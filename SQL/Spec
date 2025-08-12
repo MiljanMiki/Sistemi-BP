@@ -1,0 +1,119 @@
+Vandredna_Situacija
+(Id, Datum_Vreme, Broj_Ugrozenih_Osoba, Nivo_Opasnosti, Mesto, Opis)
+
+Prijava 
+(Id, IdVandredne_Situacije, Datum_I_Vreme, Tip, Ime, Kontakt, Lokacija, Opis, Dispecer, Prioritet)
+
+Intervencija
+(Id, Datum_I_Vreme, Lokacija, Status, Korisceni_Resursi, Broj_Spasenih, Broj_Povredjenih, Uspesnost)
+
+Zaposlen
+(JMBG, Ime, Prezime, Datum_Rodjenja, Pol, Kontakt_Telefon, Email, Adresa_Stanovanja, Datum_Zaposlenja, Tip)
+
+Analiticar
+(JMBG, Softver)
+
+Kordinator
+(JMBG, Broj_Timova)
+
+Oprativni Radnik
+(JMBG, Broj_Sati, Fizicka_Spremnost, JedBrojIJ)
+
+Ekspertize
+(JMBG,  Tip)
+
+Specijalizacija
+ (JMBG, Tip)
+
+Ucestvuje
+(IdIntervencije,Id_Jedinice, Id_VandredneSituacije)
+
+Sertifikat
+(JMBG, Tip, Institucija, Datum_Od, Datum_Do)
+
+Tip
+(Id, Tip)
+
+Interventna_Jedinica
+(Jedinstveni_Broj, Naziv, Broj_Clanova, MatBrOp, Baza, OpremaId, Id_VandredneSituacije, Id_Vozila)
+
+Vozilo
+(Registarska Oznaka, Projzvodjac, Tip, Status, Lokacija)
+
+Servisi
+(Registarska_Oznaka, Tip, Datum)
+
+Specijalna
+(RegistarskaOznaka, Tip, ID_Vozila)
+
+Terenska
+(Registarska Oznaka TipTeskogVozila)
+
+Istorija_Radnih_Mesta
+(JMBG, Datum_Od, Datum_Do, TipPosla)
+
+Sanitetska
+(Registarska Oznaka, Id_Vozila)
+
+Hemija
+(Registarska Oznaka)
+
+Voda
+(Registarska Oznaka)
+
+Mobilna_Laboratorija
+(Registarska Oznaka)
+
+Sator
+(Registarska Oznaka)
+
+Sertifikat
+(JMBG, Tip. Institucija)
+
+Je_Deo
+(Id_Vandredne_Situacije, Id_Intervencije)
+
+Dodeljuje_Se
+(JMBG, Datum_Od, Datum_Do)
+
+Saradjuje
+(ID_Vandredne_Situacije, Id_Sektora)
+
+Sektor
+(Tip, Uloga, Id_Vandredne_Situacije, Lime, Prezime, Pozicija, Telefon, email)//moze Id_Predstanika samo
+
+Dodeljuje
+(Registaska Oznaka Id_Jedinice, Pojedinca, Datum_Od, Datum_Do)
+
+Dzipovi
+(Registaska Oznaka, IdOperativnogRadnika)
+
+Kamioni
+(Registarska Oznaka)
+
+Oprema
+(ID, Naziv, Tip, Status, DatumNabavke, status, IdInterventneJedinice, TipOpreme)
+
+LicnaZastita
+(ID)
+
+Tehnicka_Oprema
+(ID)
+
+Zalihe
+(ID)
+
+Medicinska_Oprema
+(ID)
+
+Daje_Se_Jedinicama
+(Id_Vozila, Id_Interventne_Jedinice)
+
+Druge opcije radi preglednosti
+Oprema(Sa izvedenim radi preglednosti)
+(ID, Naziv, Tip, Status, DatumNabavke, status, IdInterventneJedinice, TipOpreme,LicnaZastita, 
+  Medicinska_Oprema, Tehnicka, Zalihe)
+
+
+Specijalna
+(Registarska_Oznaka, Id_Vozila, Tip, Voda, Sator, Hemija, Mobilna_Laboratorija)
