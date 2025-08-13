@@ -1,0 +1,8 @@
+[SQL] Interventna jedinica - gde je IDopereme?
+[REL] izbaciti IDVozila iz IJ, a mozda I ID opreme?
+[REL] dodeljuje_se, nema ID vozila i ID IJ/Operativnog radnika
+[SQL] gde je Ucestvuje tabela?stavio da IJ cuva te podatke, treba da bude posebna (IDIntervencije,IDJedinice,IDVanredneSituacije
+[REL] operma ima Tip pa Tip opreme?U SQL dobro
+[SQL] Sertifikat:izbaciti naziv jer ga nema, dodati tip sto je slab kljuc
+[SQL] Wtf is spolja_sluzba bruh!!!
+[SQL] Ne kapiram sto je sektor ovako implementiran.Mislim  da je nepotrebno 
