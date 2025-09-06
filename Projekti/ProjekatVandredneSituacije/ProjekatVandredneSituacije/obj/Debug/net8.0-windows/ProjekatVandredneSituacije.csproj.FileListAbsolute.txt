@@ -1,0 +1,7 @@
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.csproj.AssemblyReference.cache
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.Form1.resources
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.csproj.GenerateResource.cache
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.AssemblyInfoInputs.cache
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.AssemblyInfo.cs
+C:\Users\srdja\source\repos\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.csproj.CoreCompileInputs.cache

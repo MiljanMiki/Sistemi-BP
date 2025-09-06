@@ -1,0 +1,85 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+        "projectName": "ProjekatVandredneSituacije",
+        "projectPath": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+        "packagesPath": "C:\\Users\\srdja\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\srdja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0-windows7.0": {
+            "targetAlias": "net8.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
+          "dependencies": {
+            "FluentNHibernate": {
+              "target": "Package",
+              "version": "[3.3.0, )"
+            },
+            "NHibernate": {
+              "target": "Package",
+              "version": "[5.5.1, )"
+            },
+            "Oracle.ManagedDataAccess.Core": {
+              "target": "Package",
+              "version": "[23.4.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

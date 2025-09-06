@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ProjekatVandredneSituacije.Entiteti
+{
+    internal class Analiticar : Zaposlen
+    {
+        
+
+        public virtual string Softver {  get; set; }
+    }
+   
+}
