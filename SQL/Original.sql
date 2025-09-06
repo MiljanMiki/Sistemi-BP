@@ -4,8 +4,13 @@ CREATE TABLE Vanredna_Situacija (
     Datum_Do DATE NOT NULL,
     Broj_Ugrozenih_Osoba NUMBER,
     Nivo_Opasnosti NUMBER,
-    Mesto VARCHAR2(100),
-    Opis VARCHAR2(500)
+    Opstina VARCHAR2(100),
+    Lokacija VARCHAR2(100),
+    Opis VARCHAR2(500),
+
+    CONSTRAINT fk_prijava
+        FOREIGN KEY (Prijava_Id)
+        REFERENCES Prijava(Id)
 );
 
 CREATE TABLE Prijava (
