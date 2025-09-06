@@ -14,6 +14,16 @@ CREATE TABLE Vanredna_Situacija (
         REFERENCES Prijava(Id)
 );
 
+CREATE TABLE Istorija_Uloga_Zaposlenih (
+    JMBG CHAR(13) REFERENCES Zaposlen(JMBG),
+    Uloga VARCHAR2(50),
+    Datum_Od DATE NOT NULL,
+    Datum_Do DATE,
+    PRIMARY KEY (JMBG, Uloga)
+);
+
+
+
 CREATE TABLE Prijava (
     Id NUMBER PRIMARY KEY,
     IdVanredne_Situacije NUMBER REFERENCES Vanredna_Situacija(Id),
@@ -109,19 +119,23 @@ CREATE TABLE Oprema (
 );
 
 CREATE TABLE LicnaZastita (
-    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id)
+    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id),
+    Tip VARCHAR(20)
 );
 
 CREATE TABLE Tehnicka_Oprema (
-    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id)
+    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id),
+    Tip VARCHAR(20)
 );
 
 CREATE TABLE Zalihe (
-    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id)
+    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id),
+    Tip VARCHAR(20)
 );
 
 CREATE TABLE Medicinska_Oprema (
-    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id)
+    Id NUMBER PRIMARY KEY REFERENCES Oprema(Id),
+    Tip VARCHAR(20)
 );
 
 CREATE TABLE SpecijalnaVozila (
