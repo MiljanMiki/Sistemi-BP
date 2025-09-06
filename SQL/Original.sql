@@ -2,6 +2,7 @@ CREATE TABLE Vanredna_Situacija (
     Id NUMBER PRIMARY KEY,
     Datum_Od DATE NOT NULL,
     Datum_Do DATE NOT NULL,
+    Tip VARCHAR2(100),
     Broj_Ugrozenih_Osoba NUMBER,
     Nivo_Opasnosti NUMBER,
     Opstina VARCHAR2(100),
@@ -29,8 +30,6 @@ CREATE TABLE Prijava (
 CREATE TABLE Intervencija (
     Id NUMBER PRIMARY KEY,
     Datum_I_Vreme DATE NOT NULL,
-    Id_Vanredne_Situacije NUMBER REFERENCES Vanredna_Situacija(Id),
-    Id_Interventne_Jedinice NUMBER REFERENCES Interventna_Jedinica(Jedinstveni_Broj),
     Lokacija VARCHAR2(100),
     Status VARCHAR2(50),
     Korisceni_Resursi VARCHAR2(200),
@@ -66,13 +65,13 @@ CREATE TABLE Operativni_Radnik (
     JMBG CHAR(13) PRIMARY KEY REFERENCES Zaposlen(JMBG),
     Broj_Sati NUMBER,
     Fizicka_Spremnost VARCHAR2(50),
-    JedBrojIJ NUMBER
+    IntervetnaJedinica NUMBER REFERENCES Intervetna_Jedinica(Id)
 );
 
 CREATE TABLE Ekspertize (
     JMBG CHAR(13) REFERENCES Zaposlen(JMBG),
-    Tip VARCHAR2(50),
-    PRIMARY KEY (JMBG, Tip)
+    Oblast VARCHAR2(50),
+    PRIMARY KEY (JMBG, Oblast)
 );
 
 CREATE TABLE Specijalizacija (
@@ -85,16 +84,13 @@ CREATE TABLE Interventna_Jedinica (
     Jedinstveni_Broj NUMBER PRIMARY KEY,
     Naziv VARCHAR2(100),
     Broj_Clanova NUMBER,
-    JMBG_Komandira CHAR(13) REFERENCES Zaposlen(JMBG),
+    Komandir CHAR(13) REFERENCES Zaposlen(JMBG),
     Baza VARCHAR2(100),
-    OpremaId NUMBER,
-    Id_Vanredne_Situacije NUMBER REFERENCES Vanredna_Situacija(Id),
-    Id_Vozila NUMBER REFERENCES Vozilo(ID_Vozila)
+
 );
 
-CREATE TABLE Vozilo (
-    Id_Vozila NUMBER PRIMARY KEY,
-    Registarska_Oznaka VARCHAR2(20) UNIQUE,
+CREATE TABLE Vozilo (  
+    Registarska_Oznaka VARCHAR2(20) UNIQUE PRIMARY KEY,
     Proizvodjac VARCHAR2(50),
     Tip VARCHAR2(50),
     Status VARCHAR2(50),
@@ -127,32 +123,32 @@ CREATE TABLE Medicinska_Oprema (
     Id NUMBER PRIMARY KEY REFERENCES Oprema(Id)
 );
 
-CREATE TABLE Specijalna (
+CREATE TABLE SpecijalnaVozila (
     Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka),
     Id_Vozila NUMBER REFERENCES Vozilo(Id_Vozila),
-    Tip VARCHAR2(50)
+    Namena VARCHAR2(50)
 );
 
-CREATE TABLE Sanitetska (
-    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka),
-    Id_Vozila NUMBER REFERENCES Vozilo(Id_Vozila)
-);
+//CREATE TABLE Sanitetska (
+//    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka),
+//    Id_Vozila NUMBER REFERENCES Vozilo(Id_Vozila)
+//);
 
-CREATE TABLE Hemija (
-    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
-);
+//CREATE TABLE Hemija (
+ //   Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
+//);
 
-CREATE TABLE Voda (
-    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
-);
+//CREATE TABLE Voda (
+//    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
+//);
 
-CREATE TABLE Mobilna_Laboratorija (
-    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
-);
+//CREATE TABLE Mobilna_Laboratorija (
+//    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
+//);
 
-CREATE TABLE Sator (
-    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
-);
+//CREATE TABLE Sator (
+//    Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
+//);
 
 CREATE TABLE Sertifikat (
     JMBG CHAR(13) REFERENCES Zaposlen(JMBG),
@@ -170,29 +166,19 @@ CREATE TABLE Ucestvuje (
     PRIMARY KEY (IdIntervencije, Id_Jedinice, Id_VandredneSituacije)
 );
 
-CREATE TABLE Je_Deo (
-    Id_Vandredne_Situacije NUMBER REFERENCES Vandredna_Situacija(Id),
-    Id_Intervencije NUMBER REFERENCES Intervencija(Id),
-    PRIMARY KEY (Id_Vandredne_Situacije, Id_Intervencije)
-);
 
-CREATE TABLE Dodeljuje_Se (
-    JMBG CHAR(13) REFERENCES Zaposlen(JMBG),
-    Datum_Od DATE,
-    Datum_Do DATE,
-    PRIMARY KEY (JMBG, Datum_Od)
-);
+//CREATE TABLE Dodeljuje_Se (
+//    JMBG CHAR(13) REFERENCES Zaposlen(JMBG),
+//    Datum_Od DATE,
+//    Datum_Do DATE,
+///    PRIMARY KEY (JMBG, Datum_Od)
+//);
 
 CREATE TABLE Sektor (
     Id_Sektora NUMBER PRIMARY KEY,
     Tip VARCHAR2(50),
     Uloga VARCHAR2(50),
-    Id_Vandredne_Situacije NUMBER REFERENCES Vandredna_Situacija(Id),
-    Ime VARCHAR2(50),
-    Prezime VARCHAR2(50),
-    Pozicija VARCHAR2(50),
-    Telefon VARCHAR2(20),
-    Email VARCHAR2(100)
+    Predstavnik NUMBER REFERENCES Predstavnik(Id)
 );
 
 CREATE TABLE Saradjuje (
@@ -201,13 +187,13 @@ CREATE TABLE Saradjuje (
     PRIMARY KEY (Id_Vandredne_Situacije, Id_Sektora)
 );
 
-CREATE TABLE Dodeljuje (
+CREATE TABLE DajeSePojedincu (
     Registarska_Oznaka VARCHAR2(20) REFERENCES Vozilo(Registarska_Oznaka),
     Id_Jedinice NUMBER REFERENCES Interventna_Jedinica(Jedinstveni_Broj),
     Pojedinac CHAR(13) REFERENCES Zaposlen(JMBG),
     Datum_Od DATE,
     Datum_Do DATE,
-    PRIMARY KEY (Registarska_Oznaka, Id_Jedinice, Datum_Od)
+    PRIMARY KEY (Registarska_Oznaka, Id_Jedinice)
 );
 
 CREATE TABLE Dzipovi (
@@ -218,6 +204,51 @@ CREATE TABLE Dzipovi (
 CREATE TABLE Kamioni (
     Registarska_Oznaka VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka)
 );
+
+
+CREATE TABLE SpecijalnaIntervetnaJedinica (
+    Id_Jedinice VARCHAR2(20) PRIMARY KEY REFERENCES Interventna_Jedinica(Jedinstveni_Broj),
+    TipSpecijalneJedinice VARCHAR2(20)
+);
+
+
+CREATE TABLE Ucestvuje (
+    
+    -- Spoljni ključevi koji povezuju tri tabele
+    VanrednaSituacija_Id NUMBER NOT NULL,
+    InterventnaJedinica_Id NUMBER NOT NULL,
+    Intervencija_Id NUMBER NOT NULL,
+
+
+    CONSTRAINT fk_ucestvuje_situacija
+        FOREIGN KEY (VanrednaSituacija_Id)
+        REFERENCES VanrednaSituacija(Id),
+        
+    CONSTRAINT fk_ucestvuje_jedinica
+        FOREIGN KEY (InterventnaJedinica_Id)
+        REFERENCES InterventnaJedinica(Id),
+        
+    CONSTRAINT fk_ucestvuje_intervencija
+        FOREIGN KEY (Intervencija_Id)
+        REFERENCES Intervencija(Id)
+    
+} 
+
+CREATE TABLE Ucestvovalo
+{
+    Vozilo VARCHAR2(20) PRIMARY KEY REFERENCES Vozilo(Registarska_Oznaka),
+    InterventneJedinica NUMBER REFERENCES Interventna_Jedinica(Jedinstveni_Broj)
+
+     CONSTRAINT fk_ucestvuje_jedinica
+        FOREIGN KEY (InterventnaJedinica)
+        REFERENCES InterventnaJedinica(Id),
+
+     CONSTRAINT fk_ucestvuje_vozilo
+        FOREIGN KEY (Vozilo)
+        REFERENCES Vozilo(Registarska_Oznaka),
+
+    
+}
 
 CREATE TABLE Daje_Se_Jedinicama (
     Id_Vozila NUMBER REFERENCES Vozilo(Id_Vozila),
