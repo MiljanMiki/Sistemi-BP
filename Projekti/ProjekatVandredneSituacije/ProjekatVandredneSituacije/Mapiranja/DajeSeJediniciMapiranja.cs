@@ -12,12 +12,12 @@ namespace ProjekatVandredneSituacije.Mapiranja
         public DajeSeJediniciMapiranja()
         {
             // Naziv tabele u bazi
-            Table("DAJE_SE_JEDINICAMA");
+            Table("Daje_Se_Jedinicama");
 
             // Definicija kompozitnog primarnog ključa
             CompositeId()
-                .KeyReference(x => x.Vozilo, "VOZILO_ID")
-                .KeyReference(x => x.Intervente_Jedinice, "JEDINICA_ID");
+                .KeyReference(x => x.Vozilo, "Registarska_Oznaka")
+                .KeyReference(x => x.Intervente_Jedinice, "Id_Vandredne_Situacije");
 
             // Mapiranje ostalih propertija
             Map(x => x.datumod, "DATUM_OD");

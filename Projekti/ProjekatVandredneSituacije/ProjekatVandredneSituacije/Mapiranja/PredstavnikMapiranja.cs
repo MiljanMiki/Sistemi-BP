@@ -14,14 +14,14 @@ namespace ProjekatVandredneSituacije.Mapiranja
         public PredstavnikMapiranja()
         {
             // Naziv tabele u bazi
-            Table("Predstavnik");
+            Table("Predstavnik_Sluzbe");
 
             // Mapiranje primarnog ključa (pretpostavka: auto-increment u bazi)
-            Id(x => x.Id, "ID").GeneratedBy.Identity();
+            Id(x => x.Id, "Id").GeneratedBy.Identity();
 
             // Mapiranje many-to-one veze
             // Jedan predstavnik pripada jednom sektoru
-            References(x => x.Sektor, "SEKTOR_ID");
+            References(x => x.Sektor, "");
 
             // Mapiranje ostalih propertija
             Map(x => x.Ime, "IME");

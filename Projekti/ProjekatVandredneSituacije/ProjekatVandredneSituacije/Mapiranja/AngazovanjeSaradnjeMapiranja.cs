@@ -16,7 +16,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         Table("AngazovanjeSaradjenj");
 
         CompositeId()
-            .KeyReference(x => x.Predstavnik, "PREDSTAVNIK_ID")
+            .KeyReference(x => x.Predstavnik, "")
             .KeyReference(x => x.Sektor, "SEKTOR_ID")
             .KeyReference(x => x.VandrednaSituacija, "VANDREDNA_SITUACIJA_ID");
 

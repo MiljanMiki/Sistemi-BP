@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ProjekatVandredneSituacije.Mapiranja;
 
 namespace ProjekatVandredneSituacije
 {
@@ -43,7 +44,7 @@ namespace ProjekatVandredneSituacije
 
                 return Fluently.Configure()
                     .Database(cfg)
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<ProdavnicaMapiranja>())
+                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<VandrednaSituacijeMapiranja>())
                     .BuildSessionFactory();
             }
             catch (Exception ec)

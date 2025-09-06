@@ -268,11 +268,13 @@ namespace ProjekatVandredneSituacije
     public  int Id;
     public  DateTime Datum_Od;
     public  DateTime Datum_Do;
+    public string Tip;
     public  int Broj_Ugrozenih_Osoba;
-    public  string Nivo_Opasnosti;
+    public  int Nivo_Opasnosti;
     public  string Opstina;
     public  string Lokacija;
     public  string Opis;
+    
 
     public  PrijavaBasic Prijava;
     public  IList<UcestvujeBasic> Ucestvuje;
@@ -284,10 +286,10 @@ namespace ProjekatVandredneSituacije
         Saradjuje = new List<AngazovanjeSaradnjeBasic>();
     }
 
-    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, int Broj_Ugrozenih_Osoba, string Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
+    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, string Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
     {
         Id = id;
-   
+        this.Tip = Tip;
         this.Broj_Ugrozenih_Osoba = Broj_Ugrozenih_Osoba;
         this.Nivo_Opasnosti = Nivo_Opasnosti;
         this.Opstina = Opstina;
@@ -301,8 +303,9 @@ namespace ProjekatVandredneSituacije
     public  int Id;
     public DateTime Datum_Od;
     public DateTime Datum_Do;
+    public string Tip;
     public  int Broj_Ugrozenih_Osoba;
-    public  string Nivo_Opasnosti;
+    public  int Nivo_Opasnosti;
     public  string Opstina;
     public  string Lokacija;
     public  string Opis;
@@ -318,9 +321,11 @@ namespace ProjekatVandredneSituacije
     }
 
 
-    public VandrednaSituacijaPregled(int id, DateTime Datum_Od, DateTime Datum_Do, int Broj_Ugrozenih_Osoba, string Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
+    public VandrednaSituacijaPregled(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip,
+    int Broj_Ugrozenih_Osoba, string Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
     {
         Id = id;
+        this.Tip = Tip;  
         this.Datum_Od = Datum_Od;
         this.Datum_Do = Datum_Do;
         this.Broj_Ugrozenih_Osoba = Broj_Ugrozenih_Osoba;

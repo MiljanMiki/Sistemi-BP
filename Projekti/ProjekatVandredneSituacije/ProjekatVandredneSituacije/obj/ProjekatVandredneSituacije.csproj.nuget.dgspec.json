@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj": {}
+    "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj": {}
   },
   "projects": {
-    "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj": {
+    "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+        "projectUniqueName": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
         "projectName": "ProjekatVandredneSituacije",
-        "projectPath": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+        "projectPath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
         "packagesPath": "C:\\Users\\srdja\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\obj\\",
+        "outputPath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\srdja\\AppData\\Roaming\\NuGet\\NuGet.Config",

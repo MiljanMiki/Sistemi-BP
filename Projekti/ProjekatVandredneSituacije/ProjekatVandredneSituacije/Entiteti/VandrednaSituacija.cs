@@ -11,8 +11,10 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual int Id { get; set; }
         public virtual DateTime Datum_Od {  get; set; }
         public virtual DateTime Datum_Do { get; set; }
+
+        public virtual string Tip { get; set; }
         public virtual int Broj_Ugrozenih_Osoba {  get; set; }
-        public virtual string Nivo_Opasnosti { get; set; }
+        public virtual int Nivo_Opasnosti { get; set; }
         public virtual string Opstina { get; set; }
         public virtual string Lokacija { get; set; }
         public virtual string Opis { get; set; }

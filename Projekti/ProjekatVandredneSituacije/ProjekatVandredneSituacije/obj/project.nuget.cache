@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "h0s+CThU3mY=",
+  "dgSpecHash": "8KLMFk3ADmU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\srdja\\source\\repos\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+  "projectFilePath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\srdja\\.nuget\\packages\\antlr3.runtime\\3.5.1\\antlr3.runtime.3.5.1.nupkg.sha512",
     "C:\\Users\\srdja\\.nuget\\packages\\fluentnhibernate\\3.3.0\\fluentnhibernate.3.3.0.nupkg.sha512",
