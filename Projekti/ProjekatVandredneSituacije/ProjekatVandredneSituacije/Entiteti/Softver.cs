@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Ekspertiza_Analiticara
+    internal class Softver
     {
-        public virtual Analiticar Analiticar { get; set;}
+        public Analiticar Analiticar { get; set; }
+        public virtual string Naziv { get; set; }
 
-        public virtual String Oblast { get; set;}
 
+        
+        
+
+        
     }
 }

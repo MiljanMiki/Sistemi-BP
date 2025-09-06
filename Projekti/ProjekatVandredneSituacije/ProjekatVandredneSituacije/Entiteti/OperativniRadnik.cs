@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual int Broj_Sati { get; set; }
         public virtual string Fizicka_Spremnost { get; set; }
 
-        public virtual IList<DajeSePojedincu> Dodeljuje { get; set; }
+        public virtual IList<DodeljujeSe> Dodeljuje { get; set; }
 
         public virtual InterventnaJedinica InterventnaJedinica { get; set; }
 
@@ -21,7 +21,7 @@ namespace ProjekatVandredneSituacije.Entiteti
 
         public OperativniRadnik()
         {
-            Dodeljuje = new List<DajeSePojedincu>();
+            Dodeljuje = new List<DodeljujeSe>();
             Sertifikats = new List<Sertifikat>();
         }
     }

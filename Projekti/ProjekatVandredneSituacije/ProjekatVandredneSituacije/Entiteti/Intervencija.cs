@@ -7,14 +7,20 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
+    public enum Status
+    {
+        Uspesna, Neuspesna
+    }
     internal class Intervencija
     {
-        public virtual int ID { get; set; }
-        public virtual int Id_VAndredne_Situacije { get; set; }
-    
+        public virtual int Id { get; set; }
+
         public virtual DateTime Datum_I_Vreme { get; set; }
+       
         public virtual string Lokacija { get; set; }
-        public virtual string Status { get; set; }
+        public virtual Status Status { get; set; }
+
+        public virtual string Resursi {  get; set; }
         public virtual int Broj_Spasenih { get; set; }
         public virtual int Broj_Povredjenih { get; set; }
         public virtual int Uspesnost { get; set; }

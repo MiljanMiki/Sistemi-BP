@@ -15,7 +15,6 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
             KeyColumn("JMBG");
             
-            Map(x => x.Softver).Column("Softver");
 
         } 
     }

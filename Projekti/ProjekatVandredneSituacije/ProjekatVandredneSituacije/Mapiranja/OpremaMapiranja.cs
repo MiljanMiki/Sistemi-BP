@@ -14,47 +14,70 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("OPREMA");
 
-            // Mapiranje primarnog ključa. Serijski broj se verovatno unosi ručno.
-            Id(x => x.Serijski_Broj, "SERIJSKI_BROJ").GeneratedBy.Assigned();
+           
+            Id(x => x.Serijski_Broj, "Serijski_Broj").GeneratedBy.Assigned();
 
-            // Definicija diskriminator kolone koja određuje tip opreme.
-            // Vrednost ove kolone će biti "MEDICINSKA", "TEHNICKA" itd.
-            DiscriminateSubClassesOnColumn("TIP_OPREME");
+            
+            DiscriminateSubClassesOnColumn("Tip");
 
-            // Mapiranje zajedničkih propertija
-            Map(x => x.Naziv, "NAZIV");
-            Map(x => x.DatumNabavke, "DATUM_NABAVKE");
-            Map(x => x.Status, "STATUS");
+          
+            Map(x => x.Naziv).Column("Naziv");
+            Map(x => x.Tip).Column("Tip");
+            Map(x => x.Status).Column("Status")
+            Map(x => x.DatumNabavke).Column("DatumNabacke");
+            
 
-            // Mapiranje many-to-one veze
-            References(x => x.Jedinica, "JEDINICA_ID");
 
-            // Property "TipOpreme" se NE MAPIRA direktno jer služi kao diskriminator!
+            
+            References(x => x.Jedinica, "IdIntervetneJedinice");
+
         }
     }
 
      class MedicinskaOpremaMapiranja : SubclassMap<MedicinskaOprema>
     {
-        public MedicinskaOpremaMapiranja() { DiscriminatorValue("MEDICINSKA"); }
+        public MedicinskaOpremaMapiranja() { 
+            Table("MedicinskaOprema")
+            
+                KeyColumn("Serijski_Broj");
+                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+            
+        }
     }
 
      class TehnickaOpremaMapiranja : SubclassMap<TehnickaOprema>
     {
-        public TehnickaOpremaMapiranja() { DiscriminatorValue("TEHNICKA"); }
+        public TehnickaOpremaMapiranja() {
+            Table("TehnickaOprema")
+            
+                KeyColumn("Serijski_Broj");
+                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+            
+        }
     }
 
      class LicnaZastitaMapiranja : SubclassMap<LicnaZastita>
     {
-        public LicnaZastitaMapiranja() { DiscriminatorValue("LICNA_ZASTITA"); }
+        public LicnaZastitaMapiranja() {
+            Table("LicnaZastita")
+            
+                KeyColumn("Serijski_Broj");
+                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+            
+        }
     }
 
-    // Za klasu Zalihe koja ima dodatni property
     class ZaliheMapiranja : SubclassMap<Zalihe>
     {
         public ZaliheMapiranja()
         {
-            DiscriminatorValue("ZALIHE");
-            Map(x => x.Kolicina, "KOLICINA");
+            Table("MedicinskaOprema")
+            
+                KeyColumn("Serijski_Broj");
+                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+                Map(x => x.Kolicina, "Kolicina");
+            
+            
         }
     }
 }

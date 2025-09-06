@@ -26,6 +26,9 @@ namespace ProjekatVandredneSituacije.Mapiranja
            .Inverse()
            .KeyColumn("Sertifikat");
 
+            References(x => x.InterventnaJedinica).Column("InterventnaJedinica");
+
+
             HasMany(x => x.Dodeljuje)
                 .Cascade.All()
                 .Inverse()

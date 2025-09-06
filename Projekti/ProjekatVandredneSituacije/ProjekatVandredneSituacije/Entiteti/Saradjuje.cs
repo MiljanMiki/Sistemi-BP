@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Terenska:Vozilo
+    internal class Saradjuje
     {
-
-        
-        public virtual string TipVozila {  get; set; }  
-
        
+        public virtual Sektor Sektor { get; set; }
+
+        public virtual VandrednaSituacija VandrednaSituacija { get; set; }
     }
 }

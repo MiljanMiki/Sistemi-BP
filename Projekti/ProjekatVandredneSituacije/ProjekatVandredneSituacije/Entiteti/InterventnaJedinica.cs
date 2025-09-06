@@ -12,10 +12,10 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual int Jedinstveni_Broj { get; set; }
         public virtual string Naziv { get; set; }
         public virtual int BrojClanova { get; set; }
-        public virtual int MatBrOp { get; set; }
         public virtual string Baza { get; set; }
 
-        public virtual IList<DajeSeJedinicama> Dodeljuje {  get; set; }
+        public virtual OperativniRadnik Komandir {  get; set; }
+        public virtual IList<DodeljujeSe> Dodeljuje {  get; set; }
        
         public virtual Oprema Oprema {  get; set; }
 
@@ -24,12 +24,16 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual IList<Ucestvuje> Ucestvuje { get; set; }
 
        
-        public virtual OperativniRadnik Komandir {  get; set; }
+       public virtual IList<Ucestvovalo> AngazovanaVozila {  get; set; }
+        
         public InterventnaJedinica()
         {
-            Dodeljuje = new List<DajeSeJedinicama>();
+            Dodeljuje = new List<DodeljujeSe>();
             Radnici= new List<OperativniRadnik>();
             Ucestvuje = new List<Ucestvuje>();
+            AngazovanaVozila = new List<Ucestvovalo>();
+
+            
         }
     }
 
@@ -37,6 +41,6 @@ namespace ProjekatVandredneSituacije.Entiteti
 
     internal class SpecijalnaInterventna : InterventnaJedinica
     {
-        public virtual string TipSpecijalneJed{ get; set; }
+        public virtual string TipSpecijalneJedinice{ get; set; }
     }
 }

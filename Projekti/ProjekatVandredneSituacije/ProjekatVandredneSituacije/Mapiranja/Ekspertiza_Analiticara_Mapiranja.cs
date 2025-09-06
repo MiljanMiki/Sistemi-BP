@@ -8,18 +8,16 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Mapiranja
 {
-    class Ekspertiza_Analiticara_Mapiranja:ClassMap<Ekspertiza_Analiticara>
+    class Ekspertiza_Analiticara_Mapiranja:ClassMap<Ekspertiza>
     {
         public Ekspertiza_Analiticara_Mapiranja()
         {
-            // Naziv tabele u bazi
-            Table("Ekspertiza_Analiticara");
+            
+            Table("Ekspertize");
 
-            // Definicija kompozitnog primarnog ključa
+            
             CompositeId()
-                // Prvi deo ključa je veza ka tabeli Analiticar
                 .KeyReference(x => x.Analiticar, "JMBG")
-                // Drugi deo ključa je property "Oblast"
                 .KeyProperty(x => x.Oblast, "Oblast");
         }
     }

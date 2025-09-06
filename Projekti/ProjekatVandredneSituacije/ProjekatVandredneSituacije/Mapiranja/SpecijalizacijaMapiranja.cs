@@ -16,8 +16,8 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Specijalizacija");
 
             CompositeId()
-                .KeyReference(x => x.JMBG, "JMBG")
-                .KeyReference(x => x.TipSpec, "TipSpec");
+                .KeyReference(x => x.Kordinator., "JMBG")
+                .KeyReference(x => x.Tip, "Oblast");
 
         }
     }

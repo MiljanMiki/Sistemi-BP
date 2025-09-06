@@ -12,12 +12,13 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual string TipSektora { get; set; }
         public virtual string Uloga { get; set; }
         
-        public IList<AngazovanjeSaradnje> VandredneSituacije {  get; set; }
+
+        public IList<Saradjuje> VandredneSituacije {  get; set; }
         public Predstavnik? Predstavnik { get; set;}
 
         public Sektor()
         {
-            VandredneSituacije = new List<AngazovanjeSaradnje>();
+            VandredneSituacije = new List<Saradjuje>();
         }
     }
 }

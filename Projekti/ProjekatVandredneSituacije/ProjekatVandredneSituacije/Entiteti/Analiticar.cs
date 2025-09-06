@@ -9,8 +9,6 @@ namespace ProjekatVandredneSituacije.Entiteti
     internal class Analiticar : Zaposlen
     {
         
-
-        public virtual string Softver {  get; set; }
     }
    
 }

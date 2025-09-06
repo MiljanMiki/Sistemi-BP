@@ -6,17 +6,19 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class SpecijalnaVozila
+
+    public enum Namena{
+        Voda,
+        Sator,
+        Hemija,
+        Mobilna_Laboratorija
+    }
+    internal class SpecijalnaVozila:Vozilo
     {
         public virtual int Registarska_Oznaka { get; set; }
-        public virtual int Namena { get; set; }
+        public virtual Namena Namena { get; set; }
 
-        public virtual bool Voda { get; set; }
-        public virtual bool Sator { get; set; }
-        public virtual bool Hemija { get; set; }
-
-        public virtual bool Mobilna_Laboratorija { get; set; }
-
+      
     }
 
 }   

@@ -13,26 +13,23 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
         public IntervencijaMapiranja()
         {
-            // Naziv tabele u bazi
-            Table("INTERVENCIJA");
+            
+            Table("Intervencija");
 
-            // Mapiranje primarnog ključa
-            // Pretpostavka je da se ID automatski generiše u bazi (Identity kolona)
-            Id(x => x.ID, "ID").GeneratedBy.Identity();
+            
+            Id(x => x.Id, "Id").GeneratedBy.Identity();
 
-            // Mapiranje ostalih prostih propertija
-            Map(x => x.Id_VAndredne_Situacije, "ID_VANDREDNE_SITUACIJE");
-            Map(x => x.Datum_I_Vreme, "DATUM_I_VREME");
-            Map(x => x.Lokacija, "LOKACIJA");
-            Map(x => x.Status, "STATUS");
-            Map(x => x.Broj_Spasenih, "BROJ_SPASENIH");
-            Map(x => x.Broj_Povredjenih, "BROJ_POVREDJENIH");
-            Map(x => x.Uspesnost, "USPESNOST");
+            
+            Map(x => x.Datum_I_Vreme, "Datum_I_Vreme");
+            Map(x => x.Lokacija, "Lokacija");
+            Map(x => x.Status, "Status").CustomType<string>();
+            Map(x => x.Broj_Spasenih, "Broj_Spasenih");
+            Map(x => x.Broj_Povredjenih, "Broj_Povredjenih");
+            Map(x => x.Uspesnost, "Uspesnost");
 
-            // Mapiranje veze 1-prema-više (one-to-many)
-            // Intervencija ima više stavki "Ucestvuje"
+            "
             HasMany(x => x.Ucestvuje)
-                .KeyColumn("INTERVENCIJA_ID") // Naziv spoljnog ključa u tabeli UCESTVUJE
+                .KeyColumn("IdIntervencije") // Naziv spoljnog ključa u tabeli UCESTVUJE
                 .Inverse()
                 .Cascade.All(); // Prilikom brisanja Intervencije, brišu se i sve stavke Ucestvuje
         }

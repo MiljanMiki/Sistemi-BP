@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Specijalizacija
+    internal class Ucestvovalo
     {
-        public virtual Kordinator Kordinator { get; set; }
-        public virtual string Tip { get; set; }
 
-       
-
-
+        public virtual Vozilo Vozilo { get; set; }
+        public virtual InterventnaJedinica Jedinica { get; set; }
     }
 }

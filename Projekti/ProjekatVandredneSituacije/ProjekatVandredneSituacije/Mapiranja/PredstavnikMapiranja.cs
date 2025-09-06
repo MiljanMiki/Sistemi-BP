@@ -13,22 +13,20 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
         public PredstavnikMapiranja()
         {
-            // Naziv tabele u bazi
+          
             Table("Predstavnik_Sluzbe");
 
-            // Mapiranje primarnog ključa (pretpostavka: auto-increment u bazi)
+            
             Id(x => x.Id, "Id").GeneratedBy.Identity();
 
-            // Mapiranje many-to-one veze
-            // Jedan predstavnik pripada jednom sektoru
             References(x => x.Sektor, "");
 
-            // Mapiranje ostalih propertija
-            Map(x => x.Ime, "IME");
-            Map(x => x.Prezime, "PREZIME");
-            Map(x => x.Pozicija, "POZICIJA");
-            Map(x => x.Telefon, "TELEFON");
-            Map(x => x.Email, "EMAIL");
+          
+            Map(x => x.Ime).Column("Ime");
+            Map(x => x.Prezime).Column("Prezime");
+            Map(x => x.Pozicija).Column("Pozicija");
+            Map(x => x.Telefon).Column("Telefon");
+            Map(x => x.Email).Column("Email");
         }
     }
 }

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
+    public enum NivoOpasnosti{
+        niska, srednja, visoka
+    }
     internal class VandrednaSituacija
     {
         public virtual int Id { get; set; }
@@ -14,19 +17,19 @@ namespace ProjekatVandredneSituacije.Entiteti
 
         public virtual string Tip { get; set; }
         public virtual int Broj_Ugrozenih_Osoba {  get; set; }
-        public virtual int Nivo_Opasnosti { get; set; }
+        public virtual NivoOpasnosti Nivo_Opasnosti { get; set; }
         public virtual string Opstina { get; set; }
         public virtual string Lokacija { get; set; }
         public virtual string Opis { get; set; }
 
-        public virtual Prijava Prijava { get; set; }
+        public virtual Prijava Prijava_ID { get; set; }
         public virtual IList<Ucestvuje> Ucestvuje {  get; set; }
-        public virtual IList<AngazovanjeSaradnje> Saradjuje {  get; set; }
+        public virtual IList<Saradjuje> Saradjuje {  get; set; }
 
         public VandrednaSituacija()
         {
             Ucestvuje = new List<Ucestvuje>();
-            Saradjuje= new List<AngazovanjeSaradnje>();
+            Saradjuje= new List<Saradjuje>();
         }
     }
 }

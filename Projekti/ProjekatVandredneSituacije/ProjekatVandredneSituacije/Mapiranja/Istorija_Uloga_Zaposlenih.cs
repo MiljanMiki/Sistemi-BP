@@ -15,11 +15,13 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Istorija_Uloga_Zaposlenih");
 
             CompositeId()
-                .KeyReference(x => x.Zaposleni, "JMBG") 
-                .KeyProperty(x => x.Uloga, "Uloga")
-                .KeyProperty(x => x.Datum_Od, "Datum_Od");
+                .KeyReference(x => x.Zaposleni, "JMBG")
+                .KeyProperty(x => x.Uloga, "Uloga");
 
-            // Ostali atributi
+
+            Map(x => x.Datum_Od)
+                .Column("Datum_Od")
+                .Nullable();
             Map(x => x.Datum_Do)
                 .Column("Datum_Do")
                 .Nullable();

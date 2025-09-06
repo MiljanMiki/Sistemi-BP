@@ -1,4 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
+using NHibernate.Mapping;
 using ProjekatVandredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
@@ -8,16 +9,12 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Mapiranja
 {
-     class TerenskaMapiranja:SubclassMap<Terenska>
+     class DzipoviMapiranja : SubclassMap<Dzipovi>
     {
-        public TerenskaMapiranja()
+        public DzipoviMapiranja()
         {
-            Table("Terensko_Vozilo");
-
+            Table("Dzipovi");
             KeyColumn("Registarska_Oznaka");
-
-            Map(x => x.TipVozila).Column("TipVozila");
-
         }
     }
 }

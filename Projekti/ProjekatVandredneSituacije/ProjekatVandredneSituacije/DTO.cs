@@ -286,7 +286,7 @@ namespace ProjekatVandredneSituacije
         Saradjuje = new List<AngazovanjeSaradnjeBasic>();
     }
 
-    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, string Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
+    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, int Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
     {
         Id = id;
         this.Tip = Tip;
@@ -322,7 +322,7 @@ namespace ProjekatVandredneSituacije
 
 
     public VandrednaSituacijaPregled(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip,
-    int Broj_Ugrozenih_Osoba, string Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
+    int Broj_Ugrozenih_Osoba, int Nivo_Opasnosti, string Opstina, string Lokacija, string Opis)
     {
         Id = id;
         this.Tip = Tip;  
@@ -363,7 +363,6 @@ namespace ProjekatVandredneSituacije
         this.Broj_Spasenih = Broj_Spasenih;
         this.Broj_Povredjenih = Broj_Povredjenih;
         this.Uspesnost = Uspesnost;
-
     }
 
 }
@@ -1237,12 +1236,12 @@ public class PrijavaBasic
     public SektorPregled Sektor;
     public VandrednaSituacijaPregled VandrednaSituacija;
 
-    public AngazovanjeSaradnjePregled()
+    public SaradjujePregled()
     {
 
     }
 
-    public AngazovanjeSaradnjePregled(int Uloga)
+    public SaradjujePregled(int Uloga)
     {
         this.Uloga = Uloga;
     }

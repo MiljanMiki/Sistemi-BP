@@ -18,11 +18,8 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
             Id(x => x.Registarska_Oznaka).GeneratedBy.TriggerIdentity();
 
-            Map(x => x.Namena).Column("Namena");
-            Map(x => x.Voda).Column("Voda");
-            Map(x => x.Sator).Column("Sektor");
-            Map(x => x.Hemija).Column("Hemija");
-            Map(x => x.Mobilna_Laboratorija).Column("Mobilna_Laboratorija");
+            Map(x => x.Namena).Column("Namena").CustomType<string>();
+            
 
 
         }

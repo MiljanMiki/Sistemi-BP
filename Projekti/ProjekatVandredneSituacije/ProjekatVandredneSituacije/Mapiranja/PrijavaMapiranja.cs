@@ -19,17 +19,20 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Id(x => x.Id, "ID").GeneratedBy.Identity();
 
             
-            References(x => x.VandrednaSituacija, "VANDREDNASITUACIJAID");
+            References(x => x.Id_VandrednaSituacija, "IdVandredne_Situacije");
 
            
-            Map(x => x.Datum_I_Vreme, "DATUM_I_VREME");
-            Map(x => x.Tip, "TIP");
-            Map(x => x.Ime_Prijavioca, "IME_PRIJAVIOCA");
-            Map(x => x.Kontakt_Prijavioca, "KONTAKT_PRIJAVIOCA");
-            Map(x => x.Lokacija, "LOKACIJA");
-            Map(x => x.Opis, "OPIS");
-            Map(x => x.Dispecer, "DISPECER");
-            Map(x => x.Prioritet, "PRIORITET");
-        }
+            Map(x => x.Datum_I_Vreme, "Datum_I_Vreme");
+            Map(x => x.Tip).Column("Tip").CustomType<string>();
+            Map(x => x.Ime).Column("Ime");
+            Map(x => x.Kontakt).Column("Kontakt");
+            Map(x => x.Lokacija).Column("Lokacija");
+            Map(x => x.Opis).Column("Opis");
+            Map(x => x.JMBG_Dispecer).Column("JMBG_Dispecer");
+            Map(x => x.Prioritet).Column("Prioriter");
+
+
+             
+    }
     }
 }

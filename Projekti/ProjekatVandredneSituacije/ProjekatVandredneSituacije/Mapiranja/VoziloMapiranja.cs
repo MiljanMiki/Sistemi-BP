@@ -28,15 +28,12 @@ namespace ProjekatVandredneSituacije.Mapiranja
            .Inverse()                  
            .KeyColumn("Registarska_Oznaka");  
 
-            HasMany(x => x.DodeljujeJed)
+            HasMany(x => x.Dodeljuje)
                 .Cascade.All()
                 .Inverse()
                 .KeyColumn("Registarska_Oznaka");
 
-            HasMany(x => x.DodeljujePojed)
-                .Cascade.All()
-                .Inverse()
-                .KeyColumn("Registarska_Oznaka");
+            
         }
     }
 }
