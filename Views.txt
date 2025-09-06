@@ -1,0 +1,64 @@
+Lista zaposlenih
+    Dodaj/izmeni => dialog {
+        dropdown pozicija => {
+            analiticar
+            Koordinator,
+            Operativni_Radnik
+        },
+        polja na osnovu dropdown vrednosti,
+        sertifikat dugme => dialog {
+            Tip VARCHAR2(50),
+            Institucija VARCHAR2(100),
+            Datum_Od DATE NOT NULL,
+            Datum_Do DATE,
+        }
+    }
+    select pa otpusti
+
+Istorija zaposlenih
+    Dugmad date picker
+
+Istorija Prijava ( za vandrednu situaciju )
+    Dodaj Prijavu
+
+Istorija Vandrednih situacija 
+    Dodaj Vandrednu situaciju 
+    Dodirivanje vanredne situacije => Istorija Prijava
+
+Lista Int Jedinica
+    Dodaj novu
+    Ucestvuj u => dropdown vanrednih situacija 
+    select pa obrisi
+
+
+Lista intervencija 
+    dodaj/modifikuj => dialog {
+        Dropdown int jedinica 
+        Dropdown vanrednih situacija 
+        ...
+    }
+    select pa obrisi
+
+Lista vozila 
+    filtriraj po {
+        int_jedinica,
+        dzipovi,
+        kamioni,
+    }
+    dodaj/modifikuj => dialog {
+        checkbox specijalno
+        dropdown vrsta ako je specijalno => {
+            Sanitetska,
+            Hemija,
+            Voda,
+            Mobilna_Laboratorija,
+            Sator
+        },
+    }
+    select pa obrisi
+
+Lista sektora 
+    dodaj/modifikuj => dialog {
+        vanredne situacije => dropdown { ... }
+        ime, prezime ...
+    }

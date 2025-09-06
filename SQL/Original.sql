@@ -29,6 +29,8 @@ CREATE TABLE Prijava (
 CREATE TABLE Intervencija (
     Id NUMBER PRIMARY KEY,
     Datum_I_Vreme DATE NOT NULL,
+    Id_Vanredne_Situacije NUMBER REFERENCES Vanredna_Situacija(Id),
+    Id_Interventne_Jedinice NUMBER REFERENCES Interventna_Jedinica(Jedinstveni_Broj),
     Lokacija VARCHAR2(100),
     Status VARCHAR2(50),
     Korisceni_Resursi VARCHAR2(200),
@@ -47,7 +49,7 @@ CREATE TABLE Zaposlen (
     Email VARCHAR2(100),
     Adresa_Stanovanja VARCHAR2(200),
     Datum_Zaposlenja DATE,
-    Tip VARCHAR2(50)
+    Tip VARCHAR2(50) #Pozicija
 );
 
 CREATE TABLE Analiticar (
@@ -158,7 +160,7 @@ CREATE TABLE Sertifikat (
     Institucija VARCHAR2(100),
     Datum_Od DATE NOT NULL,
     Datum_Do DATE,
-    PRIMARY KEY (JMBG, Tip, Institucija)
+    PRIMARY KEY (JMBG, Tip)
 );
 
 CREATE TABLE Ucestvuje (
