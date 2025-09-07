@@ -63,7 +63,7 @@ CREATE TABLE Zaposlen (
 
 CREATE TABLE Analiticar (
     JMBG CHAR(13) PRIMARY KEY REFERENCES Zaposlen(JMBG),
-    Softver VARCHAR2(100)
+    
 );
 
 CREATE TABLE Koordinator (
