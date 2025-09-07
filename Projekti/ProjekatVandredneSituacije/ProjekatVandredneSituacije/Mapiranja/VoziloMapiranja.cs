@@ -36,4 +36,13 @@ namespace ProjekatVandredneSituacije.Mapiranja
             
         }
     }
+    class TerenskaMapiranja:SubclassMap<Terenska>
+    {
+        public TerenskaMapiranja()
+        {
+            Table("Terenska");
+            KeyColumn("Registarska_Oznaka");
+
+        }
+    }
 }

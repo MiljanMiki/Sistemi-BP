@@ -20,7 +20,7 @@ namespace ProjekatVandredneSituacije.Entiteti
 
     public enum TipMedicinske
     {
-        prenosive_nosiljke, defibrilatori, kompleti_za_reanimaciju)
+        prenosive_nosiljke, defibrilatori, kompleti_za_reanimaciju
     }
 
     public enum TipZalihe

@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public ZaposleniMapiranja()
         {
-            Table("ZAPOSLEN");
+            Table("Yaposlen");
 
             Id(x => x.JMBG).GeneratedBy.TriggerIdentity();
 

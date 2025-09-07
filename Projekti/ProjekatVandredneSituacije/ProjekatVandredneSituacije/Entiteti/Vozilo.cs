@@ -36,13 +36,7 @@ namespace ProjekatVandredneSituacije.Entiteti
         }
     }
 
-     class Kamioni : Vozilo
-    {
-    }
-     class Dzipovi : Vozilo
-    {
-
-    }
+  
 
      class Sanitetska : Vozilo
     { }

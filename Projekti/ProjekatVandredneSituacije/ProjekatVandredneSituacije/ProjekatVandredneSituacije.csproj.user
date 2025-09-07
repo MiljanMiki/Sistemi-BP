@@ -1,8 +1,65 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <ItemGroup>
-        <Compile Update="Form1.cs">
-            <SubType>Form</SubType>
-        </Compile>
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniIntervencijuDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniIntJedinicuDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniPrijavuDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniSektorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniSertifikatDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniSpecijalizacijaDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniVanrednuSituacijuDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniVoziloDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajIzmeniZaposlenogDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\DodajSertifikatDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\IstorijaPrijavaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\IstorijaVanrednihSituacijaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\IstorijaZaposlenihForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ListaIntervencijaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ListaIntJedinica.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ListaSektoraForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ListaVozilaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\ListaZaposlenihForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
 </Project>

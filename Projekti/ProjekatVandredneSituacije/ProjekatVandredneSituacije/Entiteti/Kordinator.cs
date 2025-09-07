@@ -10,6 +10,6 @@ namespace ProjekatVandredneSituacije.Entiteti
     {
         public virtual int BrojTimova { get; set; }
 
-        public virtual Specijalizacija Specijalizacija { get; set; }
+        
     }
 }

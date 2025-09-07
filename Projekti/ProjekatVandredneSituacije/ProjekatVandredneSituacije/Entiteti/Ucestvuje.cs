@@ -12,5 +12,10 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual VandrednaSituacija IdVandredneSituacije { get; set; }
 
         public virtual Intervencija IdIntervencije { get; set; }
+
+
+       
+
+
     }
 }

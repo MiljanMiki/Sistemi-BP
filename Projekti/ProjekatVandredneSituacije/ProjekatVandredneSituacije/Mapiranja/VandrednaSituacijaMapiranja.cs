@@ -14,7 +14,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("VandrednaSituacija");
 
-            Id(x => x.Id,).GeneratedBy.TriggerIdentity();
+            Id(x => x.Id).GeneratedBy.TriggerIdentity();
 
             Map(x => x.Datum_Od).Column("Datum_Od");
             Map(x => x.Datum_Do).Column("Datum_Do");
@@ -26,7 +26,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Opis).Column("Opis");
 
             //mapiranje veza
-            References(x => x.Prijava).Column("Prijava");
+            References(x => x.Prijava_ID).Column("Prijava_Id");
             
 
             HasMany(x => x.Ucestvuje)

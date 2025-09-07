@@ -14,6 +14,8 @@ namespace ProjekatVandredneSituacije.Entiteti
 
         public virtual InterventnaJedinica? Jedinica{ get; set; }
 
-        public virtual DateTime Datum {  get; set; }
+        public virtual DateTime DatumOd {  get; set; }
+
+        public virtual DateTime DatumDo {  get; set; }
     }
 }
