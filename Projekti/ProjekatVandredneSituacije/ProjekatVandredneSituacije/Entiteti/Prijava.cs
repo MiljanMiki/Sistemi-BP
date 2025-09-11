@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Prijava
+    public class Prijava
     {
         public virtual int Id {  get; set; }
 
         public virtual DateTime Datum_I_Vreme { get; set; }
-        public virtual VandrednaSituacija Id_VandrednaSituacija { get; set; }
+        public virtual VanrednaSituacija Id_VandrednaSituacija { get; set; }
         public virtual string Tip {  get; set; }
         public virtual string Ime { get; set; }
         public virtual string Kontakt {  get; set; }    

@@ -10,7 +10,7 @@ namespace ProjekatVandredneSituacije.Entiteti
     {
         operativno, u_kvaru
     }
-    internal class Vozilo
+    public class Vozilo
     {
         public virtual int Registarska_Oznaka { get; set; }
         public virtual string Proizvodjac {  get; set; }

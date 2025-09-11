@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Ucestvuje
+    public class Ucestvuje
     {
         public virtual InterventnaJedinica IdInterventneJed {  get; set; }
-        public virtual VandrednaSituacija IdVandredneSituacije { get; set; }
+        public virtual VanrednaSituacija IdVandredneSituacije { get; set; }
 
         public virtual Intervencija IdIntervencije { get; set; }
     }

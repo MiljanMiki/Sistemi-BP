@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Zaposlen
+    public class Zaposlen
     {
-        public virtual int JMBG { get; set; }
+        public virtual long JMBG { get; set; }
 
         public virtual string Ime { get; set; }
 
@@ -24,7 +24,7 @@ namespace ProjekatVandredneSituacije.Entiteti
 
         public virtual string AdresaStanovanja { get; set; }
 
-        public virtual string Datum_Zaposlenja { get; set; }
+        public virtual DateTime Datum_Zaposlenja { get; set; }
 
         public virtual string Tip { get; set; }
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class InterventnaJedinica
+    public class InterventnaJedinica
     {
         public virtual int Jedinstveni_Broj { get; set; }
         public virtual string Naziv { get; set; }

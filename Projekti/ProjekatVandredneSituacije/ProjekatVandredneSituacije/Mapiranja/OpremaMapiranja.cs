@@ -23,7 +23,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
           
             Map(x => x.Naziv).Column("Naziv");
             Map(x => x.Tip).Column("Tip");
-            Map(x => x.Status).Column("Status")
+            Map(x => x.Status).Column("Status");
             Map(x => x.DatumNabavke).Column("DatumNabacke");
             
 
@@ -36,22 +36,25 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
      class MedicinskaOpremaMapiranja : SubclassMap<MedicinskaOprema>
     {
-        public MedicinskaOpremaMapiranja() { 
-            Table("MedicinskaOprema")
+        public MedicinskaOpremaMapiranja() {
+            /*
+            Table("MedicinskaOprema");
             
                 KeyColumn("Serijski_Broj");
                 Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
-            
+            */
         }
     }
 
      class TehnickaOpremaMapiranja : SubclassMap<TehnickaOprema>
     {
         public TehnickaOpremaMapiranja() {
+            /*
             Table("TehnickaOprema")
             
                 KeyColumn("Serijski_Broj");
                 Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+            */
             
         }
     }
@@ -59,10 +62,12 @@ namespace ProjekatVandredneSituacije.Mapiranja
      class LicnaZastitaMapiranja : SubclassMap<LicnaZastita>
     {
         public LicnaZastitaMapiranja() {
+            /*
             Table("LicnaZastita")
             
                 KeyColumn("Serijski_Broj");
                 Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+            */
             
         }
     }
@@ -71,13 +76,14 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public ZaliheMapiranja()
         {
+            /*
             Table("MedicinskaOprema")
             
                 KeyColumn("Serijski_Broj");
                 Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
                 Map(x => x.Kolicina, "Kolicina");
             
-            
+            */
         }
     }
 }

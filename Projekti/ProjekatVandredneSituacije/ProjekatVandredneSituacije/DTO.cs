@@ -1236,12 +1236,12 @@ public class PrijavaBasic
     public SektorPregled Sektor;
     public VandrednaSituacijaPregled VandrednaSituacija;
 
-    public SaradjujePregled()
+    public void SaradjujePregled()
     {
-
+        
     }
 
-    public SaradjujePregled(int Uloga)
+    public void SaradjujePregled(int Uloga)
     {
         this.Uloga = Uloga;
     }

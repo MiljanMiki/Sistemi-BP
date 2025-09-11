@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije
     internal class DTOMAnager
     {
         #region VandrednaSituacija
-
+        /*
         public static void obrisiVandrednuSituaciju(int id)
         {
             try
@@ -37,142 +37,142 @@ namespace ProjekatVandredneSituacije
 
 
         }
-        public static VandrednaSituacijaBasic vratiVandrednu(int id)
+    public static VandrednaSituacijaBasic vratiVandrednu(int id)
+    {
+        VandrednaSituacija v = new VandrednaSituacija();
+        try
         {
-            VandrednaSituacija v = new VandrednaSituacija();
-            try
-            {
-                ISession s = DataLayer.GetSession();
+            ISession s = DataLayer.GetSession();
 
-                VandrednaSituacija vs = s.Load<VandrednaSituacija>(id);
+            VandrednaSituacija vs = s.Load<VandrednaSituacija>(id);
 
-                v.Id = vs.Id;
-                v.Datum_Od = vs.Datum_Od;
-                v.Datum_Do = vs.Datum_Do;
-                v.Tip=vs.Tip
-                v.Broj_Ugrozenih_Osoba = vs.Broj_Ugrozenih_Osoba;
-                v.Opstina = vs.Opstina;
-                v.Opis = vs.Opis;
-                v.Prijava = vs.Prijava;
-                    
+            v.Id = vs.Id;
+            v.Datum_Od = vs.Datum_Od;
+            v.Datum_Do = vs.Datum_Do;
+            v.Tip=vs.Tip
+            v.Broj_Ugrozenih_Osoba = vs.Broj_Ugrozenih_Osoba;
+            v.Opstina = vs.Opstina;
+            v.Opis = vs.Opis;
+            v.Prijava = vs.Prijava;
 
 
-                
-                s.Close();
 
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
 
-            return o;
+            s.Close();
 
         }
-        public static List<OdeljenjeBasic> GetOdInfos(int prodavnicaId)
+        catch (Exception ec)
         {
-            List<OdeljenjeBasic> odInfos = new List<OdeljenjeBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-
-                IEnumerable<Odeljenje> odeljenja = from o in s.Query<Odeljenje>()
-                                                   where o.PripadaProdavnici.Id == prodavnicaId
-                                                   select o;
-
-                foreach (Odeljenje o in odeljenja)
-                {
-                    odInfos.Add(new OdeljenjeBasic(o.Id, o.Lokacija, o.PripadaProdavnici.Naziv, o.ProdajeSeProizvod.Count));
-                }
-
-                s.Close();
-
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-
-            return odInfos;
-        }
-        public static List<OdeljenjeDo5Pregled> vratiOdeljenjaDo5Prodavnice(int prodavnicaId)
-        {
-            List<OdeljenjeDo5Pregled> odInfos = new List<OdeljenjeDo5Pregled>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-
-                IEnumerable<OdeljenjeDo5> odeljenja = from o in s.Query<OdeljenjeDo5>()
-                                                      where o.PripadaProdavnici.Id == prodavnicaId
-                                                      select o;
-
-                foreach (OdeljenjeDo5 o in odeljenja)
-                {
-                    odInfos.Add(new OdeljenjeDo5Pregled(o.Id, o.Lokacija, o.BrojKasa, o.InfoPult));
-                }
-
-                s.Close();
-
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-
-            return odInfos;
-        }
-        public static void izmeniOdeljenjeDo5(OdeljenjeDo5Basic odeljenje)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-
-                Prodavnica.Entiteti.OdeljenjeDo5 o = s.Load<OdeljenjeDo5>(odeljenje.OdeljenjeId);
-
-                o.Lokacija = odeljenje.Lokacija;
-                o.BrojKasa = odeljenje.BrojKasa;
-                o.InfoPult = odeljenje.infoPult;
-
-
-
-                s.SaveOrUpdate(o);
-
-                s.Flush();
-
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
+            //handle exceptions
         }
 
+        return o;
 
-        public static void sacuvajOdeljenjeDo5(OdeljenjeDo5Basic odeljenje)
+    }
+    public static List<OdeljenjeBasic> GetOdInfos(int prodavnicaId)
+    {
+        List<OdeljenjeBasic> odInfos = new List<OdeljenjeBasic>();
+        try
         {
-            try
+            ISession s = DataLayer.GetSession();
+
+            IEnumerable<Odeljenje> odeljenja = from o in s.Query<Odeljenje>()
+                                               where o.PripadaProdavnici.Id == prodavnicaId
+                                               select o;
+
+            foreach (Odeljenje o in odeljenja)
             {
-                ISession s = DataLayer.GetSession();
-
-                Prodavnica.Entiteti.OdeljenjeDo5 o = new Prodavnica.Entiteti.OdeljenjeDo5();
-
-                o.Lokacija = odeljenje.Lokacija;
-                o.BrojKasa = odeljenje.BrojKasa;
-                o.InfoPult = odeljenje.infoPult;
-                Prodavnica.Entiteti.Prodavnica p = s.Load<Prodavnica.Entiteti.Prodavnica>(odeljenje.Prodavnica.Id);
-                o.PripadaProdavnici = p;
-
-
-                s.Save(o);
-
-                s.Flush();
-
-                s.Close();
+                odInfos.Add(new OdeljenjeBasic(o.Id, o.Lokacija, o.PripadaProdavnici.Naziv, o.ProdajeSeProizvod.Count));
             }
-            catch (Exception ec)
+
+            s.Close();
+
+        }
+        catch (Exception ec)
+        {
+            //handle exceptions
+        }
+
+        return odInfos;
+    }
+    public static List<OdeljenjeDo5Pregled> vratiOdeljenjaDo5Prodavnice(int prodavnicaId)
+    {
+        List<OdeljenjeDo5Pregled> odInfos = new List<OdeljenjeDo5Pregled>();
+        try
+        {
+            ISession s = DataLayer.GetSession();
+
+            IEnumerable<OdeljenjeDo5> odeljenja = from o in s.Query<OdeljenjeDo5>()
+                                                  where o.PripadaProdavnici.Id == prodavnicaId
+                                                  select o;
+
+            foreach (OdeljenjeDo5 o in odeljenja)
             {
-                //handle exceptions
+                odInfos.Add(new OdeljenjeDo5Pregled(o.Id, o.Lokacija, o.BrojKasa, o.InfoPult));
             }
+
+            s.Close();
+
+        }
+        catch (Exception ec)
+        {
+            //handle exceptions
+        }
+
+        return odInfos;
+    }
+    public static void izmeniOdeljenjeDo5(OdeljenjeDo5Basic odeljenje)
+    {
+        try
+        {
+            ISession s = DataLayer.GetSession();
+
+            Prodavnica.Entiteti.OdeljenjeDo5 o = s.Load<OdeljenjeDo5>(odeljenje.OdeljenjeId);
+
+            o.Lokacija = odeljenje.Lokacija;
+            o.BrojKasa = odeljenje.BrojKasa;
+            o.InfoPult = odeljenje.infoPult;
+
+
+
+            s.SaveOrUpdate(o);
+
+            s.Flush();
+
+            s.Close();
+        }
+        catch (Exception ec)
+        {
+            //handle exceptions
+        }
+    }
+
+
+    public static void sacuvajOdeljenjeDo5(OdeljenjeDo5Basic odeljenje)
+    {
+        try
+        {
+            ISession s = DataLayer.GetSession();
+
+            Prodavnica.Entiteti.OdeljenjeDo5 o = new Prodavnica.Entiteti.OdeljenjeDo5();
+
+            o.Lokacija = odeljenje.Lokacija;
+            o.BrojKasa = odeljenje.BrojKasa;
+            o.InfoPult = odeljenje.infoPult;
+            Prodavnica.Entiteti.Prodavnica p = s.Load<Prodavnica.Entiteti.Prodavnica>(odeljenje.Prodavnica.Id);
+            o.PripadaProdavnici = p;
+
+
+            s.Save(o);
+
+            s.Flush();
+
+            s.Close();
+        }
+        catch (Exception ec)
+        {
+            //handle exceptions
+        }
 }
 #region 
 
@@ -182,162 +182,162 @@ namespace ProjekatVandredneSituacije
 
 public static void obrisiAnaliticara(int id)
 {
-    try
-    {
-        ISession s = DataLayer.GetSession();
+try
+{
+    ISession s = DataLayer.GetSession();
 
-        Zaposlen z = s.Load<Analiticar>(id);
+    Zaposlen z = s.Load<Analiticar>(id);
 
-        s.Delete(Zaposlen);
-        s.Flush();
+    s.Delete(Zaposlen);
+    s.Flush();
 
 
 
-        s.Close();
+    s.Close();
 
-    }
-    catch (Exception ec)
-    {
-        //handle exceptions
-    }
+}
+catch (Exception ec)
+{
+    //handle exceptions
+}
 
 
 }
 public static ZaposlenBasic vratiAnaliticara(int id)
 {
-    OdeljenjeDo5Basic o = new OdeljenjeDo5Basic();
-    try
-    {
-        ISession s = DataLayer.GetSession();
+OdeljenjeDo5Basic o = new OdeljenjeDo5Basic();
+try
+{
+    ISession s = DataLayer.GetSession();
 
-        OdeljenjeDo5 odeljenje = s.Load<OdeljenjeDo5>(id);
+    OdeljenjeDo5 odeljenje = s.Load<OdeljenjeDo5>(id);
 
-        o.OdeljenjeId = odeljenje.Id;
-        o.Lokacija = odeljenje.Lokacija;
-        o.BrojKasa = odeljenje.BrojKasa;
-        o.infoPult = odeljenje.InfoPult;
-
-
+    o.OdeljenjeId = odeljenje.Id;
+    o.Lokacija = odeljenje.Lokacija;
+    o.BrojKasa = odeljenje.BrojKasa;
+    o.infoPult = odeljenje.InfoPult;
 
 
-        s.Close();
 
-    }
-    catch (Exception ec)
-    {
-        //handle exceptions
-    }
 
-    return o;
+    s.Close();
+
+}
+catch (Exception ec)
+{
+    //handle exceptions
+}
+
+return o;
 
 }
 public static List<OdeljenjeBasic> GetOdInfos(int prodavnicaId)
 {
-    List<OdeljenjeBasic> odInfos = new List<OdeljenjeBasic>();
-    try
+List<OdeljenjeBasic> odInfos = new List<OdeljenjeBasic>();
+try
+{
+    ISession s = DataLayer.GetSession();
+
+    IEnumerable<Odeljenje> odeljenja = from o in s.Query<Odeljenje>()
+                                       where o.PripadaProdavnici.Id == prodavnicaId
+                                       select o;
+
+    foreach (Odeljenje o in odeljenja)
     {
-        ISession s = DataLayer.GetSession();
-
-        IEnumerable<Odeljenje> odeljenja = from o in s.Query<Odeljenje>()
-                                           where o.PripadaProdavnici.Id == prodavnicaId
-                                           select o;
-
-        foreach (Odeljenje o in odeljenja)
-        {
-            odInfos.Add(new OdeljenjeBasic(o.Id, o.Lokacija, o.PripadaProdavnici.Naziv, o.ProdajeSeProizvod.Count));
-        }
-
-        s.Close();
-
-    }
-    catch (Exception ec)
-    {
-        //handle exceptions
+        odInfos.Add(new OdeljenjeBasic(o.Id, o.Lokacija, o.PripadaProdavnici.Naziv, o.ProdajeSeProizvod.Count));
     }
 
-    return odInfos;
+    s.Close();
+
+}
+catch (Exception ec)
+{
+    //handle exceptions
+}
+
+return odInfos;
 }
 public static List<OdeljenjeDo5Pregled> vratiOdeljenjaDo5Prodavnice(int prodavnicaId)
 {
-    List<OdeljenjeDo5Pregled> odInfos = new List<OdeljenjeDo5Pregled>();
-    try
+List<OdeljenjeDo5Pregled> odInfos = new List<OdeljenjeDo5Pregled>();
+try
+{
+    ISession s = DataLayer.GetSession();
+
+    IEnumerable<OdeljenjeDo5> odeljenja = from o in s.Query<OdeljenjeDo5>()
+                                          where o.PripadaProdavnici.Id == prodavnicaId
+                                          select o;
+
+    foreach (OdeljenjeDo5 o in odeljenja)
     {
-        ISession s = DataLayer.GetSession();
-
-        IEnumerable<OdeljenjeDo5> odeljenja = from o in s.Query<OdeljenjeDo5>()
-                                              where o.PripadaProdavnici.Id == prodavnicaId
-                                              select o;
-
-        foreach (OdeljenjeDo5 o in odeljenja)
-        {
-            odInfos.Add(new OdeljenjeDo5Pregled(o.Id, o.Lokacija, o.BrojKasa, o.InfoPult));
-        }
-
-        s.Close();
-
-    }
-    catch (Exception ec)
-    {
-        //handle exceptions
+        odInfos.Add(new OdeljenjeDo5Pregled(o.Id, o.Lokacija, o.BrojKasa, o.InfoPult));
     }
 
-    return odInfos;
+    s.Close();
+
+}
+catch (Exception ec)
+{
+    //handle exceptions
+}
+
+return odInfos;
 }
 public static void izmeniOdeljenjeDo5(OdeljenjeDo5Basic odeljenje)
 {
-    try
-    {
-        ISession s = DataLayer.GetSession();
+try
+{
+    ISession s = DataLayer.GetSession();
 
-        Prodavnica.Entiteti.OdeljenjeDo5 o = s.Load<OdeljenjeDo5>(odeljenje.OdeljenjeId);
+    Prodavnica.Entiteti.OdeljenjeDo5 o = s.Load<OdeljenjeDo5>(odeljenje.OdeljenjeId);
 
-        o.Lokacija = odeljenje.Lokacija;
-        o.BrojKasa = odeljenje.BrojKasa;
-        o.InfoPult = odeljenje.infoPult;
+    o.Lokacija = odeljenje.Lokacija;
+    o.BrojKasa = odeljenje.BrojKasa;
+    o.InfoPult = odeljenje.infoPult;
 
 
 
-        s.SaveOrUpdate(o);
+    s.SaveOrUpdate(o);
 
-        s.Flush();
+    s.Flush();
 
-        s.Close();
-    }
-    catch (Exception ec)
-    {
-        //handle exceptions
-    }
+    s.Close();
+}
+catch (Exception ec)
+{
+    //handle exceptions
+}
 }
 
 
 public static void sacuvajOdeljenjeDo5(OdeljenjeDo5Basic odeljenje)
 {
-    try
-    {
-        ISession s = DataLayer.GetSession();
+try
+{
+    ISession s = DataLayer.GetSession();
 
-        Prodavnica.Entiteti.OdeljenjeDo5 o = new Prodavnica.Entiteti.OdeljenjeDo5();
+    Prodavnica.Entiteti.OdeljenjeDo5 o = new Prodavnica.Entiteti.OdeljenjeDo5();
 
-        o.Lokacija = .Lokacija;
-        o.BrojKasa = odeljenje.BrojKasa;
-        o.InfoPult = odeljenje.infoPult;
-        Prodavnica.Entiteti.Prodavnica p = s.Load<Prodavnica.Entiteti.Prodavnica>(odeljenje.Prodavnica.Id);
-        o.PripadaProdavnici = p;
+    o.Lokacija = .Lokacija;
+    o.BrojKasa = odeljenje.BrojKasa;
+    o.InfoPult = odeljenje.infoPult;
+    Prodavnica.Entiteti.Prodavnica p = s.Load<Prodavnica.Entiteti.Prodavnica>(odeljenje.Prodavnica.Id);
+    o.PripadaProdavnici = p;
 
 
-        s.Save(o);
+    s.Save(o);
 
-        s.Flush();
+    s.Flush();
 
-        s.Close();
-    }
-    catch (Exception ec)
-    {
-        //handle exceptions
-    }
+    s.Close();
 }
-    #endregion Zaposlen
-
+catch (Exception ec)
+{
+    //handle exceptions
+}
+}
+    */
+        #endregion Zaposlen
 
     }
 }

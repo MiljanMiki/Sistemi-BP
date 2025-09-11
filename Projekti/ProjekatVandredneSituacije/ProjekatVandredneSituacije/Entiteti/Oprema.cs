@@ -20,14 +20,14 @@ namespace ProjekatVandredneSituacije.Entiteti
 
     public enum TipMedicinske
     {
-        prenosive_nosiljke, defibrilatori, kompleti_za_reanimaciju)
+        prenosive_nosiljke, defibrilatori, kompleti_za_reanimaciju
     }
 
     public enum TipZalihe
     {
         satori, hrana, voda, lekovi
     }
-    internal class Oprema
+    public class Oprema
     {
         public virtual int Serijski_Broj {  get; set; }    
         public virtual string Naziv {  get; set; }

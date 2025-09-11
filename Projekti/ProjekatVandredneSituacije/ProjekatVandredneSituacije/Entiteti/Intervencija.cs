@@ -11,7 +11,7 @@ namespace ProjekatVandredneSituacije.Entiteti
     {
         Uspesna, Neuspesna
     }
-    internal class Intervencija
+    public class Intervencija
     {
         public virtual int Id { get; set; }
 
