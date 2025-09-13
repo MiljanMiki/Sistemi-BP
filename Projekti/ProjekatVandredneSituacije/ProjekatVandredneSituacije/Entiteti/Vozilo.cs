@@ -12,9 +12,9 @@ namespace ProjekatVandredneSituacije.Entiteti
     }
     internal class Vozilo
     {
-        public virtual int Registarska_Oznaka { get; set; }
+        public virtual string Registarska_Oznaka { get; set; }
         public virtual string Proizvodjac {  get; set; }
-        public virtual string Tip {  get; set; }
+        
         public virtual StatusVozila Status { get; set; }
         public virtual string Lokacija { get; set; }
 
@@ -22,11 +22,8 @@ namespace ProjekatVandredneSituacije.Entiteti
 
         public virtual IList<DodeljujeSe> Dodeljuje { get; set; }
 
-       
-
         public IList<Ucestvovalo> Ucestvovalo {  get; set; }
-      
-        
+     
         public Vozilo()
         {
             Servisi = new List<Servisi>();
@@ -36,10 +33,14 @@ namespace ProjekatVandredneSituacije.Entiteti
         }
     }
 
-  
+    internal abstract class VoziloZaJedinice:Vozilo
+    {
+        //objasnjenje dummy class za odvajanje dzipova od ostalih vozila
+    }
 
-     class Sanitetska : Vozilo
-    { }
+    class Sanitetska : VoziloZaJedinice
+    { 
+    }
 
 
 

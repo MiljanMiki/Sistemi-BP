@@ -25,8 +25,8 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Lokacija).Column("Lokacija");
             Map(x => x.Opis).Column("Opis");
 
-            //mapiranje veza
-            References(x => x.Prijava_ID).Column("Prijava_Id");
+           
+            References(x => x.Prijava_ID).Column("ID");
             
 
             HasMany(x => x.Ucestvuje)
@@ -37,7 +37,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             HasMany(x => x.Saradjuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("VandrednaSituacija");
+                .KeyColumn("IdVandredneSituacije");
 
            
         }

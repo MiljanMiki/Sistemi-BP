@@ -8,8 +8,10 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Saradjuje
     {
-       
-        public virtual Sektor Sektor { get; set; }
+
+        public virtual int Id { get; set; }
+        public string Uloga {  get; set; }
+        public virtual Sluzba Sektor { get; set; }
 
         public virtual VandrednaSituacija VandrednaSituacija { get; set; }
     }

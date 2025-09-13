@@ -8,6 +8,7 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Istorija_Uloga_Zaposlenih
     {
+        public virtual int Id { get; set; }
         public virtual Zaposlen Zaposleni {  get; set; }
         public virtual string Uloga {  get; set; }
         public virtual DateTime Datum_Od { get; set; }

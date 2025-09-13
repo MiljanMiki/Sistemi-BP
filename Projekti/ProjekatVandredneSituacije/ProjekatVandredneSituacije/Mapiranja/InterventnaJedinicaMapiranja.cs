@@ -23,13 +23,13 @@ namespace ProjekatVandredneSituacije.Mapiranja
           
             Map(x => x.Baza, "Baza");
 
-            References(x => x.Oprema, "Oprema");
-            References(x => x.Komandir, "Komandir");
+  
+            References(x => x.Komandir, "JMBG");
 
-
+            HasMany(x => x.Oprema).KeyColumn("Serijski_Broj").Cascade.All();
             HasMany(x => x.Dodeljuje).KeyColumn("Interventna").Inverse().Cascade.All();
-            HasMany(x => x.Radnici).KeyColumn("IntervetnaJedinica").Inverse().Cascade.All();
-            HasMany(x => x.Ucestvuje).KeyColumn("Id_Jedinice").Inverse().Cascade.All();
+            HasMany(x => x.Radnici).KeyColumn("JMBG").Inverse().Cascade.All();
+            HasMany(x => x.Ucestvuje).KeyColumn("InterventnaJedinica_Id").Inverse().Cascade.All();
             HasMany(x => x.AngazovanaVozila).KeyColumn("IntervetnaJedinica").Inverse().Cascade.All();
         }   
     }

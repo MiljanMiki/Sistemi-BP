@@ -8,12 +8,14 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Predstavnik
     {
-        public virtual int Id {  get; set; }
-        public virtual Sektor Sektor { get; set; }
+        public virtual string JMBG {  get; set; }
+        public virtual Sluzba Sektor { get; set; }
         public virtual string Ime {  get; set; }
         public virtual string Prezime { get; set; }
         public virtual string Pozicija { get; set; }
         public virtual string Telefon {  get; set; }
         public virtual string Email {  get; set; }
+
+        public virtual Sluzba Sluzba { get; set; }
     }
 }

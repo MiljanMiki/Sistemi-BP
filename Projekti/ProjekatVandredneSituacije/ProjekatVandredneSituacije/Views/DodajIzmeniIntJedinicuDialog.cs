@@ -12,6 +12,7 @@ public class DodajIzmeniIntJedinicuDialog : Form
     private TextBox txtNaziv, txtBrojClanova, txtBaza;
     private ComboBox cmbTipJedinice;
     private Button btnSacuvaj, btnOdustani;
+    private Panel pnlButtons;
     private TableLayoutPanel tlpMain;
 
     public InterventnaJedinica Jedinica { get; private set; }
@@ -36,44 +37,27 @@ public class DodajIzmeniIntJedinicuDialog : Form
 
     private void InitializeComponent()
     {
-        this.ClientSize = new System.Drawing.Size(400, 250);
-        this.FormBorderStyle = FormBorderStyle.FixedDialog;
-        this.StartPosition = FormStartPosition.CenterParent;
-        this.MaximizeBox = false;
-        this.MinimizeBox = false;
-
-        // Glavni TableLayoutPanel
         tlpMain = new TableLayoutPanel();
-        tlpMain.Dock = DockStyle.Fill;
-        tlpMain.Padding = new Padding(10);
+        lblNaziv = new Label();
+        txtNaziv = new TextBox();
+        lblBrojClanova = new Label();
+        txtBrojClanova = new TextBox();
+        lblBaza = new Label();
+        txtBaza = new TextBox();
+        lblTip = new Label();
+        cmbTipJedinice = new ComboBox();
+        pnlButtons = new Panel();
+        btnSacuvaj = new Button();
+        btnOdustani = new Button();
+        tlpMain.SuspendLayout();
+        pnlButtons.SuspendLayout();
+        SuspendLayout();
+        // 
+        // tlpMain
+        // 
         tlpMain.ColumnCount = 2;
-        tlpMain.RowCount = 5;
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-
-        // Kontrole
-        lblNaziv = new Label { Text = "Naziv:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
-        txtNaziv = new TextBox();
-        lblBrojClanova = new Label { Text = "Broj članova:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
-        txtBrojClanova = new TextBox();
-        lblBaza = new Label { Text = "Baza:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
-        txtBaza = new TextBox();
-        lblTip = new Label { Text = "Tip jedinice:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
-        cmbTipJedinice = new ComboBox();
-        cmbTipJedinice.Items.Add("Opšta");
-        cmbTipJedinice.Items.Add("Specijalna");
-        cmbTipJedinice.DropDownStyle = ComboBoxStyle.DropDownList;
-        cmbTipJedinice.SelectedIndex = 0; // Podrazumevana vrednost
-
-        btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
-        btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
-
-        // Dodavanje kontrola u TableLayoutPanel
         tlpMain.Controls.Add(lblNaziv, 0, 0);
         tlpMain.Controls.Add(txtNaziv, 1, 0);
         tlpMain.Controls.Add(lblBrojClanova, 0, 1);
@@ -82,20 +66,116 @@ public class DodajIzmeniIntJedinicuDialog : Form
         tlpMain.Controls.Add(txtBaza, 1, 2);
         tlpMain.Controls.Add(lblTip, 0, 3);
         tlpMain.Controls.Add(cmbTipJedinice, 1, 3);
-
-        Panel pnlButtons = new Panel { Dock = DockStyle.Fill };
+        tlpMain.Controls.Add(pnlButtons, 0, 4);
+        tlpMain.Dock = DockStyle.Fill;
+        tlpMain.Location = new Point(0, 0);
+        tlpMain.Name = "tlpMain";
+        tlpMain.Padding = new Padding(10);
+        tlpMain.RowCount = 5;
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+        tlpMain.Size = new Size(400, 250);
+        tlpMain.TabIndex = 0;
+        // 
+        // lblNaziv
+        // 
+        lblNaziv.Location = new Point(13, 10);
+        lblNaziv.Name = "lblNaziv";
+        lblNaziv.Size = new Size(100, 23);
+        lblNaziv.TabIndex = 0;
+        // 
+        // txtNaziv
+        // 
+        txtNaziv.Location = new Point(127, 13);
+        txtNaziv.Name = "txtNaziv";
+        txtNaziv.Size = new Size(100, 27);
+        txtNaziv.TabIndex = 1;
+        // 
+        // lblBrojClanova
+        // 
+        lblBrojClanova.Location = new Point(13, 40);
+        lblBrojClanova.Name = "lblBrojClanova";
+        lblBrojClanova.Size = new Size(100, 23);
+        lblBrojClanova.TabIndex = 2;
+        // 
+        // txtBrojClanova
+        // 
+        txtBrojClanova.Location = new Point(127, 43);
+        txtBrojClanova.Name = "txtBrojClanova";
+        txtBrojClanova.Size = new Size(100, 27);
+        txtBrojClanova.TabIndex = 3;
+        // 
+        // lblBaza
+        // 
+        lblBaza.Location = new Point(13, 70);
+        lblBaza.Name = "lblBaza";
+        lblBaza.Size = new Size(100, 23);
+        lblBaza.TabIndex = 4;
+        // 
+        // txtBaza
+        // 
+        txtBaza.Location = new Point(127, 73);
+        txtBaza.Name = "txtBaza";
+        txtBaza.Size = new Size(100, 27);
+        txtBaza.TabIndex = 5;
+        // 
+        // lblTip
+        // 
+        lblTip.Location = new Point(13, 100);
+        lblTip.Name = "lblTip";
+        lblTip.Size = new Size(100, 23);
+        lblTip.TabIndex = 6;
+        // 
+        // cmbTipJedinice
+        // 
+        cmbTipJedinice.DropDownStyle = ComboBoxStyle.DropDownList;
+        cmbTipJedinice.Items.AddRange(new object[] { "Opšta", "Specijalna" });
+        cmbTipJedinice.Location = new Point(127, 103);
+        cmbTipJedinice.Name = "cmbTipJedinice";
+        cmbTipJedinice.Size = new Size(121, 28);
+        cmbTipJedinice.TabIndex = 7;
+        // 
+        // pnlButtons
+        // 
+        tlpMain.SetColumnSpan(pnlButtons, 2);
         pnlButtons.Controls.Add(btnSacuvaj);
         pnlButtons.Controls.Add(btnOdustani);
-        btnSacuvaj.Location = new System.Drawing.Point(100, 10);
-        btnOdustani.Location = new System.Drawing.Point(210, 10);
-
-        tlpMain.Controls.Add(pnlButtons, 0, 4);
-        tlpMain.SetColumnSpan(pnlButtons, 2);
-
-        this.Controls.Add(tlpMain);
-
-        // Vezivanje događaja
-        btnSacuvaj.Click += new EventHandler(BtnSacuvaj_Click);
+        pnlButtons.Location = new Point(13, 133);
+        pnlButtons.Name = "pnlButtons";
+        pnlButtons.Size = new Size(200, 100);
+        pnlButtons.TabIndex = 8;
+        // 
+        // btnSacuvaj
+        // 
+        btnSacuvaj.Location = new Point(100, 10);
+        btnSacuvaj.Name = "btnSacuvaj";
+        btnSacuvaj.Size = new Size(75, 23);
+        btnSacuvaj.TabIndex = 0;
+        btnSacuvaj.Click += BtnSacuvaj_Click;
+        // 
+        // btnOdustani
+        // 
+        btnOdustani.Location = new Point(210, 10);
+        btnOdustani.Name = "btnOdustani";
+        btnOdustani.Size = new Size(75, 23);
+        btnOdustani.TabIndex = 1;
+        // 
+        // DodajIzmeniIntJedinicuDialog
+        // 
+        ClientSize = new Size(400, 250);
+        Controls.Add(tlpMain);
+        FormBorderStyle = FormBorderStyle.FixedDialog;
+        MaximizeBox = false;
+        MinimizeBox = false;
+        Name = "DodajIzmeniIntJedinicuDialog";
+        StartPosition = FormStartPosition.CenterParent;
+        tlpMain.ResumeLayout(false);
+        tlpMain.PerformLayout();
+        pnlButtons.ResumeLayout(false);
+        ResumeLayout(false);
     }
 
     private void PopulateFields()

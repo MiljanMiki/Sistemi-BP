@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         public ServisiMapiranja()
         {
             Table("Servisi");
-
+            Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.Vozilo, "Registarska_Oznaka");
 
 

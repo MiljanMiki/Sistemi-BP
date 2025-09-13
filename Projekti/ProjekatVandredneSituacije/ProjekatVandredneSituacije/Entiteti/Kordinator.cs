@@ -9,7 +9,11 @@ namespace ProjekatVandredneSituacije.Entiteti
     internal class Kordinator:Zaposlen
     {
         public virtual int BrojTimova { get; set; }
-
+        public virtual IList<Specijalizacija> Specijalizacija { get; set; }
         
+        public Kordinator()
+        {
+            Specijalizacija = new List<Specijalizacija>();
+        }
     }
 }

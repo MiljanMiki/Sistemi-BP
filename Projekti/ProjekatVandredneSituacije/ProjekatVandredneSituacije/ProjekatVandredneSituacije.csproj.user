@@ -4,6 +4,9 @@
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forme\ZaposleniForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\DodajIzmeniIntervencijuDialog.cs">
       <SubType>Form</SubType>
     </Compile>

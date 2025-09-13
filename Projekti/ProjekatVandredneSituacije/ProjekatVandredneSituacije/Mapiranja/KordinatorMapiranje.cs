@@ -11,7 +11,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public KordinatorMapiranje()
         {
-            Table("KORDINATOR");
+            Table("Kordinator");
 
             KeyColumn("JMBG");
 

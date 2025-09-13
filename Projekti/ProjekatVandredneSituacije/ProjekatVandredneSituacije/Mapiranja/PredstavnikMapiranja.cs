@@ -17,9 +17,9 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Predstavnik_Sluzbe");
 
             
-            Id(x => x.Id, "Id").GeneratedBy.Identity();
+            Id(x => x.JMBG, "JMBG").GeneratedBy.Identity();
 
-            References(x => x.Sektor, "");
+            References(x => x.Sektor, "Id_Sektora");
 
           
             Map(x => x.Ime).Column("Ime");

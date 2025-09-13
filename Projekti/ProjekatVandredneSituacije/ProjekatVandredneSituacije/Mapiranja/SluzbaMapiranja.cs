@@ -8,25 +8,25 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Mapiranja
 {
-     class SektoriMapiranja:ClassMap<Sektor>
+     class SluzbaMapiranja:ClassMap<Sluzba>
     {
-        public SektoriMapiranja()
+        public SluzbaMapiranja()
         {
-            Table("Sektor");
+            Table("Sluzba");
 
             Id(x => x.Id_Sektora, "Id_Sektora").GeneratedBy.TriggerIdentity();
 
             Map(x => x.TipSektora).Column("Tip");
-            Map(x => x.Uloga).Column("Uloga");
+            
           
            
-            References(x => x.Predstavnik).Column("Predstavnik");
+            References(x => x.Predstavnik).Column("JMBGPredstavnika");
 
 
             HasMany(x => x.VandredneSituacije)
            .Cascade.All()
            .Inverse()
-           .KeyColumn("Id_Sektora");
+           .KeyColumn("VandredneSituacije");
 
             
         }

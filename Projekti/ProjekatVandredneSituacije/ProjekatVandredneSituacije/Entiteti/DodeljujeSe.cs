@@ -8,10 +8,9 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class DodeljujeSe
     {
+        public virtual int Id { get; set; }
         public virtual Vozilo Vozilo { get; set; }
-
-        public virtual OperativniRadnik? Pojedinac { get; set; }
-
+        public virtual OperativniRadnik Radnik { get; set; }
         public virtual InterventnaJedinica? Jedinica{ get; set; }
 
         public virtual DateTime DatumOd {  get; set; }

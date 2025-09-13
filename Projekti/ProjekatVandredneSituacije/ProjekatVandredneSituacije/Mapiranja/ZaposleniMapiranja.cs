@@ -13,9 +13,9 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public ZaposleniMapiranja()
         {
-            Table("Yaposlen");
+            Table("Zaposlen");
 
-            Id(x => x.JMBG).GeneratedBy.TriggerIdentity();
+            Id(x => x.JMBG, "JMBG").GeneratedBy.TriggerIdentity();
 
             Map(x => x.Ime).Column("Ime");
             Map(x => x.Prezime).Column("Prezime");
@@ -25,8 +25,6 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Email).Column("Email");
             Map(x => x.AdresaStanovanja).Column("AdresaStanovanja");
             Map(x => x.Datum_Zaposlenja).Column("Datum_Zaposlenja");
-            Map(x => x.Tip).Column("Tip");
-
 
         }
     }

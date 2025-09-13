@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8KLMFk3ADmU=",
+  "dgSpecHash": "dt1/xbHJ0og=",
   "success": true,
   "projectFilePath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
   "expectedPackageFiles": [
@@ -99,8 +99,10 @@
     {
       "code": "NU1903",
       "level": "Warning",
-      "warningLevel": 1,
       "message": "Package 'NHibernate' 5.5.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-fg4q-ccq8-3r5q",
+      "projectPath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
       "libraryId": "NHibernate",
       "targetGraphs": [
         "net8.0-windows7.0"

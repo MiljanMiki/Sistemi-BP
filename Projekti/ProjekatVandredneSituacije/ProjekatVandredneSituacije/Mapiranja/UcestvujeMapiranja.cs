@@ -15,10 +15,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("Ucestvuje");
 
-            CompositeId()
-                .KeyReference(x => x.IdInterventneJed, "IdInterventneJed")
-                .KeyReference(x => x.IdVandredneSituacije, "IdVandredneSituacije")
-                .KeyReference(x => x.IdIntervencije, "IdIntervencije");
+            Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
+            References(x => x.IdInterventneJed, "Jedinstveni_Broj");
+            References(x => x.IdVandredneSituacije, "Id");
+            References(x => x.IdIntervencije, "Id");
 
         }
     }

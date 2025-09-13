@@ -13,15 +13,15 @@ namespace ProjekatVandredneSituacije.Mapiranja
         public SertifikatMapiranja()
         {
             
-                Table("Sertifikat");
+           Table("Sertifikat");
 
-                CompositeId()
-                    .KeyReference(x => x.OperativniRadnik, "JMBG")
-                    .KeyProperty(x => x.Naziv, "Tip")
-                    .KeyProperty(x => x.Institucija, "Institucija");
+           CompositeId(x=> x.Id)
+            .KeyReference(x => x.OperativniRadnik, "OperativniRadnik")
+            .KeyProperty(x => x.Naziv, "Naziv")
+            .KeyProperty(x => x.Institucija, "Institucija"); ;
 
-            Map(x => x.DatumIzdavanja).Column("DATUM_OD");
-            Map(x => x.DatumVazenja).Column("DATUM_DO");
+            Map(x => x.DatumIzdavanja).Column("Datum_Od");
+            Map(x => x.DatumVazenja).Column("Datum_Do");
 
             
         }

@@ -1,4 +1,5 @@
 ﻿using FluentNHibernate.Mapping;
+using NHibernate.Proxy;
 using ProjekatVandredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,15 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public DodeljujeSeMapiranja() {
             Table("DodeljujeSe");
-            CompositeId()
-                .KeyReference(x => x.Vozilo, "Vozilo")
-                .KeyProperty(x => x.DatumOd, "Datum_Od");
+            Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
+            References(x=> x.Vozilo, "Registarska_Oznaka").Nullable();
+  
 
+            References(x => x.Radnik, "JMBG").Nullable();
 
-            References(x => x.Pojedinac, "Pojedinac").Nullable();
+            References(x => x.Jedinica, "Id").Nullable();
 
-            References(x => x.Jedinica, "Id_Jedinice").Nullable();
-
-           
+            Map(x=> x.DatumOd).Column("Datum_Od");
             Map(x => x.DatumDo).Column("Datum_Do");
         }
     }

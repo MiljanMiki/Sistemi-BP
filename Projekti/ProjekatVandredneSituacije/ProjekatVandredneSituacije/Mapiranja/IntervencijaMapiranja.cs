@@ -27,11 +27,11 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Broj_Povredjenih, "Broj_Povredjenih");
             Map(x => x.Uspesnost, "Uspesnost");
 
-            "
+            
             HasMany(x => x.Ucestvuje)
-                .KeyColumn("IdIntervencije") // Naziv spoljnog ključa u tabeli UCESTVUJE
+                .KeyColumn("IdIntervencije") 
                 .Inverse()
-                .Cascade.All(); // Prilikom brisanja Intervencije, brišu se i sve stavke Ucestvuje
+                .Cascade.All(); 
         }
     }
 }

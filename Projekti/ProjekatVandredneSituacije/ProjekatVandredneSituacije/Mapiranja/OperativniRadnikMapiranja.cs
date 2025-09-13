@@ -18,7 +18,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
             Map(x => x.Broj_Sati).Column("Broj_Sati");
             Map(x => x.Fizicka_Spremnost).Column("Fizicka_Spremnost");
-            References(x => x.InterventnaJedinica).Column("IdIntervetneJedinice");
+            References(x => x.InterventnaJedinica).Column("Jedinstveni_Broj");
 
 
             HasMany(x => x.Sertifikats)
@@ -26,13 +26,13 @@ namespace ProjekatVandredneSituacije.Mapiranja
            .Inverse()
            .KeyColumn("Sertifikat");
 
-            References(x => x.InterventnaJedinica).Column("InterventnaJedinica");
+            References(x => x.InterventnaJedinica).Column("Jedinstveni_Broj");
 
 
             HasMany(x => x.Dodeljuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("");
+                .KeyColumn("Pojedinac");
 
 
         }

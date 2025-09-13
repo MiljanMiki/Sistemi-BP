@@ -8,12 +8,9 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Softver
     {
+        public virtual int Id { get; set; }
         public Analiticar Analiticar { get; set; }
         public virtual string Naziv { get; set; }
-
-
-        
-        
 
         
     }

@@ -11,7 +11,7 @@ public class ListaSektoraForm : Form
     private Button btnDodaj, btnIzmeni, btnObrisi;
     private Panel pnlButtons, pnlContent;
 
-    private static List<Sektor> mockSektori = new List<Sektor>();
+    private static List<Sluzba> mockSektori = new List<Sluzba>();
 
     public ListaSektoraForm()
     {
@@ -72,8 +72,8 @@ public class ListaSektoraForm : Form
     {
         if (mockSektori.Count == 0)
         {
-            mockSektori.Add(new Sektor { Id_Sektora = 1, TipSektora = "Sektor za vanredne situacije", Uloga = "Koordinacija i rukovođenje" });
-            mockSektori.Add(new Sektor { Id_Sektora = 2, TipSektora = "Zdravstveni sektor", Uloga = "Pružanje medicinske pomoći" });
+            mockSektori.Add(new Sluzba { Id_Sektora = 1, TipSektora = "Sektor za vanredne situacije", Uloga = "Koordinacija i rukovođenje" });
+            mockSektori.Add(new Sluzba { Id_Sektora = 2, TipSektora = "Zdravstveni sektor", Uloga = "Pružanje medicinske pomoći" });
         }
     }
 
@@ -104,7 +104,7 @@ public class ListaSektoraForm : Form
             return;
         }
 
-        var selectedSektor = dgvSektori.SelectedRows[0].DataBoundItem as Sektor;
+        var selectedSektor = dgvSektori.SelectedRows[0].DataBoundItem as Sluzba;
         if (selectedSektor != null)
         {
             var izmenaDialog = new DodajIzmeniSektorDialog(selectedSektor);
@@ -124,7 +124,7 @@ public class ListaSektoraForm : Form
             return;
         }
 
-        var selectedSektor = dgvSektori.SelectedRows[0].DataBoundItem as Sektor;
+        var selectedSektor = dgvSektori.SelectedRows[0].DataBoundItem as Sluzba;
         if (selectedSektor != null)
         {
             var rezultat = MessageBox.Show($"Da li ste sigurni da želite da obrišete sektor '{selectedSektor.TipSektora}'?",
@@ -142,7 +142,7 @@ public class ListaSektoraForm : Form
     {
         if (e.RowIndex < 0) return;
 
-        var selectedItem = dgvSektori.Rows[e.RowIndex].DataBoundItem as Sektor;
+        var selectedItem = dgvSektori.Rows[e.RowIndex].DataBoundItem as Sluzba;
         if (selectedItem != null)
         {
             MessageBox.Show($"Dvoklik na sektor: {selectedItem.TipSektora}. Ovde će se otvoriti forma sa detaljima o sektoru.");

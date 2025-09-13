@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual DateTime Datum_I_Vreme { get; set; }
         public virtual VandrednaSituacija Id_VandrednaSituacija { get; set; }
         public virtual string Tip {  get; set; }
-        public virtual string Ime { get; set; }
+        public virtual string Ime_Prijavioca { get; set; }
         public virtual string Kontakt {  get; set; }    
         public virtual string Lokacija { get; set; }
         public virtual string Opis {  get; set; }

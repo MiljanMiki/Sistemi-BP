@@ -8,10 +8,14 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Sertifikat
     {
-        public virtual OperativniRadnik OperativniRadnik { get; set; }
-        public virtual string Naziv {  get; set; }
-        public virtual string Institucija { get; set; } 
+       
+        public virtual SertifikatId Id { get; set; }
         public virtual DateTime DatumIzdavanja {  get; set; }
         public virtual DateTime DatumVazenja {  get; set; }
+
+        public Sertifikat()
+        {
+            Id = new SertifikatId();
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Ucestvuje
     {
+        public virtual int Id{ get; set; }
         public virtual InterventnaJedinica IdInterventneJed {  get; set; }
         public virtual VandrednaSituacija IdVandredneSituacije { get; set; }
 

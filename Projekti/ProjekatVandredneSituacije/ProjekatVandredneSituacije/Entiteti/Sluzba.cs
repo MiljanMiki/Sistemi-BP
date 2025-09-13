@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Sektor
+    internal class Sluzba
     {
         public virtual int Id_Sektora {  get; set; }
         public virtual string TipSektora { get; set; }
-        public virtual string Uloga { get; set; }
+       
         
 
         public IList<Saradjuje> VandredneSituacije {  get; set; }
         public Predstavnik? Predstavnik { get; set;}
 
-        public Sektor()
+        public Sluzba()
         {
             VandredneSituacije = new List<Saradjuje>();
         }

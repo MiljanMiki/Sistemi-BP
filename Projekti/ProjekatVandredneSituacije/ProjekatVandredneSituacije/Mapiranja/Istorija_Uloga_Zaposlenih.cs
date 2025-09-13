@@ -14,9 +14,9 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("Istorija_Uloga_Zaposlenih");
 
-            CompositeId()
-                .KeyReference(x => x.Zaposleni, "JMBG")
-                .KeyProperty(x => x.Uloga, "Uloga");
+            Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
+            References(x => x.Zaposleni, "JMBG");
+            Map(x => x.Uloga, "Uloga");
 
 
             Map(x => x.Datum_Od)

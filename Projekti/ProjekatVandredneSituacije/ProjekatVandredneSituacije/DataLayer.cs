@@ -10,7 +10,7 @@ using ProjekatVandredneSituacije.Mapiranja;
 
 namespace ProjekatVandredneSituacije
 {
-    i class DataLayer
+     class DataLayer
     {
         private static ISessionFactory _factory = null;
         private static object objLock = new object();

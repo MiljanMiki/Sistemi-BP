@@ -12,7 +12,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public OpremaMapiranja()
         {
-            Table("OPREMA");
+            Table("Oprema");
 
            
             Id(x => x.Serijski_Broj, "Serijski_Broj").GeneratedBy.Assigned();
@@ -22,25 +22,25 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
           
             Map(x => x.Naziv).Column("Naziv");
-            Map(x => x.Tip).Column("Tip");
-            Map(x => x.Status).Column("Status")
+           
+            Map(x => x.Status).Column("Status");
             Map(x => x.DatumNabavke).Column("DatumNabacke");
             
 
 
             
-            References(x => x.Jedinica, "IdIntervetneJedinice");
+            References(x => x.Jedinica, "Jedinstveni_Broj");
 
         }
     }
 
      class MedicinskaOpremaMapiranja : SubclassMap<MedicinskaOprema>
     {
-        public MedicinskaOpremaMapiranja() { 
-            Table("MedicinskaOprema")
-            
-                KeyColumn("Serijski_Broj");
-                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+        public MedicinskaOpremaMapiranja() {
+            Table("MedicinskaOprema");
+
+            KeyColumn("Serijski_Broj");
+                Map(x => x.Tip).Column("Tip").CustomType<string>();
             
         }
     }
@@ -48,21 +48,22 @@ namespace ProjekatVandredneSituacije.Mapiranja
      class TehnickaOpremaMapiranja : SubclassMap<TehnickaOprema>
     {
         public TehnickaOpremaMapiranja() {
-            Table("TehnickaOprema")
+            Table("TehnickaOprema");
             
                 KeyColumn("Serijski_Broj");
-                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<string>();
             
         }
     }
 
      class LicnaZastitaMapiranja : SubclassMap<LicnaZastita>
     {
-        public LicnaZastitaMapiranja() {
-            Table("LicnaZastita")
+        public LicnaZastitaMapiranja() 
+        {
+            Table("LicnaZastita");
             
                 KeyColumn("Serijski_Broj");
-                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<string>();
             
         }
     }
@@ -71,10 +72,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public ZaliheMapiranja()
         {
-            Table("MedicinskaOprema")
+            Table("Zalihe");
             
                 KeyColumn("Serijski_Broj");
-                Map(x => x.TipOpreme).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<string>();
                 Map(x => x.Kolicina, "Kolicina");
             
             

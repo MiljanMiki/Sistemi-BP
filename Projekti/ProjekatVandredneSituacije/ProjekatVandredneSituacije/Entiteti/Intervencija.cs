@@ -26,9 +26,11 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual int Uspesnost { get; set; }
         public virtual IList<Ucestvuje> Ucestvuje { get; set; }
 
+        public virtual IList<Ucestvovalo> Ucestvovalos { get; set; }
         public Intervencija()
         {
             Ucestvuje = new List<Ucestvuje>();
+            Ucestvovalos = new List<Ucestvovalo>();
         }
     }
 }

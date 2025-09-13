@@ -4,26 +4,27 @@ using ProjekatVandredneSituacije.Entiteti;
 
 public class DodajIzmeniSektorDialog : Form
 {
-    private Sektor _sektor;
+    private Sluzba _sektor;
     private bool _isUpdate = false;
 
     private Label lblTipSektora, lblUloga;
     private TextBox txtTipSektora, txtUloga;
     private Button btnSacuvaj, btnOdustani;
+    private Panel pnlButtons;
     private TableLayoutPanel tlpMain;
 
-    public Sektor Sektor { get; private set; }
+    public Sluzba Sektor { get; private set; }
 
     // Konstruktor za dodavanje novog sektora
     public DodajIzmeniSektorDialog()
     {
         InitializeComponent();
         this.Text = "Dodaj novi sektor";
-        Sektor = new Sektor();
+        Sektor = new Sluzba();
     }
 
     // Konstruktor za izmenu postojećeg sektora
-    public DodajIzmeniSektorDialog(Sektor sektor)
+    public DodajIzmeniSektorDialog(Sluzba sektor)
     {
         InitializeComponent();
         this.Text = "Izmeni sektor";
@@ -34,52 +35,105 @@ public class DodajIzmeniSektorDialog : Form
 
     private void InitializeComponent()
     {
-        this.ClientSize = new System.Drawing.Size(400, 200);
-        this.FormBorderStyle = FormBorderStyle.FixedDialog;
-        this.StartPosition = FormStartPosition.CenterParent;
-        this.MaximizeBox = false;
-        this.MinimizeBox = false;
-
-        // Glavni TableLayoutPanel
         tlpMain = new TableLayoutPanel();
-        tlpMain.Dock = DockStyle.Fill;
-        tlpMain.Padding = new Padding(10);
+        lblTipSektora = new Label();
+        txtTipSektora = new TextBox();
+        lblUloga = new Label();
+        txtUloga = new TextBox();
+        pnlButtons = new Panel();
+        btnSacuvaj = new Button();
+        btnOdustani = new Button();
+        tlpMain.SuspendLayout();
+        pnlButtons.SuspendLayout();
+        SuspendLayout();
+        // 
+        // tlpMain
+        // 
         tlpMain.ColumnCount = 2;
-        tlpMain.RowCount = 3;
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30F));
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-
-        // Kontrole
-        lblTipSektora = new Label { Text = "Tip Sektora:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
-        txtTipSektora = new TextBox();
-        lblUloga = new Label { Text = "Uloga:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
-        txtUloga = new TextBox();
-
-        btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
-        btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
-
-        // Dodavanje kontrola u TableLayoutPanel
         tlpMain.Controls.Add(lblTipSektora, 0, 0);
         tlpMain.Controls.Add(txtTipSektora, 1, 0);
         tlpMain.Controls.Add(lblUloga, 0, 1);
         tlpMain.Controls.Add(txtUloga, 1, 1);
-
-        Panel pnlButtons = new Panel { Dock = DockStyle.Fill };
+        tlpMain.Controls.Add(pnlButtons, 0, 2);
+        tlpMain.Dock = DockStyle.Fill;
+        tlpMain.Location = new Point(0, 0);
+        tlpMain.Name = "tlpMain";
+        tlpMain.Padding = new Padding(10);
+        tlpMain.RowCount = 3;
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+        tlpMain.Size = new Size(400, 200);
+        tlpMain.TabIndex = 0;
+        // 
+        // lblTipSektora
+        // 
+        lblTipSektora.Location = new Point(13, 10);
+        lblTipSektora.Name = "lblTipSektora";
+        lblTipSektora.Size = new Size(100, 23);
+        lblTipSektora.TabIndex = 0;
+        // 
+        // txtTipSektora
+        // 
+        txtTipSektora.Location = new Point(127, 13);
+        txtTipSektora.Name = "txtTipSektora";
+        txtTipSektora.Size = new Size(100, 27);
+        txtTipSektora.TabIndex = 1;
+        // 
+        // lblUloga
+        // 
+        lblUloga.Location = new Point(13, 40);
+        lblUloga.Name = "lblUloga";
+        lblUloga.Size = new Size(100, 23);
+        lblUloga.TabIndex = 2;
+        // 
+        // txtUloga
+        // 
+        txtUloga.Location = new Point(127, 43);
+        txtUloga.Name = "txtUloga";
+        txtUloga.Size = new Size(100, 27);
+        txtUloga.TabIndex = 3;
+        // 
+        // pnlButtons
+        // 
+        tlpMain.SetColumnSpan(pnlButtons, 2);
         pnlButtons.Controls.Add(btnSacuvaj);
         pnlButtons.Controls.Add(btnOdustani);
-        btnSacuvaj.Location = new System.Drawing.Point(100, 10);
-        btnOdustani.Location = new System.Drawing.Point(210, 10);
-
-        tlpMain.Controls.Add(pnlButtons, 0, 2);
-        tlpMain.SetColumnSpan(pnlButtons, 2);
-
-        this.Controls.Add(tlpMain);
-
-        // Vezivanje događaja
-        btnSacuvaj.Click += new EventHandler(BtnSacuvaj_Click);
+        pnlButtons.Location = new Point(13, 73);
+        pnlButtons.Name = "pnlButtons";
+        pnlButtons.Size = new Size(200, 100);
+        pnlButtons.TabIndex = 4;
+        // 
+        // btnSacuvaj
+        // 
+        btnSacuvaj.Location = new Point(100, 10);
+        btnSacuvaj.Name = "btnSacuvaj";
+        btnSacuvaj.Size = new Size(75, 23);
+        btnSacuvaj.TabIndex = 0;
+        btnSacuvaj.Click += BtnSacuvaj_Click;
+        // 
+        // btnOdustani
+        // 
+        btnOdustani.Location = new Point(210, 10);
+        btnOdustani.Name = "btnOdustani";
+        btnOdustani.Size = new Size(75, 23);
+        btnOdustani.TabIndex = 1;
+        // 
+        // DodajIzmeniSektorDialog
+        // 
+        ClientSize = new Size(400, 200);
+        Controls.Add(tlpMain);
+        FormBorderStyle = FormBorderStyle.FixedDialog;
+        MaximizeBox = false;
+        MinimizeBox = false;
+        Name = "DodajIzmeniSektorDialog";
+        StartPosition = FormStartPosition.CenterParent;
+        tlpMain.ResumeLayout(false);
+        tlpMain.PerformLayout();
+        pnlButtons.ResumeLayout(false);
+        ResumeLayout(false);
     }
 
     private void PopulateFields()
@@ -101,7 +155,7 @@ public class DodajIzmeniSektorDialog : Form
             }
             else
             {
-                Sektor = new Sektor();
+                Sektor = new Sluzba();
             }
 
             Sektor.TipSektora = txtTipSektora.Text;

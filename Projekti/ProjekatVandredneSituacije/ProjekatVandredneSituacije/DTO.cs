@@ -6,6 +6,7 @@ using ProjekatVandredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static SaradjujeBasic;
@@ -14,7 +15,7 @@ namespace ProjekatVandredneSituacije
 {
    public class ZaposlenBasic
     {
-        public int JMBG;
+        public string JMBG;
 
         public string Ime;
 
@@ -30,13 +31,13 @@ namespace ProjekatVandredneSituacije
 
         public string AdresaStanovanja;
 
-        public string Datum_Zaposlenja;
+        public DateTime Datum_Zaposlenja;
 
-        public string Tip;
+        
 
         public IList<Istorija_Uloga_ZaposlenihBasic> Istorija; 
 
-        public ZaposlenBasic(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja,  string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip)
+        public ZaposlenBasic(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja,  string pol, string Kontakt_Telefon, string email, string AdresaStanovanja, DateTime DatumZaposlenja)
         {
             this.JMBG = JMBG;
             this.Ime=Ime;
@@ -46,7 +47,8 @@ namespace ProjekatVandredneSituacije
             this.Kontakt_Telefon = Kontakt_Telefon;
             Email = email;
             this.Datum_Zaposlenja = DatumZaposlenja;
-            this.Tip = Tip;
+            this.AdresaStanovanja = AdresaStanovanja;
+
         }
 
         public ZaposlenBasic()
@@ -59,7 +61,7 @@ namespace ProjekatVandredneSituacije
 
     public class ZaposlenPregled
     {
-        public  int JMBG;
+        public  string JMBG;
 
         public  string Ime;
 
@@ -75,13 +77,13 @@ namespace ProjekatVandredneSituacije
 
         public  string AdresaStanovanja;
 
-        public  string Datum_Zaposlenja;
+        public  DateTime Datum_Zaposlenja;
 
-        public  string Tip;
+        
 
         public IList<Istorija_Uloga_ZaposlenihPregled> Istorija; 
 
-        public ZaposlenPregled(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip)
+        public ZaposlenPregled(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string AdresaStanovanja,DateTime DatumZaposlenja)
         {
             this.JMBG = JMBG;
             this.Ime = Ime;
@@ -90,8 +92,9 @@ namespace ProjekatVandredneSituacije
             Pol = pol;
             this.Kontakt_Telefon = Kontakt_Telefon;
             Email = email;
+            this.AdresaStanovanja = AdresaStanovanja;
             this.Datum_Zaposlenja = DatumZaposlenja;
-            this.Tip = Tip;
+            
         }
 
         public ZaposlenPregled()
@@ -102,13 +105,16 @@ namespace ProjekatVandredneSituacije
 
     public class AnaliticarBasic: ZaposlenBasic
     {
-     
+        public IList<SoftverBasic> Softveri;
+        public IList<EkspertizaBasic> Ekspertiza;
         public AnaliticarBasic()
         {
+            Softveri = new List<SoftverBasic>();
+            Ekspertiza = new List<EkspertizaBasic>();
         }
 
-        public AnaliticarBasic(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip) :
-            base(JMBG,Ime,Prezime,Datum_Rodjenja,pol, Kontakt_Telefon, email,DatumZaposlenja, Tip)
+        public AnaliticarBasic(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string AdresaStanovanja, DateTime DatumZaposlenja) :
+            base(JMBG,Ime,Prezime,Datum_Rodjenja,pol, Kontakt_Telefon, email, AdresaStanovanja,DatumZaposlenja)
           
         {
             
@@ -118,15 +124,17 @@ namespace ProjekatVandredneSituacije
 
     public class AnaliticarPregled: ZaposlenPregled
     {
-        
 
-
+        public IList<SoftverPregled> Softver;
+        public IList<EkspertizaPregled> Ekspertiza;
         public AnaliticarPregled()
-        { 
+        {
+            Softver = new List<SoftverPregled>();
+            Ekspertiza = new List<EkspertizaPregled>();
         }
 
-        public AnaliticarPregled(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip) :
-            base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, DatumZaposlenja, Tip)
+        public AnaliticarPregled(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string AdresaStanovanja,DateTime DatumZaposlenja) :
+            base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, AdresaStanovanja, DatumZaposlenja)
         {
            
         }
@@ -135,13 +143,14 @@ namespace ProjekatVandredneSituacije
     public class KordinatorPregled:ZaposlenPregled
     {
         public int BrojTimova;
-
+        public IList<SpecijalizacijaPregled> Specijalizacija;
         public KordinatorPregled()
         {
+            Specijalizacija = new List<SpecijalizacijaPregled>();
         }
 
-        public KordinatorPregled(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip, int BrojTimova) :
-            base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, DatumZaposlenja, Tip)
+        public KordinatorPregled(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string AdresaStanovanja, DateTime DatumZaposlenja ,int BrojTimova) :
+            base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, AdresaStanovanja, DatumZaposlenja)
         {
             this.BrojTimova = BrojTimova;
         }
@@ -150,14 +159,16 @@ namespace ProjekatVandredneSituacije
 
     public class KordinatorBasic:ZaposlenBasic
     {
-    public int BrojTimova; 
-
+    public int BrojTimova;
+    public IList<SpecijalizacijaBasic> Specijalizacija;
     public KordinatorBasic()
     {
+        Specijalizacija = new List<SpecijalizacijaBasic>();
     }
 
-    public KordinatorBasic(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip, int BrojTimova) 
-        :base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, DatumZaposlenja, Tip)
+
+    public KordinatorBasic(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string AdresaStanovanja, DateTime DatumZaposlenja, int BrojTimova) 
+        :base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, AdresaStanovanja, DatumZaposlenja)
     {
         this.BrojTimova = BrojTimova;
     }
@@ -171,7 +182,7 @@ namespace ProjekatVandredneSituacije
 
     public  IList<DodeljujeSeBasic> Dodeljuje;
 
-    public  InterventnaJedinicaBasic InterventnaJedinica;
+    public  int IdInterventnaJedinica;
 
     public  IList<SertifikatBasic> Sertifikats;
 
@@ -181,12 +192,12 @@ namespace ProjekatVandredneSituacije
         Sertifikats = new List<SertifikatBasic>();
     }
 
-    public OperativniRadnikBasic(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip, int Broj_Sati, string Fizicka_Spremnost, InterventnaJedinicaBasic interventna)
-        : base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, DatumZaposlenja, Tip)
+    public OperativniRadnikBasic(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string AdresaStanovanja, DateTime DatumZaposlenja, int Broj_Sati, string Fizicka_Spremnost, int IdIntervetneJedinice)
+        : base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email,AdresaStanovanja, DatumZaposlenja)
     {
         this.Broj_Sati=Broj_Sati;
         this.Fizicka_Spremnost = Fizicka_Spremnost;
-        this.InterventnaJedinica = interventna;
+        this.IdInterventnaJedinica = IdIntervetneJedinice;
     }
 }
 
@@ -197,7 +208,7 @@ namespace ProjekatVandredneSituacije
 
     public IList<DodeljujeSePregled> Dodeljuje;
 
-    public InterventnaJedinicaPregled InterventnaJedinica;
+    public int IdInterventnaJedinica;
 
     public IList<SertifikatPregled> Sertifikats;
 
@@ -206,11 +217,12 @@ namespace ProjekatVandredneSituacije
         Dodeljuje = new List<DodeljujeSePregled>();
         Sertifikats = new List<SertifikatPregled>();
     }
-    public OperativniRadnikPregled(int JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email, string DatumZaposlenja, string Tip, int Broj_Sati, string Fizicka_Spremnost, InterventnaJedinicaPregled IntervernaJedinica)
-    : base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, DatumZaposlenja, Tip)
+    public OperativniRadnikPregled(string JMBG, string Ime, string Prezime, DateTime Datum_Rodjenja, string pol, string Kontakt_Telefon, string email,string AdresaStanovanja, DateTime DatumZaposlenja, int Broj_Sati, string Fizicka_Spremnost, int IdInterventnaJedinica)
+    : base(JMBG, Ime, Prezime, Datum_Rodjenja, pol, Kontakt_Telefon, email, AdresaStanovanja, DatumZaposlenja)
     {
         this.Broj_Sati = Broj_Sati;
         this.Fizicka_Spremnost = Fizicka_Spremnost;
+        this.IdInterventnaJedinica = IdInterventnaJedinica;
     }
 
 }
@@ -222,7 +234,6 @@ namespace ProjekatVandredneSituacije
     public string Naziv;
 
   
-    public string Tip;
 
     public string Status;
 
@@ -230,22 +241,22 @@ namespace ProjekatVandredneSituacije
     
     public DateTime DatumNabavke;
 
-    public InterventnaJedinicaBasic Jedinica;
+    public int IdJedinica;
 
     public OpremaBasic()
     {
 
     }
 
-    public OpremaBasic(int Serijski_Broj,string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaBasic Jedinica)
+    public OpremaBasic(int Serijski_Broj,string Naziv, string Status, DateTime DatumNabavke, int IdJedinica)
     {
         this.Serijski_Broj = Serijski_Broj;
         this.Naziv = Naziv;
        
         this.Status = Status;
-        this.Tip=Tip;
+        
         this.DatumNabavke = DatumNabavke;
-        this.Jedinica = Jedinica;
+        this.IdJedinica = IdJedinica;
     }
 }
 
@@ -255,11 +266,11 @@ namespace ProjekatVandredneSituacije
 
     public string Naziv;
 
-    public string Tip;
+    
 
     public string Status;
 
-    public InterventnaJedinicaPregled Jedinica;
+    public int  IdJedinica;
 
     public DateTime DatumNabavke;
 
@@ -268,14 +279,14 @@ namespace ProjekatVandredneSituacije
 
     }
 
-    public OpremaPregled(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaPregled Jedinica)
+    public OpremaPregled(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica)
     {
         this.Serijski_Broj = Serijski_Broj;
         this.Naziv = Naziv;
         this.DatumNabavke = DatumNabavke;
         this.Status = Status;
-        this.Tip = Tip;
-        this.Jedinica = Jedinica;
+        
+        this.IdJedinica = IdJedinica;
     }
 }
 
@@ -293,7 +304,7 @@ namespace ProjekatVandredneSituacije
     
 
     
-    public  PrijavaBasic Prijava;
+    public  int  IdPrijava;
     public  IList<UcestvujeBasic> Ucestvuje;
     public  IList<SaradjujeBasic> Saradjuje;
 
@@ -303,7 +314,7 @@ namespace ProjekatVandredneSituacije
         Saradjuje = new List<SaradjujeBasic>();
     }
 
-    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, PrijavaBasic Prijava)
+    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, int IdPrijava)
     {
         Id = id;
         this.Tip = Tip;
@@ -312,7 +323,7 @@ namespace ProjekatVandredneSituacije
         this.Opstina = Opstina;
         this.Lokacija = Lokacija;
         this.Opis = Opis;
-        this.Prijava = Prijava;
+        this.IdPrijava = IdPrijava;
     }
 }
 
@@ -328,7 +339,7 @@ namespace ProjekatVandredneSituacije
     public  string Lokacija;
     public  string Opis;
 
-    public  PrijavaPregled Prijava;
+    public int IdPrijava;
     public  IList<UcestvujePregled> Ucestvuje;
     public  IList<SaradjujePregled> Saradjuje;
 
@@ -340,7 +351,7 @@ namespace ProjekatVandredneSituacije
 
 
     public VandrednaSituacijaPregled(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip,
-    int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, PrijavaPregled Prijava)
+    int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, int IdPrijava)
     {
         Id = id;
         this.Tip = Tip;  
@@ -351,7 +362,7 @@ namespace ProjekatVandredneSituacije
         this.Opstina = Opstina;
         this.Lokacija = Lokacija;
         this.Opis = Opis;
-        this.Prijava = Prijava;
+        this.IdPrijava = IdPrijava;
     }
 }
 
@@ -362,7 +373,7 @@ namespace ProjekatVandredneSituacije
     public DateTime Datum_I_Vreme;
     public string Lokacija;
 
-    public string Status;
+    public Status Status;
     public int Broj_Spasenih;
     public int Broj_Povredjenih;
     public int Uspesnost;
@@ -373,7 +384,7 @@ namespace ProjekatVandredneSituacije
         Ucestvuje = new List<UcestvujeBasic>();
     }
 
-    public IntervencijaBasic(int Id, DateTime DatumIVreme, string Lokacija, string Status, int Broj_Spasenih, int Broj_Povredjenih, int Uspesnost)
+    public IntervencijaBasic(int Id, DateTime DatumIVreme, string Lokacija, Status Status, int Broj_Spasenih, int Broj_Povredjenih, int Uspesnost)
     {
         ID = Id;
         Datum_I_Vreme = DatumIVreme;
@@ -425,10 +436,10 @@ namespace ProjekatVandredneSituacije
     public  string Naziv;
     public int BrojClanova;
     public  string Baza;
-    public OperativniRadnikBasic Komandir;
-    public  IList<DajeSeJedinicamaBasic> Dodeljuje;
+    public string Komandir;
+    public  IList<DodeljujeSeBasic> dodeljujeSe;
 
-    public  OpremaBasic Oprema;
+    public  IList<OpremaBasic> Oprema;
 
     public  IList<OperativniRadnikBasic> Radnici;
 
@@ -438,12 +449,14 @@ namespace ProjekatVandredneSituacije
     
     public InterventnaJedinicaBasic()
     {
-        Dodeljuje = new List<DajeSeJedinicamaBasic>();
+        dodeljujeSe = new List<DodeljujeSeBasic>();
         Radnici = new List<OperativniRadnikBasic>();
         Ucestvuje = new List<UcestvujeBasic>();
+        Oprema = new List<OpremaBasic>();
+
     }
 
-    public InterventnaJedinicaBasic(int Jedinstveni_Broj, string Naziv, int BrojClanova, OperativniRadnikBasic Komandir, string Baza)
+    public InterventnaJedinicaBasic(int Jedinstveni_Broj, string Naziv, int BrojClanova, string Komandir, string Baza)
     {
         this.Jedinstveni_Broj = Jedinstveni_Broj;
         this.Naziv = Naziv;
@@ -460,24 +473,25 @@ namespace ProjekatVandredneSituacije
     public int BrojClanova;
     public string Baza;
 
-    public IList<DajeSeJedinicamaPregled> Dodeljuje;
+    public IList<DodeljujeSePregled> Dodeljuje;
 
-    public OpremaPregled Oprema;
+    public IList<OpremaPregled> Oprema;
 
     public IList<OperativniRadnikPregled> Radnici;
 
     public IList<UcestvujePregled> Ucestvuje;
 
 
-    public OperativniRadnikPregled Komandir;
+    public string Komandir;
     public InterventnaJedinicaPregled()
     {
-        Dodeljuje = new List<DajeSeJedinicamaPregled>();
+        Dodeljuje = new List<DodeljujeSePregled>();
         Radnici = new List<OperativniRadnikPregled>();
         Ucestvuje = new List<UcestvujePregled>();
+        Oprema = new List<OpremaPregled>();
     }
 
-    public InterventnaJedinicaPregled(int Jedinstveni_Broj, string Naziv, int BrojClanova, OperativniRadnikPregled Komandir, string Baza)
+    public InterventnaJedinicaPregled(int Jedinstveni_Broj, string Naziv, int BrojClanova, string Komandir, string Baza)
     
     {
         this.Jedinstveni_Broj = Jedinstveni_Broj;
@@ -497,7 +511,7 @@ namespace ProjekatVandredneSituacije
 
         }
 
-        public SpecijalnaInterventnaJedinicaBasic(int Jedinstveni_Broj, string Naziv, int BrojClanova, OperativniRadnikBasic Komandir, string Baza, string TipSpecijalneJed):base(Jedinstveni_Broj,Naziv,BrojClanova,Komandir,Baza)
+        public SpecijalnaInterventnaJedinicaBasic(int Jedinstveni_Broj, string Naziv, int BrojClanova, string Komandir, string Baza, string TipSpecijalneJed):base(Jedinstveni_Broj,Naziv,BrojClanova,Komandir,Baza)
         {
             this.TipSpecijalneJed = TipSpecijalneJed;
         }
@@ -513,7 +527,7 @@ namespace ProjekatVandredneSituacije
 
         }
 
-        public SpecijalnaInterventnaJedinicaPregled(int Jedinstveni_Broj, string Naziv, int BrojClanova, OperativniRadnikPregled Komandir, string Baza, string TipSpecijalneJed) : base(Jedinstveni_Broj, Naziv, BrojClanova, Komandir, Baza)
+        public SpecijalnaInterventnaJedinicaPregled(int Jedinstveni_Broj, string Naziv, int BrojClanova, string Komandir, string Baza, string TipSpecijalneJed) : base(Jedinstveni_Broj, Naziv, BrojClanova, Komandir, Baza)
         {
             this.TipSpecijalneJed = TipSpecijalneJed;
         }
@@ -522,48 +536,50 @@ namespace ProjekatVandredneSituacije
 
 public class OpstaInterventnaJedBasic : InterventnaJedinicaBasic
 {
-    public string TipSpecijalneJed;
+    
 
     public OpstaInterventnaJedBasic()
     {
 
     }
 
-    public OpstaInterventnaJedBasic(int Jedinstveni_Broj, string Naziv, int BrojClanova, OperativniRadnikBasic Komandir, string Baza, string TipSpecijalneJed) : base(Jedinstveni_Broj, Naziv, BrojClanova, Komandir, Baza)
+    public OpstaInterventnaJedBasic(int Jedinstveni_Broj, string Naziv, int BrojClanova, String Komandir, string Baza) : base(Jedinstveni_Broj, Naziv, BrojClanova,Komandir, Baza)
     {
-        this.TipSpecijalneJed = TipSpecijalneJed;
+        
     }
 
 }
 
 public class OpstaInterventnaJedPregled : InterventnaJedinicaPregled
 {
-    public string TipSpecijalneJed;
+    
 
     public OpstaInterventnaJedPregled()
     {
 
     }
 
-    public OpstaInterventnaJedPregled(int Jedinstveni_Broj, string Naziv, int BrojClanova, OperativniRadnikPregled Komandir, string Baza, string TipSpecijalneJed) : base(Jedinstveni_Broj, Naziv, BrojClanova, Komandir, Baza)
+    public OpstaInterventnaJedPregled(int Jedinstveni_Broj, string Naziv, int BrojClanova, string Komandir, string Baza) : base(Jedinstveni_Broj, Naziv, BrojClanova, Komandir, Baza)
     {
-        this.TipSpecijalneJed = TipSpecijalneJed;
+       
     }
 
 }
 public class EkspertizaBasic
     {
+    public int Id;
     public  AnaliticarBasic Analiticar;
 
-    public  String Oblast;
+    public  string Oblast;
 
     public EkspertizaBasic()
     {
 
     }
 
-    public EkspertizaBasic(AnaliticarBasic Analiticar, string Oblast)
+    public EkspertizaBasic(int Id, AnaliticarBasic Analiticar, string Oblast)
     {
+        this.Id = Id;
         this.Analiticar = Analiticar;
         this.Oblast = Oblast;
     }
@@ -571,7 +587,8 @@ public class EkspertizaBasic
 
     public class EkspertizaPregled
     {
-    public AnaliticarPregled Analiticar;
+    public int Id;
+    public string Analiticar;
 
     public String Oblast;
 
@@ -580,19 +597,53 @@ public class EkspertizaBasic
 
     }
 
-    public EkspertizaPregled(AnaliticarPregled Analiticar, string Oblast)
+    public EkspertizaPregled(int Id, string Analiticar, string Oblast)
     {
+        this.Id= Id;
         this.Analiticar = Analiticar;
         this.Oblast = Oblast;
     }
 }
 
+public class SpecijalizacijaBasic
+{
+    public virtual int Id { get; set; }
+    public virtual KordinatorBasic Kordinator { get; set; }
+    public virtual string Tip { get; set; }
+
+    public SpecijalizacijaBasic()
+    {
+    }
+    public SpecijalizacijaBasic(int Id, KordinatorBasic Kordinator, string Tip)
+    {
+        this.Kordinator = Kordinator;
+        this.Tip = Tip;
+    }
+
+}
+public class SpecijalizacijaPregled
+{
+    public virtual int Id { get; set; }
+    public virtual string Kordinator { get; set; }
+    public virtual string Tip { get; set; }
+
+    public SpecijalizacijaPregled()
+    {
+    }
+
+    public SpecijalizacijaPregled(int Id, string Kordinator, string Tip)
+    {
+        this.Id = Id;
+        this.Kordinator = Kordinator;
+        this.Tip = Tip;
+    }
+}
 
     public class VoziloBasic
     {
-    public  int Registarska_Oznaka;
+    public  string Registarska_Oznaka;
     public  string Proizvodjac;
-    public  string Tip;
+   
     public  StatusVozila Status;
     public  string Lokacija;
 
@@ -612,11 +663,11 @@ public class EkspertizaBasic
         
     }
 
-    public VoziloBasic(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija)
+    public VoziloBasic(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija)
     {
         this.Registarska_Oznaka = Registarska_Oznaka;
         this.Proizvodjac = Proizvodjac;
-        this.Tip = Tip;
+       
         this.Status = Status;
         this.Lokacija = Lokacija;
     }
@@ -624,9 +675,9 @@ public class EkspertizaBasic
 
     public class VoziloPregled
     {
-    public int Registarska_Oznaka;
+    public string Registarska_Oznaka;
     public string Proizvodjac;
-    public string Tip;
+    
     public StatusVozila Status;
     public string Lokacija;
 
@@ -646,118 +697,135 @@ public class EkspertizaBasic
    
     }
 
-    public VoziloPregled(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija)
+    public VoziloPregled(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija)
     {
         this.Registarska_Oznaka = Registarska_Oznaka;
         this.Proizvodjac = Proizvodjac;
-        this.Tip = Tip;
+        
         this.Status = Status;
         this.Lokacija = Lokacija;
     }
 }
 
-    public class TerenskaBasic:VoziloBasic
+//    public class TerenskaBasic:VoziloBasic
+//    {
+        
+
+//        public TerenskaBasic()
+//        {
+
+//        }
+
+//         public TerenskaBasic(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija):
+//         base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
+//         {
+           
+//         }
+//    }
+
+//    public class TerenskaPregled:VoziloPregled
+//    {
+  
+
+//    public TerenskaPregled()
+//    {
+
+//    }
+
+//    public TerenskaPregled(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) :
+//    base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
+//    {
+//    }
+
+
+//}
+
+public class SanitetskaBasic: VoziloBasic
+{
+    public SanitetskaBasic()
     {
-         public string TipVozila;
-
-        public TerenskaBasic()
-        {
-
-        }
-
-         public TerenskaBasic(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija, string TipVozila):
-         base(Registarska_Oznaka, Proizvodjac, Tip, Status, Lokacija)
-         {
-        this.Tip = TipVozila;
-         }
     }
-
-    public class TerenskaPregled:VoziloPregled
+    public SanitetskaBasic(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) : base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
     {
-    public string TipVozila;
-
-    public TerenskaPregled()
-    {
-
-    }
-
-    public TerenskaPregled(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija, string TipVozila) :
-    base(Registarska_Oznaka, Proizvodjac, Tip, Status, Lokacija)
-    {
-        this.TipVozila = TipVozila;
     }
 }
-public class DzipoviBasic:TerenskaBasic
+
+public class SanitetskaPregled : VoziloPregled
+{
+    public SanitetskaPregled()
+    {
+    }
+    public SanitetskaPregled(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) : base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
+    {
+    }
+}
+    public class DzipoviBasic:VoziloBasic
 {
     public DzipoviBasic()
     {  
     }
 
-    public DzipoviBasic(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija,string TipVozila) : base (Registarska_Oznaka, Proizvodjac, Tip, Status, Lokacija,TipVozila)
+    public DzipoviBasic(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) : base (Registarska_Oznaka, Proizvodjac, Status, Lokacija)
     {
 
     }
 }
 
-public class DzipoviPregled : TerenskaBasic
+public class DzipoviPregled : VoziloBasic
 {
     public DzipoviPregled()
     {
     }
 
-    public DzipoviPregled(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija, string TipVozila) : base(Registarska_Oznaka, Proizvodjac, Tip, Status, Lokacija, TipVozila)
+    public DzipoviPregled(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) : base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
     {
 
     }
 }
 
-public class KamioniBasic : TerenskaBasic
+public class KamioniBasic : VoziloBasic
 {
     public KamioniBasic()
     {
     }
 
-    public KamioniBasic(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija, string TipVozila) : base(Registarska_Oznaka, Proizvodjac, Tip, Status, Lokacija, TipVozila)
+    public KamioniBasic(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) : base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
     {
 
     }
 }
 
-public class KamioniPregled : TerenskaBasic
+public class KamioniPregled : VoziloBasic
 {
     public KamioniPregled()
     {
     }
 
-    public KamioniPregled(int Registarska_Oznaka, string Proizvodjac, string Tip, StatusVozila Status, string Lokacija, string TipVozila) : base(Registarska_Oznaka, Proizvodjac, Tip, Status, Lokacija, TipVozila)
+    public KamioniPregled(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija) : base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
     {
 
     }
 }
-public class SpecijalnaVozilaBasic
+public class SpecijalnaVozilaBasic:VoziloBasic 
     {
-    public  int Registarska_Oznaka ;
+    
     public  Namena Namena ;
-
-
-
-    public  bool Mobilna_Laboratorija ;
 
     public SpecijalnaVozilaBasic()
     {
 
     }
 
-    public SpecijalnaVozilaBasic(int Registarska_Oznaka, Namena Namena)
+    public SpecijalnaVozilaBasic(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija, Namena Namena) : base(Registarska_Oznaka, Proizvodjac, Status, Lokacija)
     {
-        this.Registarska_Oznaka = Registarska_Oznaka;
+        
         this.Namena = Namena;
     }
 
 }
-    public class SpecijalnaVozilaPregled
+    public class SpecijalnaVozilaPregled:VoziloPregled
     {
-    public int Registarska_Oznaka;
+    
     public Namena Namena;
 
 
@@ -766,18 +834,16 @@ public class SpecijalnaVozilaBasic
 
     }
 
-    public SpecijalnaVozilaPregled(int Registarska_Oznaka, Namena Namena)
+    public SpecijalnaVozilaPregled(string Registarska_Oznaka, string Proizvodjac, StatusVozila Status, string Lokacija, Namena Namena) :base(Registarska_Oznaka, Proizvodjac, Status, Lokacija) 
     {
-        this.Registarska_Oznaka = Registarska_Oznaka;
+        
         this.Namena = Namena;
       
     }
 }
     public class SertifikatBasic
     {
-    public  OperativniRadnikBasic OperativniRadnik;
-    public  string Naziv;
-    public  string Institucija;
+    public SertifikatIdBasic Id;
     public  DateTime DatumIzdavanja;
     public  DateTime DatumVazenja;
     
@@ -786,11 +852,9 @@ public class SpecijalnaVozilaBasic
 
     }
 
-    public SertifikatBasic(OperativniRadnikBasic OperativniRadnik, string Naziv, string Institucija, DateTime DatumIzdavanja, DateTime DatumVazenja)
+    public SertifikatBasic(SertifikatIdBasic Id, DateTime DatumIzdavanja, DateTime DatumVazenja)
     {
-        this.OperativniRadnik = OperativniRadnik;
-        this.Naziv = Naziv;
-        this.Institucija = Institucija;
+        this.Id = Id;
         this.DatumIzdavanja = DatumIzdavanja;
         this.DatumVazenja = DatumVazenja;
 
@@ -798,9 +862,8 @@ public class SpecijalnaVozilaBasic
 }
     public class SertifikatPregled
     {
-    public OperativniRadnikPregled OperativniRadnik;
-    public string Naziv;
-    public string Institucija;
+    public SertifikatIdBasic Id;
+    
     public DateTime DatumIzdavanja;
     public DateTime DatumVazenja;
 
@@ -809,63 +872,74 @@ public class SpecijalnaVozilaBasic
 
     }
 
-    public SertifikatPregled(OperativniRadnikPregled OperativniRadnik,string Naziv, string Institucija, DateTime DatumIzdavanja, DateTime DatumVazenja)
+    public SertifikatPregled(SertifikatIdBasic Id, DateTime DatumIzdavanja, DateTime DatumVazenja)
     {
-        this.OperativniRadnik = OperativniRadnik;
-        this.Naziv = Naziv;
-        this.Institucija = Institucija;
+
+        this.Id = Id;
         this.DatumIzdavanja = DatumIzdavanja;
         this.DatumVazenja = DatumVazenja;
 
     }
 }
  
-    public class DajeSeJedinicamaBasic
-    {
-    public  VoziloBasic Vozilo;
-    public  InterventnaJedinicaBasic Intervente_Jedinice;
-
-    public  DateTime datumod;
-    public  DateTime datumDo;
-
-    public DajeSeJedinicamaBasic()
-    {
-
-    }
-
-    public DajeSeJedinicamaBasic(DateTime datumod, DateTime datumDo)
-    {
-        this.datumod = datumod;
-        this.datumDo = datumDo;
-    }
-
-}
-    public class DajeSeJedinicamaPregled
-    {
+public class SertifikatIdBasic
+{
     
-        public VoziloPregled Vozilo;
-        public InterventnaJedinicaPregled Interventna_Jedinica;
-
-        public DateTime datumod;
-        public DateTime datumDo;
-
-        public DajeSeJedinicamaPregled()
-        {
-
-        }
-
-        public DajeSeJedinicamaPregled(DateTime datumod, DateTime datumDo)
-        {
-            this.datumod = datumod;
-            this.datumDo = datumDo;
-        }
-    }
-    public class DodeljujeSeBasic
+    public OperativniRadnikBasic OperativniRadnik;
+    public string Naziv;
+    public string Institucija;
+    public SertifikatIdBasic()
     {
-    public  VoziloBasic Vozilo;
-    public  OperativniRadnikBasic Pojedinac;
+    }
+   
+}
+//    public class DajeSeJedinicamaBasic
+//    {
+//    public  VoziloBasic Vozilo;
+//    public  InterventnaJedinicaBasic Intervente_Jedinice;
 
-    public InterventnaJedinicaBasic Jedinica;
+//    public  DateTime datumod;
+//    public  DateTime datumDo;
+
+//    public DajeSeJedinicamaBasic()
+//    {
+
+//    }
+
+//    public DajeSeJedinicamaBasic(DateTime datumod, DateTime datumDo)
+//    {
+//        this.datumod = datumod;
+//        this.datumDo = datumDo;
+//    }
+
+//}
+//    public class DajeSeJedinicamaPregled
+//    {
+
+//        public VoziloPregled Vozilo;
+//        public InterventnaJedinicaPregled Interventna_Jedinica;
+
+//        public DateTime datumod;
+//        public DateTime datumDo;
+
+//        public DajeSeJedinicamaPregled()
+//        {
+
+//        }
+
+//        public DajeSeJedinicamaPregled(DateTime datumod, DateTime datumDo)
+//        {
+//            this.datumod = datumod;
+//            this.datumDo = datumDo;
+//        }
+//    }
+public class DodeljujeSeBasic
+    {
+    public int Id;
+    public  string RegVozilo;
+    public  string JMBGPojedinac;
+
+    public int idJedinica;
 
     public  DateTime datumod;
     public  DateTime datumDo;
@@ -876,17 +950,19 @@ public class SpecijalnaVozilaBasic
     }
 
 
-    public DodeljujeSeBasic(VoziloBasic Vozilo, OperativniRadnikBasic Pojedinac, InterventnaJedinicaBasic Jedinica, DateTime datumod, DateTime datumDo)
+    public DodeljujeSeBasic(int Id, string RegVozilo, string JMBGPojedinac, int IdJedinica, DateTime datumod, DateTime datumDo)
     {
-        this.Vozilo = Vozilo;
-        this.Pojedinac = Pojedinac;
-        this.Jedinica = Jedinica;
+        this.Id = Id;
+        this.RegVozilo = RegVozilo;
+        this.JMBGPojedinac = JMBGPojedinac;
+        this.idJedinica = idJedinica;
         this.datumod = datumod;
         this.datumDo = datumDo;
     }
 }
 public class DodeljujeSePregled
 {
+    public int Id;
     public VoziloPregled Vozilo;
     public OperativniRadnikPregled Pojedinac;
 
@@ -901,8 +977,9 @@ public class DodeljujeSePregled
     }
 
 
-    public DodeljujeSePregled(VoziloPregled Vozilo, OperativniRadnikPregled Pojedinac, InterventnaJedinicaPregled Jedinica, DateTime datumod, DateTime datumDo)
+    public DodeljujeSePregled(int Id, VoziloPregled Vozilo, OperativniRadnikPregled Pojedinac, InterventnaJedinicaPregled Jedinica, DateTime datumod, DateTime datumDo)
     {
+        this.Id = Id;
         this.Vozilo = Vozilo;
         this.Pojedinac = Pojedinac;
         this.Jedinica = Jedinica;
@@ -910,17 +987,11 @@ public class DodeljujeSePregled
         this.datumDo = datumDo;
     }
 }
-//public class DajeSePojedincuPregled
-//{
-//    public VoziloPregled Vozilo;
-//    public OperativniRadnikPregled Pojedinac;
-
-//    public DateTime datumod;
-//    public DateTime datumDo;
 
 public class Istorija_Uloga_ZaposlenihBasic
 {
-    public ZaposlenBasic Zaposlen;
+    public virtual int Id { get; set; }
+    public string JMBGZaposleni;
     public string Uloga;
     public DateTime Datum_Od;
     public DateTime Datum_Do;
@@ -929,9 +1000,10 @@ public class Istorija_Uloga_ZaposlenihBasic
 {
 }
     
-    public Istorija_Uloga_ZaposlenihBasic(string Uloga, DateTime Datum_Od, DateTime Datum_Do)
+    public Istorija_Uloga_ZaposlenihBasic(int Id,string JMBGZaposleni,string Uloga, DateTime Datum_Od, DateTime Datum_Do)
     {
-
+        this.Id = Id;
+        this.JMBGZaposleni = JMBGZaposleni;
         this.Uloga = Uloga;
         this.Datum_Od = Datum_Od;
         this.Datum_Do = Datum_Od;
@@ -939,7 +1011,8 @@ public class Istorija_Uloga_ZaposlenihBasic
     }
 public class Istorija_Uloga_ZaposlenihPregled
     {
-    public ZaposlenPregled Zaposlen;
+    public int Id;
+    public string JMBGZaposleni;
     public string Uloga;
     public DateTime Datum_Od;
     public DateTime Datum_Do;
@@ -948,8 +1021,10 @@ public class Istorija_Uloga_ZaposlenihPregled
     {
 
     }
-    public Istorija_Uloga_ZaposlenihPregled( string Uloga, DateTime Datum_Od, DateTime Datum_Do)
+    public Istorija_Uloga_ZaposlenihPregled(int Id, string JMBGZaposleni, string Uloga, DateTime Datum_Od, DateTime Datum_Do)
     {
+        this.Id = Id;
+        this.JMBGZaposleni=JMBGZaposleni;
         this.Uloga = Uloga;
         this.Datum_Od = Datum_Od;
         this.Datum_Do = Datum_Od;
@@ -957,22 +1032,27 @@ public class Istorija_Uloga_ZaposlenihPregled
 }
     public class PredstavnikBasic
     {
-    public  int Id ;
-    public  SektorBasic Sektor ;
+    public  string JMBG ;
+    public  int IdSektor ;
+    public string ImeSektora;
     public  string Ime ;
     public  string Prezime ;
     public  string Pozicija ;
     public  string Telefon ;
     public  string Email ;
+    
 
     public  PredstavnikBasic()
     {
 
     }
 
-    public PredstavnikBasic(int Id, string Ime, string Prezime, string Pozicija, string Telefon, string Email)
+    public PredstavnikBasic(string JMBG, string Ime, string Prezime, string Pozicija, string Telefon, string Email, string ImeSektora, int IdSektor)
     {
-        this.Id = Id;
+
+        this.JMBG = JMBG;
+        this.IdSektor = IdSektor;
+        this.ImeSektora = ImeSektora;   
         this.Ime = Ime;
         this.Prezime = Prezime;
         this.Pozicija = Pozicija;
@@ -982,121 +1062,147 @@ public class Istorija_Uloga_ZaposlenihPregled
 }
     public class PredstavnikPregled
     {
-    public int Id;
-    public SektorPregled Sektor;
+    public string JMBG;
+    
     public string Ime;
     public string Prezime;
     public string Pozicija;
     public string Telefon;
     public string Email;
+    public int IdSektor;
+    public string ImeSektora;
 
     public PredstavnikPregled()
     {
 
     }
 
-    public PredstavnikPregled(int Id, string Ime, string Prezime, string Pozicija, string Telefon, string Email)
+    public PredstavnikPregled(string JMBG,  string Ime,  string Prezime, string Pozicija, string Telefon, string Email, int IdSektor, string ImeSektora)
     {
-        this.Id = Id;
+        this.JMBG = JMBG;
         this.Ime = Ime;
         this.Prezime = Prezime;
         this.Pozicija = Pozicija;
-        this.Telefon = Telefon;
+        this.Telefon= Telefon;
         this.Email = Email;
+        this.IdSektor = IdSektor;
+        this.ImeSektora= ImeSektora; 
+
     }
 }
     public class UcestvujeBasic
     {
-    public  InterventnaJedinicaBasic IdInterventneJed;
-    public  VandrednaSituacijaBasic IdVandredneSituacije;
+    public int Id;
+    public  int IdInterventneJed;
+    public  int IdVandredneSituacije;
 
-    public  IntervencijaBasic IdIntervencije;
+    public  int IdIntervencije;
 
     public UcestvujeBasic()
     {
 
     }
+    public UcestvujeBasic(int Id,int IdInterventneJedinice, int IdVandredneSituacije, int IdIntervencije)
+    {
+        this.Id = Id;
+        this.IdInterventneJed = IdInterventneJedinice;
+        this.IdVandredneSituacije = IdVandredneSituacije;
+        this.IdIntervencije = IdIntervencije;
+    }
 }
     public class UcestvujePregled
     {
+    public int Id;
     public InterventnaJedinicaPregled IdInterventneJed;
     public VandrednaSituacijaPregled IdVandredneSituacije;
 
     public IntervencijaPregled IdIntervencije;
-
+    
     public UcestvujePregled()
     {
 
     }
+
+    public UcestvujePregled(int Id, InterventnaJedinicaPregled IdInterventneJedinice, VandrednaSituacijaPregled IdVandredneSituacije, IntervencijaPregled IdIntervencije)
+    {
+        this.Id = Id;
+        this.IdInterventneJed = IdInterventneJedinice;
+        this.IdVandredneSituacije = IdVandredneSituacije;
+        this.IdIntervencije = IdIntervencije;
+    }
 }
 
-    public class SektorBasic
+    public class SluzbaBasic
     {
     public int Id_Sektora;
     public  string TipSektora;
-    public  string Uloga;
+    
 
     public IList<SaradjujeBasic> VandredneSituacije;
     public PredstavnikBasic? Predstavnik;
 
-    public SektorBasic()
+    public SluzbaBasic()
     {
         VandredneSituacije = new List<SaradjujeBasic>();
     }
 
-    public SektorBasic(int Id_Sektora, string TipSektora, string Uloga)
+    public SluzbaBasic(int Id_Sektora, string TipSektora, PredstavnikBasic predstavnik)
     {
         this.Id_Sektora = Id_Sektora;
         this.TipSektora = TipSektora;
-        this.Uloga = Uloga;
+        this.Predstavnik = predstavnik;
     }
 }
-    public class SektorPregled
+    public class SluzbaPregled
     {
     public int Id_Sektora;
     public string TipSektora;
-    public string Uloga;
+
 
     public IList<SaradjujePregled> VandredneSituacije;
     public PredstavnikPregled? Predstavnik;
 
-    public SektorPregled()
+    public SluzbaPregled()
     {
         VandredneSituacije = new List<SaradjujePregled>();
     }
 
-    public SektorPregled(int Id_Sektora, string TipSektora, string Uloga)
+    public SluzbaPregled(int Id_Sektora, string TipSektora, PredstavnikPregled predstavnik)
     {
         this.Id_Sektora = Id_Sektora;
         this.TipSektora = TipSektora;
-        this.Uloga = Uloga;
+        
+        this.Predstavnik = predstavnik;
     }
 }
 
     public class ZaliheBasic:OpremaBasic
     {
     public int Kolicina;
-    public TipLicneZastite Zalihe;
+    public TipZalihe Zalihe;
     public ZaliheBasic()
     {
 
     }
 
-    public ZaliheBasic(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaBasic Jedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke,Jedinica)
+    public ZaliheBasic(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, DatumNabavke,IdJedinica)
     {
+        this.Zalihe = Zalihe;
         this.Kolicina = Kolicina;
     }
 }
     public class ZalihePregled:OpremaPregled
     {
     public int Kolicina;
+    public TipZalihe Zalihe;
     public ZalihePregled()
     {
 
     }
 
-    public ZalihePregled(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaPregled Jedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke, Jedinica)
+    public ZalihePregled(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
+        this.Zalihe = Zalihe;
         this.Kolicina = Kolicina;
     }
 }
@@ -1109,7 +1215,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public MedicinskaOpremaBasic(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaBasic Jedinica, TipMedicinske medicinske) : base(Serijski_Broj, Naziv, Status, Tip ,DatumNabavke, Jedinica)
+    public MedicinskaOpremaBasic(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, TipMedicinske medicinske) : base(Serijski_Broj, Naziv, Status ,DatumNabavke, IdJedinica)
     {
         this.Medicinska = medicinske;
     }
@@ -1124,7 +1230,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public MedicinskaOpremaPregled(int Serijski_Broj, string Naziv, string Status, string Tip,DateTime DatumNabavke, InterventnaJedinicaPregled Jedinica,TipMedicinske Medicinska) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke, Jedinica)
+    public MedicinskaOpremaPregled(int Serijski_Broj, string Naziv, string Status,DateTime DatumNabavke, int IdJedinica,TipMedicinske Medicinska) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
     }
 }
@@ -1136,7 +1242,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public LicnaZastitaBasic(int Serijski_Broj,string Naziv, string Status, string Tip, DateTime DatumNabavke,InterventnaJedinicaBasic Jedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke, Jedinica)
+    public LicnaZastitaBasic(int Serijski_Broj,string Naziv, string Status, DateTime DatumNabavke,int IdJedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status,  DatumNabavke, IdJedinica)
     {
         this.Licna = Licna;
     }
@@ -1149,7 +1255,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public LicnaZastitaPregled(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaPregled Jedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke, Jedinica)
+    public LicnaZastitaPregled(int Serijski_Broj, string Naziv, string Status,  DateTime DatumNabavke, int IdJedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Licna = Licna;
     }
@@ -1163,7 +1269,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public TehnickaOpremaBasic(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaBasic Jedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke, Jedinica)
+    public TehnickaOpremaBasic(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Tehnicka = Tehnicka;
     }
@@ -1176,7 +1282,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public TehnickaOpremaPregled(int Serijski_Broj, string Naziv, string Status, string Tip, DateTime DatumNabavke, InterventnaJedinicaPregled Jedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, Tip, DatumNabavke, Jedinica)
+    public TehnickaOpremaPregled(int Serijski_Broj, string Naziv, string Status,  DateTime DatumNabavke, int IdJedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Tehnicka = Tehnicka;
     }
@@ -1184,7 +1290,8 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     public class ServisiBasic
     {
-    public  VoziloBasic Vozilo ;
+    public int Id;
+    public  string  RegistracijaVozilo ;
     public  string TipServisa ;
     public  DateTime Datum ;
 
@@ -1193,16 +1300,18 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public ServisiBasic(VoziloBasic Vozilo, string TipServisa, DateTime Datum)
+    public ServisiBasic(int Id, string RegistracijaVozila, string TipServisa, DateTime Datum)
     {
-        this.Vozilo = Vozilo;
+        this.Id = Id;
+        this.RegistracijaVozilo = RegistracijaVozila;
         this.TipServisa = TipServisa;
         this.Datum = Datum;
     }
 }
 public class ServisiPregled
     {
-    public  VoziloPregled Vozilo ;
+    public int Id;
+    public  string RegistracijaVozila ;
     public  string TipServisa ;
     public  DateTime Datum ;
 
@@ -1211,9 +1320,10 @@ public class ServisiPregled
 
     }
 
-    public ServisiPregled(VoziloPregled Vozilo,string TipServisa, DateTime Datum)
+    public ServisiPregled(int Id,string RegistracijaVozila,string TipServisa, DateTime Datum)
     {
-        this.Vozilo = Vozilo;
+        this.Id= Id;
+        this.RegistracijaVozila = RegistracijaVozila;
         this.TipServisa = TipServisa;
         this.Datum = Datum;
     }
@@ -1225,7 +1335,7 @@ public class PrijavaBasic
     public  int Id ;
     
     public  DateTime Datum_I_Vreme ;
-    public VandrednaSituacijaBasic VandrednaSituacija;
+    public int? IdVandrednaSituacija;
     public  string Tip ;
     public  string Ime_Prijavioca ;
     public  string Kontakt_Prijavioca ;
@@ -1240,11 +1350,11 @@ public class PrijavaBasic
 
     }
 
-    public PrijavaBasic(int Id, DateTime Datum_I_Vreme, VandrednaSituacijaBasic VandrednaSituacija,  string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
+    public PrijavaBasic(int Id, DateTime Datum_I_Vreme, int IdVandrednaSituacija,  string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
     {
         this.Id = Id;
         this.Datum_I_Vreme = Datum_I_Vreme;
-        this.VandrednaSituacija = VandrednaSituacija;
+        this.IdVandrednaSituacija = IdVandrednaSituacija;
         this.Tip = Tip;
         this.Ime_Prijavioca = Ime_Prijavioca;
         this.Kontakt_Prijavioca = Kontakt_Prijavioca;
@@ -1259,7 +1369,7 @@ public class PrijavaBasic
     public  int Id ;
     
     public  DateTime Datum_I_Vreme ;
-    public VandrednaSituacijaPregled VandrednaSituacija;
+    public int IdVandrednaSituacija;
     public  string Tip ;
     public  string Ime ;
     public  string Kontakt ;
@@ -1275,11 +1385,11 @@ public class PrijavaBasic
 
     }
 
-    public PrijavaPregled(int Id,  DateTime Datum_I_Vreme, VandrednaSituacijaPregled VandrednaSituacija,string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
+    public PrijavaPregled(  DateTime Datum_I_Vreme, int IdVandrednaSituacija,string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
     {
-        this.Id = Id;
+        
         this.Datum_I_Vreme = Datum_I_Vreme;
-        this.VandrednaSituacija = VandrednaSituacija;
+        this.IdVandrednaSituacija = IdVandrednaSituacija;
         this.Tip = Tip;
         this.Ime = Ime_Prijavioca;
         this.Kontakt = Kontakt_Prijavioca;
@@ -1292,45 +1402,106 @@ public class PrijavaBasic
 
 public class SaradjujeBasic
 {
-    public PredstavnikBasic Predstavnik;
-    public int Uloga;
+    public int Id;
+    public string Uloga;
 
-    public SektorBasic Sektor;
-    public VandrednaSituacijaBasic VandrednaSituacija;
+    public int IdSektor;
+    public int IdVandrednaSituacija;
 
     public SaradjujeBasic()
     {
 
     }
 
-    public SaradjujeBasic(PredstavnikBasic Predstavnik, int Uloga, SektorBasic Sektor, VandrednaSituacijaBasic VandrednaSituacija)
+    public SaradjujeBasic(int Id, string Uloga, int IdSektor, int IdVandrednaSituacija)
     {
-        this.Predstavnik = Predstavnik;
+        this.Id = Id;
         this.Uloga = Uloga;
-        this.Sektor = Sektor;
-        this.VandrednaSituacija = VandrednaSituacija;
-    }
-
-    public class SaradjujePregled
-    {
-        public PredstavnikPregled Predstavnik;
-        public int Uloga;
-
-        public SektorPregled Sektor;
-        public VandrednaSituacijaPregled VandrednaSituacija;
-
-        public SaradjujePregled()
-        {
-
-        }
-
-        public SaradjujePregled(PredstavnikPregled Predstavnik, int Uloga, SektorPregled Sektor, VandrednaSituacijaPregled VandrednaSituacija)
-        {
-            this.Predstavnik = Predstavnik;
-            this.Uloga = Uloga;
-            this.Sektor = Sektor;
-            this.VandrednaSituacija = VandrednaSituacija;
-        }
+        this.IdSektor = IdSektor;
+        this.IdVandrednaSituacija = IdVandrednaSituacija;
     }
 }
+public class SaradjujePregled
+{
+
+    public int Id;
+    public string Uloga;
+
+    public SluzbaPregled IdSektor;
+    public VandrednaSituacijaPregled IdVandrednaSituacija;
+
+    public SaradjujePregled()
+    {
+
+    }
+
+    public SaradjujePregled(int Id, string Uloga, SluzbaPregled IdSektor, VandrednaSituacijaPregled IdVandrednaSituacija)
+    {
+        this.Id = Id;
+        this.Uloga = Uloga;
+        this.IdSektor = IdSektor;
+        this.IdVandrednaSituacija = IdVandrednaSituacija;
+    }
+}
+    public class SoftverBasic
+    {
+        public string AnaliticarJMBG;
+        public string Naziv;
+        public SoftverBasic()
+        {
+
+        }
+        public SoftverBasic(string AnaliticarJMBG, string Naziv)
+        {
+            this.AnaliticarJMBG = AnaliticarJMBG;
+            this.Naziv = Naziv;
+        }
+
+    }
+    public class SoftverPregled
+    {
+        public AnaliticarPregled Analiticar;
+        public string Naziv;
+        public SoftverPregled()
+        {
+        }
+        public SoftverPregled(AnaliticarPregled Analiticar, string Naziv)
+        {
+            this.Analiticar = Analiticar;
+            this.Naziv = Naziv;
+        }
+    }
+
+    public class UcestvovaloBasic
+{
+    public virtual int ID { get; set; }
+    public virtual string RegVozilo { get; set; }
+    public virtual int IdJedinica { get; set; }
+
+    public UcestvovaloBasic()
+    {
+    }
+    public UcestvovaloBasic(int ID, string RegVozilo, int IdJedinica)
+    {
+        this.ID = ID;
+        this.RegVozilo = RegVozilo;
+        this.IdJedinica = IdJedinica;
+    }
+}
+public class UcestvovaloPregled
+{
+    public virtual int ID { get; set; }
+    public virtual VoziloPregled RegVozilo { get; set; }
+    public virtual InterventnaJedinicaPregled IdJedinica { get; set; }
+    public UcestvovaloPregled()
+    {
+    }
+    public UcestvovaloPregled(int ID, VoziloPregled RegVozilo, InterventnaJedinicaPregled IdJedinica)
+    {
+        this.ID = ID;
+        this.RegVozilo = RegVozilo;
+        this.IdJedinica = IdJedinica;
+    }
+}
+
 

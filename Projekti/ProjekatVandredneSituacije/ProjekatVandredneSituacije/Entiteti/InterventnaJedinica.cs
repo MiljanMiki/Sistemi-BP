@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class InterventnaJedinica
+    internal abstract class InterventnaJedinica
     {
         public virtual int Jedinstveni_Broj { get; set; }
         public virtual string Naziv { get; set; }
@@ -17,23 +17,25 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual OperativniRadnik Komandir {  get; set; }
         public virtual IList<DodeljujeSe> Dodeljuje {  get; set; }
        
-        public virtual Oprema Oprema {  get; set; }
+  
 
         public virtual IList<OperativniRadnik> Radnici {  get; set; }
 
         public virtual IList<Ucestvuje> Ucestvuje { get; set; }
 
        
-       public virtual IList<Ucestvovalo> AngazovanaVozila {  get; set; }
-        
+        public virtual IList<Ucestvovalo> AngazovanaVozila {  get; set; }
+
+        public virtual IList<Oprema> Oprema { get; set; }
+
         public InterventnaJedinica()
         {
             Dodeljuje = new List<DodeljujeSe>();
             Radnici= new List<OperativniRadnik>();
             Ucestvuje = new List<Ucestvuje>();
             AngazovanaVozila = new List<Ucestvovalo>();
+            Oprema = new List<Oprema>();
 
-            
         }
     }
 

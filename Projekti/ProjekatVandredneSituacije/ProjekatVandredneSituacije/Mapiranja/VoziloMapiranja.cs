@@ -15,10 +15,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("Vozilo");
 
-            Id(x => x.Registarska_Oznaka).GeneratedBy.TriggerIdentity();
+            Id(x => x.Registarska_Oznaka, "Registarska_Oznaka").GeneratedBy.TriggerIdentity();
 
             Map(x => x.Proizvodjac).Column("Proizvodjac");
-            Map(x => x.Tip).Column("Tip");
+            ;
             Map(x => x.Status).Column("Status");
             Map(x => x.Lokacija).Column("Lokacija");
 
@@ -36,13 +36,5 @@ namespace ProjekatVandredneSituacije.Mapiranja
             
         }
     }
-    class TerenskaMapiranja:SubclassMap<Terenska>
-    {
-        public TerenskaMapiranja()
-        {
-            Table("Terenska");
-            KeyColumn("Registarska_Oznaka");
-
-        }
-    }
+    
 }

@@ -8,10 +8,9 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     internal class Specijalizacija
     {
+        public virtual int Id { get; set; }
         public virtual Kordinator Kordinator { get; set; }
         public virtual string Tip { get; set; }
-
-       
 
 
     }

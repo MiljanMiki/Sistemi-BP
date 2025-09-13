@@ -15,7 +15,7 @@ namespace ProjekatVandredneSituacije.Entiteti
     }
     internal class SpecijalnaVozila:Vozilo
     {
-        public virtual int Registarska_Oznaka { get; set; }
+
         public virtual Namena Namena { get; set; }
 
       
