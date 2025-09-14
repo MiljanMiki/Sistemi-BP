@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal abstract class Zaposlen
+    public abstract class Zaposlen
     {
         public virtual string JMBG { get; set; }
 

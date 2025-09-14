@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Specijalizacija
+    public class Specijalizacija
     {
         public virtual int Id { get; set; }
         public virtual Kordinator Kordinator { get; set; }

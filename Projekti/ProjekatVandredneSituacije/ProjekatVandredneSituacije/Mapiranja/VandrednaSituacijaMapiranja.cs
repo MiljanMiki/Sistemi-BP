@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Mapiranja
 {
-    class VandrednaSituacijeMapiranja : ClassMap<VandrednaSituacija>
+    class VandrednaSituacijeMapiranja : ClassMap<VanrednaSituacija>
     {
         public VandrednaSituacijeMapiranja()
         {

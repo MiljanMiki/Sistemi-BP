@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class OperativniRadnik : Zaposlen
+    public class OperativniRadnik : Zaposlen
     {
         public virtual int Broj_Sati { get; set; }
         public virtual string Fizicka_Spremnost { get; set; }

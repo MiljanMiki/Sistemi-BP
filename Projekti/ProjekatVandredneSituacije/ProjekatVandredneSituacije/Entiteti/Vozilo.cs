@@ -10,7 +10,7 @@ namespace ProjekatVandredneSituacije.Entiteti
     {
         operativno, u_kvaru
     }
-    internal class Vozilo
+    public class Vozilo
     {
         public virtual string Registarska_Oznaka { get; set; }
         public virtual string Proizvodjac {  get; set; }
@@ -33,12 +33,12 @@ namespace ProjekatVandredneSituacije.Entiteti
         }
     }
 
-    internal abstract class VoziloZaJedinice:Vozilo
+    public abstract class VoziloZaJedinice:Vozilo
     {
         //objasnjenje dummy class za odvajanje dzipova od ostalih vozila
     }
 
-    class Sanitetska : VoziloZaJedinice
+    public class Sanitetska : VoziloZaJedinice
     { 
     }
 

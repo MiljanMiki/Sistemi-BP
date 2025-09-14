@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Ucestvovalo
+    public class Ucestvovalo
     {
 
         public virtual int ID { get; set; }

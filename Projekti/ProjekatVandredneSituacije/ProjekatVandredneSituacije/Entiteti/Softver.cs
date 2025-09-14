@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Softver
+    public class Softver
     {
         public virtual int Id { get; set; }
         public Analiticar Analiticar { get; set; }

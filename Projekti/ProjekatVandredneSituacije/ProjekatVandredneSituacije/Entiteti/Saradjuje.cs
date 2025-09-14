@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ProjekatVandredneSituacije.Entiteti
 {
-    internal class Saradjuje
+    public class Saradjuje
     {
 
         public virtual int Id { get; set; }
         public string Uloga {  get; set; }
         public virtual Sluzba Sektor { get; set; }
 
-        public virtual VandrednaSituacija VandrednaSituacija { get; set; }
+        public virtual VanrednaSituacija VandrednaSituacija { get; set; }
     }
 }

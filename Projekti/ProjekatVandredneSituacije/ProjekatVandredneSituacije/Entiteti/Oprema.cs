@@ -27,7 +27,7 @@ namespace ProjekatVandredneSituacije.Entiteti
     {
         satori, hrana, voda, lekovi
     }
-    internal abstract class Oprema
+    public abstract class Oprema
     {
         public virtual int Serijski_Broj {  get; set; }    
         public virtual string Naziv {  get; set; }
