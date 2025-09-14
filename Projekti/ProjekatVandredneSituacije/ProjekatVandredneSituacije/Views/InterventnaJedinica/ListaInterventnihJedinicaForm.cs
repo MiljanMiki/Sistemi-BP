@@ -1,19 +1,16 @@
-﻿using System;
+﻿using ProjekatVandredneSituacije;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ProjekatVandredneSituacije.Entiteti;
 
 public class ListaInterventnihJedinicaForm : Form
 {
     private DataGridView dgvJedinice;
-    private Button btnDodaj, btnIzmeni, btnObrisi;
+    private Button btnDodajOpstu, btnDodajSpecijalnu, btnIzmeni, btnObrisi, btnOsvezi;
     private Panel pnlButtons, pnlContent;
-
-    // Mock lista za testiranje
-    public static List<InterventnaJedinica> mockJedinice = new List<InterventnaJedinica>();
-    public static List<OperativniRadnik> mockRadnici = new List<OperativniRadnik>();
+    private IList<InterventnaJedinicaBasic> interventneJedinice;
 
     public ListaInterventnihJedinicaForm()
     {
@@ -32,13 +29,17 @@ public class ListaInterventnihJedinicaForm : Form
         pnlButtons.Height = 50;
         pnlButtons.BackColor = SystemColors.Control;
 
-        btnDodaj = new Button { Text = "Dodaj", Location = new Point(10, 10), Width = 100 };
-        btnIzmeni = new Button { Text = "Izmeni", Location = new Point(120, 10), Width = 100 };
-        btnObrisi = new Button { Text = "Obriši", Location = new Point(230, 10), Width = 100 };
+        btnDodajOpstu = new Button { Text = "Dodaj Opštu", Location = new Point(10, 10), Width = 110 };
+        btnDodajSpecijalnu = new Button { Text = "Dodaj Specijalnu", Location = new Point(130, 10), Width = 120 };
+        btnIzmeni = new Button { Text = "Izmeni", Location = new Point(260, 10), Width = 100 };
+        btnObrisi = new Button { Text = "Obriši", Location = new Point(370, 10), Width = 100 };
+        btnOsvezi = new Button { Text = "Osveži", Location = new Point(480, 10), Width = 100 };
 
-        pnlButtons.Controls.Add(btnDodaj);
+        pnlButtons.Controls.Add(btnDodajOpstu);
+        pnlButtons.Controls.Add(btnDodajSpecijalnu);
         pnlButtons.Controls.Add(btnIzmeni);
         pnlButtons.Controls.Add(btnObrisi);
+        pnlButtons.Controls.Add(btnOsvezi);
 
         pnlContent = new Panel();
         pnlContent.Dock = DockStyle.Fill;
@@ -55,117 +56,75 @@ public class ListaInterventnihJedinicaForm : Form
         dgvJedinice.Columns.Add(new DataGridViewTextBoxColumn { Name = "Naziv", HeaderText = "Naziv", DataPropertyName = "Naziv" });
         dgvJedinice.Columns.Add(new DataGridViewTextBoxColumn { Name = "BrojClanova", HeaderText = "Broj članova", DataPropertyName = "BrojClanova" });
         dgvJedinice.Columns.Add(new DataGridViewTextBoxColumn { Name = "Baza", HeaderText = "Baza", DataPropertyName = "Baza" });
-
-        var komandirColumn = new DataGridViewTextBoxColumn { Name = "Komandir", HeaderText = "Komandir" };
-        dgvJedinice.Columns.Add(komandirColumn);
-
-        var tipJediniceColumn = new DataGridViewTextBoxColumn { Name = "TipSpecijalneJedinice", HeaderText = "Tip specijalne jedinice" };
-        dgvJedinice.Columns.Add(tipJediniceColumn);
+        dgvJedinice.Columns.Add(new DataGridViewTextBoxColumn { Name = "TipSpecijalneJedinice", HeaderText = "Tip specijalne jedinice", DataPropertyName = "TipSpecijalneJed" });
 
         pnlContent.Controls.Add(dgvJedinice);
 
         this.Controls.Add(pnlContent);
         this.Controls.Add(pnlButtons);
 
-        btnDodaj.Click += BtnDodaj_Click;
+        btnDodajOpstu.Click += BtnDodajOpstu_Click;
+        btnDodajSpecijalnu.Click += BtnDodajSpecijalnu_Click;
         btnIzmeni.Click += BtnIzmeni_Click;
         btnObrisi.Click += BtnObrisi_Click;
-
-        dgvJedinice.DataBindingComplete += DgvJedinice_DataBindingComplete;
+        btnOsvezi.Click += BtnOsvezi_Click;
     }
 
-    private void DgvJedinice_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
+    private void PopuniTabelu()
     {
-        foreach (DataGridViewRow row in dgvJedinice.Rows)
-        {
-            var jedinica = row.DataBoundItem as InterventnaJedinica;
-            if (jedinica != null)
-            {
-                if (jedinica.Komandir != null)
-                {
-                    row.Cells["Komandir"].Value = $"{jedinica.Komandir.Ime} {jedinica.Komandir.Prezime}";
-                }
-
-                if (jedinica is SpecijalnaInterventna specijalna)
-                {
-                    row.Cells["TipSpecijalneJedinice"].Value = specijalna.TipSpecijalneJedinice;
-                }
-            }
-        }
+        dgvJedinice.DataSource = null;
+        dgvJedinice.DataSource = interventneJedinice;
     }
 
     private void ListaInterventnihJedinicaForm_Load(object? sender, EventArgs e)
     {
-        if (mockJedinice.Count == 0)
-        {
-            if (mockRadnici.Count == 0)
-            {
-                mockRadnici.Add(new OperativniRadnik { JMBG = "1111111111111", Ime = "Marko", Prezime = "Marković", Fizicka_Spremnost = "Odlična" });
-                mockRadnici.Add(new OperativniRadnik { JMBG = "2222222222222", Ime = "Jelena", Prezime = "Jovanović", Fizicka_Spremnost = "Dobra" });
-            }
-
-            mockJedinice.Add(new OpstaIntervetnaJed
-            {
-                Jedinstveni_Broj = 1,
-                Naziv = "Jedinica A",
-                BrojClanova = 10,
-                Baza = "Beograd",
-                Komandir = mockRadnici[0]
-            });
-            mockJedinice.Add(new SpecijalnaInterventna
-            {
-                Jedinstveni_Broj = 2,
-                Naziv = "Jedinica B",
-                BrojClanova = 5,
-                Baza = "Novi Sad",
-                Komandir = mockRadnici[1],
-                TipSpecijalneJedinice = "Specijalne operacije"
-            });
-        }
-
         RefreshDataGrid();
     }
 
     private void RefreshDataGrid()
     {
-        dgvJedinice.DataSource = null;
-        dgvJedinice.DataSource = mockJedinice;
+        try
+        {
+            // Pozivanje metode koja vraća sve jedinice
+            interventneJedinice = DTOMAnager.VratiSveJedinice();
+            PopuniTabelu();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Došlo je do greške prilikom učitavanja liste interventnih jedinica: " + ex.Message);
+        }
     }
 
-    private void BtnDodaj_Click(object? sender, EventArgs e)
+    private void BtnOsvezi_Click(object? sender, EventArgs e)
     {
-        var tipDialog = new Form
+        RefreshDataGrid();
+        MessageBox.Show("Podaci su osveženi.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void BtnDodajOpstu_Click(object? sender, EventArgs e)
+    {
+        var dialog = new DodajIzmeniOpstaJedinicaDialog();
+        if (dialog.ShowDialog() == DialogResult.OK)
         {
-            Text = "Izaberite tip",
-            Size = new Size(250, 150),
-            StartPosition = FormStartPosition.CenterParent
-        };
-        var cmbTip = new ComboBox { Location = new Point(20, 20), Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
-        cmbTip.Items.AddRange(new string[] { "Opšta", "Specijalna" });
-        var btnIzaberi = new Button { Text = "Dalje", Location = new Point(70, 60), DialogResult = DialogResult.OK };
-
-        tipDialog.Controls.Add(cmbTip);
-        tipDialog.Controls.Add(btnIzaberi);
-
-        if (tipDialog.ShowDialog() == DialogResult.OK && cmbTip.SelectedItem != null)
-        {
-            Form? dialog = null;
-            string selectedTip = cmbTip.SelectedItem.ToString() ?? string.Empty;
-
-            if (selectedTip == "Opšta")
-                dialog = new DodajIzmeniJedinicuDialog();
-            else if (selectedTip == "Specijalna")
-                dialog = new DodajIzmeniJedinicuDialog(true);
-
-            if (dialog?.ShowDialog() == DialogResult.OK)
+            if (dialog.Jedinica != null)
             {
-                if (dialog is DodajIzmeniJedinicuDialog jedinicaDialog)
-                {
-                    jedinicaDialog.Jedinica.Jedinstveni_Broj = mockJedinice.Any() ? mockJedinice.Max(j => j.Jedinstveni_Broj) + 1 : 1;
-                    mockJedinice.Add(jedinicaDialog.Jedinica);
-                    RefreshDataGrid();
-                    MessageBox.Show("Interventna jedinica je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                DTOMAnager.DodajOpstuIntervetnuJedinicu(dialog.Jedinica);
+                RefreshDataGrid();
+                MessageBox.Show("Opšta interventna jedinica je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+    }
+
+    private void BtnDodajSpecijalnu_Click(object? sender, EventArgs e)
+    {
+        var dialog = new DodajIzmeniSpecijalnaJedinicaDialog();
+        if (dialog.ShowDialog() == DialogResult.OK)
+        {
+            if (dialog.Jedinica != null)
+            {
+                DTOMAnager.DodajSpecijalnuIntervetnuJedinicu(dialog.Jedinica);
+                RefreshDataGrid();
+                MessageBox.Show("Specijalna interventna jedinica je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
@@ -174,16 +133,29 @@ public class ListaInterventnihJedinicaForm : Form
     {
         if (dgvJedinice.SelectedRows.Count > 0)
         {
-            var selectedJedinica = dgvJedinice.SelectedRows[0].DataBoundItem as InterventnaJedinica;
+            var selectedJedinica = dgvJedinice.SelectedRows[0].DataBoundItem as InterventnaJedinicaBasic;
             Form? dialog = null;
 
-            if (selectedJedinica is OpstaIntervetnaJed)
-                dialog = new DodajIzmeniJedinicuDialog(selectedJedinica as OpstaIntervetnaJed);
-            else if (selectedJedinica is SpecijalnaInterventna)
-                dialog = new DodajIzmeniJedinicuDialog(selectedJedinica as SpecijalnaInterventna);
+            if (selectedJedinica is OpstaInterventnaJedBasic opstaJedinica)
+            {
+                dialog = new DodajIzmeniOpstaJedinicaDialog(opstaJedinica);
+            }
+            else if (selectedJedinica is SpecijalnaInterventnaJedinicaBasic specijalnaJedinica)
+            {
+                dialog = new DodajIzmeniSpecijalnaJedinicaDialog(specijalnaJedinica);
+            }
 
             if (dialog?.ShowDialog() == DialogResult.OK)
             {
+                if (selectedJedinica is OpstaInterventnaJedBasic opstaJedinicaToUpdate)
+                {
+                    DTOMAnager.izmeniOpstuInterventnuJedinicu(opstaJedinicaToUpdate);
+                }
+                else if (selectedJedinica is SpecijalnaInterventnaJedinicaBasic specijalnaJedinicaToUpdate)
+                {
+                    DTOMAnager.izmeniSpecijalnuInterventnuJedinicu(specijalnaJedinicaToUpdate);
+                }
+
                 RefreshDataGrid();
                 MessageBox.Show("Interventna jedinica je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -201,15 +173,30 @@ public class ListaInterventnihJedinicaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabranu jedinicu?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedJedinica = dgvJedinice.SelectedRows[0].DataBoundItem as InterventnaJedinica;
-                mockJedinice.Remove(selectedJedinica!);
-                RefreshDataGrid();
-                MessageBox.Show("Interventna jedinica je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var selectedJedinica = dgvJedinice.SelectedRows[0].DataBoundItem as InterventnaJedinicaBasic;
+                try
+                {
+                    if (selectedJedinica is OpstaInterventnaJedBasic)
+                    {
+                        DTOMAnager.ObrisiOpstuInterventnuJedinicu(selectedJedinica!.Jedinstveni_Broj);
+                    }
+                    else if (selectedJedinica is SpecijalnaInterventnaJedinicaBasic)
+                    {
+                        DTOMAnager.ObrisiSpecijalnuInterventnuJedinicu(selectedJedinica!.Jedinstveni_Broj);
+                    }
+                    RefreshDataGrid();
+                    MessageBox.Show("Interventna jedinica je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Došlo je do greške prilikom brisanja: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         else
         {
             MessageBox.Show("Molimo odaberite interventnu jedinicu za brisanje.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
+
     }
 }

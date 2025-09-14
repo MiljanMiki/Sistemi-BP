@@ -771,7 +771,7 @@ public class SanitetskaPregled : VoziloPregled
     }
 }
 
-public class DzipoviPregled : VoziloBasic
+public class DzipoviPregled : VoziloPregled
 {
     public DzipoviPregled()
     {
@@ -795,7 +795,7 @@ public class KamioniBasic : VoziloBasic
     }
 }
 
-public class KamioniPregled : VoziloBasic
+public class KamioniPregled : VoziloPregled
 {
     public KamioniPregled()
     {

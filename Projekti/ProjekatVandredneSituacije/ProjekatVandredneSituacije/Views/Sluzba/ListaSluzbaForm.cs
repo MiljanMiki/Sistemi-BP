@@ -1,20 +1,15 @@
-﻿using System;
+﻿using ProjekatVandredneSituacije;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ProjekatVandredneSituacije.Entiteti;
 
 public class ListaSluzbaForm : Form
 {
     private DataGridView dgvSluzbe;
     private Button btnDodaj, btnIzmeni, btnObrisi;
     private Panel pnlButtons, pnlContent;
-
-    // Lista koja sadrži mock podatke o službama
-    public static List<Sluzba> mockSluzbe = new List<Sluzba>();
-    public static Predstavnik mockPredstavnik1 = new Predstavnik { JMBG = "1111111111111", Ime = "Petar", Prezime = "Petrovic" };
-    public static Predstavnik mockPredstavnik2 = new Predstavnik { JMBG = "2222222222222", Ime = "Ana", Prezime = "Anic" };
 
     public ListaSluzbaForm()
     {
@@ -47,13 +42,14 @@ public class ListaSluzbaForm : Form
         dgvSluzbe = new DataGridView();
         dgvSluzbe.Dock = DockStyle.Fill;
         dgvSluzbe.ReadOnly = true;
-        dgvSluzbe.AutoGenerateColumns = false; // Isključena automatska generacija
+        dgvSluzbe.AutoGenerateColumns = false;
         dgvSluzbe.AllowUserToAddRows = false;
         dgvSluzbe.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
+        // Kolone su prilagođene SluzbaPregled DTO-u
         dgvSluzbe.Columns.Add(new DataGridViewTextBoxColumn { Name = "Id_Sektora", HeaderText = "ID Sektora", DataPropertyName = "Id_Sektora" });
         dgvSluzbe.Columns.Add(new DataGridViewTextBoxColumn { Name = "TipSektora", HeaderText = "Tip Sektora", DataPropertyName = "TipSektora" });
-        dgvSluzbe.Columns.Add(new DataGridViewTextBoxColumn { Name = "Predstavnik", HeaderText = "Predstavnik", DataPropertyName = "Predstavnik.JMBG" });
+        dgvSluzbe.Columns.Add(new DataGridViewTextBoxColumn { Name = "Predstavnik", HeaderText = "Predstavnik (JMBG)", DataPropertyName = "Predstavnik.JMBG" });
 
         pnlContent.Controls.Add(dgvSluzbe);
 
@@ -63,46 +59,25 @@ public class ListaSluzbaForm : Form
         btnDodaj.Click += BtnDodaj_Click;
         btnIzmeni.Click += BtnIzmeni_Click;
         btnObrisi.Click += BtnObrisi_Click;
-
-        dgvSluzbe.DataBindingComplete += DgvSluzbe_DataBindingComplete;
     }
 
     private void ListaSluzbaForm_Load(object? sender, EventArgs e)
     {
-        if (mockSluzbe.Count == 0)
-        {
-            mockSluzbe.Add(new Sluzba { Id_Sektora = 1, TipSektora = "Vatrogasna služba", Predstavnik = mockPredstavnik1 });
-            mockSluzbe.Add(new Sluzba { Id_Sektora = 2, TipSektora = "Civilna zaštita", Predstavnik = mockPredstavnik2 });
-            mockSluzbe.Add(new Sluzba { Id_Sektora = 3, TipSektora = "Sektor za vanredne situacije" });
-        }
-
         RefreshDataGrid();
     }
 
     private void RefreshDataGrid()
     {
-        dgvSluzbe.DataSource = null;
-        dgvSluzbe.DataSource = mockSluzbe;
-        dgvSluzbe.Refresh();
-    }
-
-    private void DgvSluzbe_DataBindingComplete(object? sender, DataGridViewBindingCompleteEventArgs e)
-    {
-        // Ova petlja osigurava da se Predstavnik pravilno prikaže
-        foreach (DataGridViewRow row in dgvSluzbe.Rows)
+        try
         {
-            var sluzba = row.DataBoundItem as Sluzba;
-            if (sluzba != null)
-            {
-                if (sluzba.Predstavnik != null)
-                {
-                    row.Cells["Predstavnik"].Value = sluzba.Predstavnik.JMBG;
-                }
-                else
-                {
-                    row.Cells["Predstavnik"].Value = "Nema";
-                }
-            }
+            dgvSluzbe.DataSource = null;
+            // Poziva DTOMAnager da dohvati listu DTO objekata
+            dgvSluzbe.DataSource = DTOMAnager.VratiSluzbe();
+            dgvSluzbe.Refresh();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Greška pri učitavanju službi: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 
@@ -111,10 +86,17 @@ public class ListaSluzbaForm : Form
         var dialog = new DodajIzmeniSluzbuDialog();
         if (dialog.ShowDialog() == DialogResult.OK)
         {
-            dialog.Sluzba.Id_Sektora = mockSluzbe.Any() ? mockSluzbe.Max(s => s.Id_Sektora) + 1 : 1;
-            mockSluzbe.Add(dialog.Sluzba);
-            RefreshDataGrid();
-            MessageBox.Show("Služba je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                // Poziva DTOMAnager za dodavanje
+                DTOMAnager.DodajSluzbu(dialog.SluzbaBasic);
+                RefreshDataGrid();
+                MessageBox.Show("Služba je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Greška pri dodavanju službe: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 
@@ -122,12 +104,22 @@ public class ListaSluzbaForm : Form
     {
         if (dgvSluzbe.SelectedRows.Count > 0)
         {
-            var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as Sluzba;
+            // Dohvata SluzbaPregled DTO iz odabranog reda
+            var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as SluzbaPregled;
             var dialog = new DodajIzmeniSluzbuDialog(selectedSluzba);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                RefreshDataGrid();
-                MessageBox.Show("Služba je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                try
+                {
+                    // Poziva DTOMAnager za izmenu
+                    DTOMAnager.IzmeniSluzbu(dialog.SluzbaBasic);
+                    RefreshDataGrid();
+                    MessageBox.Show("Služba je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Greška pri izmeni službe: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         else
@@ -143,10 +135,19 @@ public class ListaSluzbaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabranu službu?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as Sluzba;
-                mockSluzbe.Remove(selectedSluzba!);
-                RefreshDataGrid();
-                MessageBox.Show("Služba je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Dohvata SluzbaPregled DTO iz odabranog reda
+                var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as SluzbaPregled;
+                try
+                {
+                    // Poziva DTOMAnager za brisanje
+                    DTOMAnager.ObrisiSluzbu(selectedSluzba.Id_Sektora);
+                    RefreshDataGrid();
+                    MessageBox.Show("Služba je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Greška pri brisanju službe: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         else

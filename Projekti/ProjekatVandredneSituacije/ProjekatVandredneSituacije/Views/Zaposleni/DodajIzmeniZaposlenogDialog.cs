@@ -37,17 +37,7 @@ public class DodajIzmeniZaposlenogDialog : Form
             dialog = new DodajIzmeniOperativnogRadnikaDialog(zaposlen as OperativniRadnik);
         }
 
-        if (dialog?.ShowDialog() == DialogResult.OK)
-        {
-            if (dialog is DodajIzmeniAnaliticaraDialog analiticarDialog)
-                this.Zaposlen = analiticarDialog.Zaposlen;
-            else if (dialog is DodajIzmeniKoordinatoraDialog koordinatorDialog)
-                this.Zaposlen = koordinatorDialog.Zaposlen;
-            else if (dialog is DodajIzmeniOperativnogRadnikaDialog operativniDialog)
-                this.Zaposlen = operativniDialog.Zaposlen;
-
-            this.DialogResult = DialogResult.OK;
-        }
+        HandleSubDialogResult(dialog);
     }
 
     private void InitializeComponent()
@@ -58,18 +48,26 @@ public class DodajIzmeniZaposlenogDialog : Form
         this.MaximizeBox = false;
         this.MinimizeBox = false;
 
-        var tlpMain = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(10) };
-        // ... (ostali kod za layout, isti kao i pre) ...
+        var tlpMain = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(10), ColumnCount = 2, RowCount = 3 };
+        tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 30));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
 
         lblUputstvo = new Label { Text = "Izaberite tip zaposlenog:", TextAlign = ContentAlignment.MiddleLeft };
-        cmbTip = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
+        cmbTip = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Dock = DockStyle.Fill };
         cmbTip.Items.AddRange(new string[] { "Analitičar", "Koordinator", "Operativni Radnik" });
 
         btnDalje = new Button { Text = "Dalje", DialogResult = DialogResult.OK };
         btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
 
-        tlpMain.Controls.Add(lblUputstvo, 0, 0); tlpMain.SetColumnSpan(lblUputstvo, 2);
-        tlpMain.Controls.Add(cmbTip, 0, 1); tlpMain.SetColumnSpan(cmbTip, 2);
+        // Dodajemo kontrole u TableLayoutPanel
+        tlpMain.Controls.Add(lblUputstvo, 0, 0);
+        tlpMain.SetColumnSpan(lblUputstvo, 2);
+
+        tlpMain.Controls.Add(cmbTip, 0, 1);
+        tlpMain.SetColumnSpan(cmbTip, 2);
 
         var pnlButtons = new Panel { Dock = DockStyle.Fill };
         pnlButtons.Controls.Add(btnDalje);
@@ -77,48 +75,59 @@ public class DodajIzmeniZaposlenogDialog : Form
         btnDalje.Location = new Point(50, 10);
         btnOdustani.Location = new Point(160, 10);
 
-        tlpMain.Controls.Add(pnlButtons, 0, 2); tlpMain.SetColumnSpan(pnlButtons, 2);
+        tlpMain.Controls.Add(pnlButtons, 0, 2);
+        tlpMain.SetColumnSpan(pnlButtons, 2);
 
         this.Controls.Add(tlpMain);
 
-        btnDalje.Click += (sender, e) =>
+        btnDalje.Click += BtnDalje_Click;
+    }
+
+    private void BtnDalje_Click(object? sender, EventArgs e)
+    {
+        if (cmbTip.SelectedItem == null)
         {
-            if (cmbTip.SelectedItem == null)
-            {
-                MessageBox.Show("Molimo izaberite tip zaposlenog.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.DialogResult = DialogResult.None;
-            }
-            else
-            {
-                // SADA OVO OTVARA POD-DIJALOG
-                Form? dialog = null;
-                string? selectedTip = cmbTip.SelectedItem?.ToString();
+            MessageBox.Show("Molimo izaberite tip zaposlenog.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            this.DialogResult = DialogResult.None;
+            return;
+        }
 
-                if (selectedTip == "Analitičar")
-                    dialog = new DodajIzmeniAnaliticaraDialog();
-                else if (selectedTip == "Koordinator")
-                    dialog = new DodajIzmeniKoordinatoraDialog();
-                else if (selectedTip == "Operativni Radnik")
-                    dialog = new DodajIzmeniOperativnogRadnikaDialog();
+        // Otvara pod-dijalog
+        Form? dialog = null;
+        string? selectedTip = cmbTip.SelectedItem?.ToString();
 
-                if (dialog?.ShowDialog() == DialogResult.OK)
-                {
-                    if (dialog is DodajIzmeniAnaliticaraDialog analiticarDialog)
-                        this.Zaposlen = analiticarDialog.Zaposlen;
-                    else if (dialog is DodajIzmeniKoordinatoraDialog koordinatorDialog)
-                        this.Zaposlen = koordinatorDialog.Zaposlen;
-                    else if (dialog is DodajIzmeniOperativnogRadnikaDialog operativniDialog)
-                        this.Zaposlen = operativniDialog.Zaposlen;
+        if (selectedTip == "Analitičar")
+            dialog = new DodajIzmeniAnaliticaraDialog();
+        else if (selectedTip == "Koordinator")
+            dialog = new DodajIzmeniKoordinatoraDialog();
+        else if (selectedTip == "Operativni Radnik")
+            dialog = new DodajIzmeniOperativnogRadnikaDialog();
 
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
-                else
-                {
-                    this.DialogResult = DialogResult.Cancel;
-                    this.Close();
-                }
-            }
-        };
+        HandleSubDialogResult(dialog);
+    }
+
+    /// <summary>
+    ///  Centralizovana metoda za obradu rezultata pod-dijaloga.
+    /// </summary>
+    /// <param name="dialog">Dijalog koji je prikazan.</param>
+    private void HandleSubDialogResult(Form? dialog)
+    {
+        if (dialog?.ShowDialog() == DialogResult.OK)
+        {
+            if (dialog is DodajIzmeniAnaliticaraDialog analiticarDialog)
+                this.Zaposlen = analiticarDialog.Zaposlen;
+            else if (dialog is DodajIzmeniKoordinatoraDialog koordinatorDialog)
+                this.Zaposlen = koordinatorDialog.Zaposlen;
+            else if (dialog is DodajIzmeniOperativnogRadnikaDialog operativniDialog)
+                this.Zaposlen = operativniDialog.Zaposlen;
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+        else
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+        }
     }
 }

@@ -2,25 +2,37 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ProjekatVandredneSituacije.Entiteti;
+using System.Collections.Generic;
 
 public class DodajIzmeniVoziloDialog : Form
 {
-    private Label lblRegistarskaOznaka, lblProizvodjac, lblStatus, lblLokacija;
+    private Label lblRegistarskaOznaka, lblProizvodjac, lblStatus, lblLokacija, lblNamena;
     private TextBox txtRegistarskaOznaka, txtProizvodjac, txtLokacija;
-    private ComboBox cmbStatus;
+    private ComboBox cmbStatus, cmbNamena;
     private Button btnSacuvaj, btnOdustani;
+    private TableLayoutPanel tlpMain;
 
-    public Vozilo? Vozilo { get; private set; }
+    public VoziloBasic? VoziloBasic { get; private set; }
+    private readonly Type _vehicleType;
 
-    public DodajIzmeniVoziloDialog(Vozilo? vozilo = null)
+    public DodajIzmeniVoziloDialog(VoziloBasic? vozilo = null)
     {
         InitializeComponent();
-        this.Vozilo = vozilo ?? new Vozilo();
         this.Text = vozilo != null ? "Izmeni vozilo" : "Dodaj novo vozilo";
+        _vehicleType = vozilo?.GetType() ?? typeof(VoziloBasic);
 
         if (vozilo != null)
         {
+            VoziloBasic = vozilo;
             PopulateFields();
+        }
+
+        // Prilagođavanje forme za SpecijalnaVozila
+        if (_vehicleType == typeof(SpecijalnaVozilaBasic))
+        {
+            lblNamena.Visible = true;
+            cmbNamena.Visible = true;
+            this.ClientSize = new Size(400, 350);
         }
     }
 
@@ -32,7 +44,7 @@ public class DodajIzmeniVoziloDialog : Form
         this.MaximizeBox = false;
         this.MinimizeBox = false;
 
-        var tlpMain = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(10), ColumnCount = 2 };
+        tlpMain = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(10), ColumnCount = 2 };
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
 
@@ -45,6 +57,9 @@ public class DodajIzmeniVoziloDialog : Form
         cmbStatus.Items.AddRange(Enum.GetNames(typeof(StatusVozila)));
         lblLokacija = new Label { Text = "Lokacija:", TextAlign = ContentAlignment.MiddleLeft };
         txtLokacija = new TextBox();
+        lblNamena = new Label { Text = "Namena:", TextAlign = ContentAlignment.MiddleLeft, Visible = false };
+        cmbNamena = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Visible = false };
+        cmbNamena.Items.AddRange(Enum.GetNames(typeof(Namena)));
 
         btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
         btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
@@ -53,6 +68,7 @@ public class DodajIzmeniVoziloDialog : Form
         tlpMain.Controls.Add(lblProizvodjac, 0, 1); tlpMain.Controls.Add(txtProizvodjac, 1, 1);
         tlpMain.Controls.Add(lblStatus, 0, 2); tlpMain.Controls.Add(cmbStatus, 1, 2);
         tlpMain.Controls.Add(lblLokacija, 0, 3); tlpMain.Controls.Add(txtLokacija, 1, 3);
+        tlpMain.Controls.Add(lblNamena, 0, 4); tlpMain.Controls.Add(cmbNamena, 1, 4);
 
         var pnlButtons = new Panel { Dock = DockStyle.Fill };
         pnlButtons.Controls.Add(btnSacuvaj);
@@ -60,7 +76,7 @@ public class DodajIzmeniVoziloDialog : Form
         btnSacuvaj.Location = new Point(50, 10);
         btnOdustani.Location = new Point(160, 10);
 
-        tlpMain.Controls.Add(pnlButtons, 0, 4); tlpMain.SetColumnSpan(pnlButtons, 2);
+        tlpMain.Controls.Add(pnlButtons, 0, 5); tlpMain.SetColumnSpan(pnlButtons, 2);
         this.Controls.Add(tlpMain);
 
         btnSacuvaj.Click += BtnSacuvaj_Click;
@@ -68,12 +84,16 @@ public class DodajIzmeniVoziloDialog : Form
 
     protected void PopulateFields()
     {
-        if (Vozilo != null)
+        if (VoziloBasic != null)
         {
-            txtRegistarskaOznaka.Text = Vozilo.Registarska_Oznaka;
-            txtProizvodjac.Text = Vozilo.Proizvodjac;
-            cmbStatus.SelectedItem = Vozilo.Status.ToString();
-            txtLokacija.Text = Vozilo.Lokacija;
+            txtRegistarskaOznaka.Text = VoziloBasic.Registarska_Oznaka;
+            txtProizvodjac.Text = VoziloBasic.Proizvodjac;
+            cmbStatus.SelectedItem = VoziloBasic.Status.ToString();
+            txtLokacija.Text = VoziloBasic.Lokacija;
+            if (VoziloBasic is SpecijalnaVozilaBasic spec)
+            {
+                cmbNamena.SelectedItem = spec.Namena.ToString();
+            }
         }
     }
 
@@ -81,13 +101,59 @@ public class DodajIzmeniVoziloDialog : Form
     {
         if (ValidateInput())
         {
-            Vozilo!.Registarska_Oznaka = txtRegistarskaOznaka.Text;
-            Vozilo.Proizvodjac = txtProizvodjac.Text;
-            Vozilo.Status = (StatusVozila)Enum.Parse(typeof(StatusVozila), cmbStatus.SelectedItem!.ToString()!);
-            Vozilo.Lokacija = txtLokacija.Text;
+            if (_vehicleType == typeof(SpecijalnaVozilaBasic))
+            {
+                VoziloBasic = new SpecijalnaVozilaBasic
+                (
+                    txtRegistarskaOznaka.Text,
+                    txtProizvodjac.Text,
+                    (StatusVozila)Enum.Parse(typeof(StatusVozila), cmbStatus.SelectedItem!.ToString()!),
+                    txtLokacija.Text,
+                    (Namena)Enum.Parse(typeof(Namena), cmbNamena.SelectedItem!.ToString()!)
+                );
+            }
+            else if (_vehicleType == typeof(SanitetskaBasic))
+            {
+                VoziloBasic = new SanitetskaBasic
+               (
+                   txtRegistarskaOznaka.Text,
+                   txtProizvodjac.Text,
+                   (StatusVozila)Enum.Parse(typeof(StatusVozila), cmbStatus.SelectedItem!.ToString()!),
+                   txtLokacija.Text
+               );
+            }
+            else if (_vehicleType == typeof(DzipoviBasic))
+            {
+                VoziloBasic = new DzipoviBasic
+               (
+                   txtRegistarskaOznaka.Text,
+                   txtProizvodjac.Text,
+                   (StatusVozila)Enum.Parse(typeof(StatusVozila), cmbStatus.SelectedItem!.ToString()!),
+                   txtLokacija.Text
+               );
+            }
+            else if (_vehicleType == typeof(KamioniBasic))
+            {
+                VoziloBasic = new KamioniBasic
+               (
+                   txtRegistarskaOznaka.Text,
+                   txtProizvodjac.Text,
+                   (StatusVozila)Enum.Parse(typeof(StatusVozila), cmbStatus.SelectedItem!.ToString()!),
+                   txtLokacija.Text
+               );
+            }
+            else
+            {
+                VoziloBasic = new VoziloBasic
+                (
+                    txtRegistarskaOznaka.Text,
+                    txtProizvodjac.Text,
+                    (StatusVozila)Enum.Parse(typeof(StatusVozila), cmbStatus.SelectedItem!.ToString()!),
+                    txtLokacija.Text
+                );
+            }
 
             this.DialogResult = DialogResult.OK;
-            this.Close();
         }
         else
         {
@@ -101,6 +167,11 @@ public class DodajIzmeniVoziloDialog : Form
             cmbStatus.SelectedItem == null || string.IsNullOrWhiteSpace(txtLokacija.Text))
         {
             MessageBox.Show("Molimo popunite sva obavezna polja ispravno.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+        if (_vehicleType == typeof(SpecijalnaVozilaBasic) && cmbNamena.SelectedItem == null)
+        {
+            MessageBox.Show("Molimo popunite polje za namenu.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
         return true;

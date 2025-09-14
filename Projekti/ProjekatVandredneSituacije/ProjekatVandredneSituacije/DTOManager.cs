@@ -146,7 +146,7 @@ namespace ProjekatVandredneSituacije
         #endregion
 
         #region IntervetnaJedinica
-        public void DodajOpstuIntervetnuJedinicu(InterventnaJedinicaBasic i)
+        public static void DodajOpstuIntervetnuJedinicu(InterventnaJedinicaBasic i)
         {
             try
             {
@@ -183,7 +183,7 @@ namespace ProjekatVandredneSituacije
                 //handle exceptions
             }
         }
-        public static void izmeniOpstuInterventnuJedinicu(OpstaIntervetnaJed i)
+        public static void izmeniOpstuInterventnuJedinicu(OpstaInterventnaJedBasic i)
             {
                 try
                 {
@@ -245,7 +245,7 @@ namespace ProjekatVandredneSituacije
         }
 
 
-        public void DodajSpecijalnuIntervetnuJedinicu(SpecijalnaInterventnaJedinicaBasic i)
+        public static void DodajSpecijalnuIntervetnuJedinicu(SpecijalnaInterventnaJedinicaBasic i)
         {
             try
             {
@@ -400,12 +400,12 @@ namespace ProjekatVandredneSituacije
             }
         }
 
-        public static void ObrisiIntervenciju()
+        public static void ObrisiIntervenciju(int id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Intervencija i = s.Load<Intervencija>(1);
+                Intervencija i = s.Load<Intervencija>(id);
                 s.Delete(i);
                 s.Flush();
                 s.Close();
@@ -963,7 +963,7 @@ namespace ProjekatVandredneSituacije
             }
         }
 
-        public static IList<KordinatorBasic> VratiKordinatora()
+        public static IList<KordinatorBasic> VratiKoordinatore()
         {
             List<KordinatorBasic> sviKordinatori = new List<KordinatorBasic>();
             try
@@ -984,7 +984,7 @@ namespace ProjekatVandredneSituacije
             return sviKordinatori;
         }
 
-        public static KordinatorBasic VratiKordinator(string JMBG)
+        public static KordinatorBasic VratiKoordinatora(string JMBG)
         {
             KordinatorBasic kordinator = new KordinatorBasic();
             try
@@ -1539,27 +1539,25 @@ namespace ProjekatVandredneSituacije
                 //handle exceptions
             }
         }
-
-        public static void IzmeniSertifikat(SertifikatPregled sert)
+        public static void IzmeniSertifikat(SertifikatBasic sert)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                SertifikatId id = new SertifikatId();
-                id.OperativniRadnik = s.Load<OperativniRadnik>(sert.Id.OperativniRadnik.JMBG);
-                id.Naziv = sert.Id.Naziv;
-                id.Institucija = sert.Id.Naziv;
+
+                SertifikatId id = new SertifikatId
+                {
+                    OperativniRadnik = s.Load<OperativniRadnik>(sert.Id.OperativniRadnik.JMBG),
+                    Naziv = sert.Id.Naziv,
+                    Institucija = sert.Id.Institucija
+                };
+
                 Sertifikat sertifikat = s.Load<Sertifikat>(id);
                 sertifikat.DatumIzdavanja = sert.DatumIzdavanja;
                 sertifikat.DatumVazenja = sert.DatumVazenja;
 
-
-                
-
                 s.SaveOrUpdate(sertifikat);
-
                 s.Flush();
-
                 s.Close();
             }
             catch (Exception ec)
@@ -1567,6 +1565,8 @@ namespace ProjekatVandredneSituacije
                 //handle exceptions
             }
         }
+
+
         public static IList<SertifikatBasic> VratiSertifikate()
         {
             List<SertifikatBasic> sviSertifikati = new List<SertifikatBasic>();
@@ -1746,7 +1746,7 @@ namespace ProjekatVandredneSituacije
 
         #region Specijalizacija
 
-        public static void DodajSpecijalizaciju(SpecijalizacijaPregled sp)
+        public static void DodajSpecijalizaciju(SpecijalizacijaBasic sp)
         {
             try
             {

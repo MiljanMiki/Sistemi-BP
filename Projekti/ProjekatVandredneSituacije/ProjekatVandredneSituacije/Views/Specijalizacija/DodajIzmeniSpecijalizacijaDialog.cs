@@ -1,111 +1,101 @@
-﻿using System;
+﻿using ProjekatVandredneSituacije;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVandredneSituacije.Entiteti;
 
 public class DodajIzmeniSpecijalizacijaDialog : Form
 {
-    private Label lblTip;
+    private Label lblTip, lblKordinator;
     private TextBox txtTip;
+    private ComboBox cmbKordinator;
     private Button btnSacuvaj, btnOdustani;
     private TableLayoutPanel tlpMain;
-    private Panel pnlButtons;
 
-    public Specijalizacija Specijalizacija { get; private set; }
+    public SpecijalizacijaBasic SpecijalizacijaBasic { get; private set; }
+    private int _specijalizacijaIdToUpdate;
 
-    public DodajIzmeniSpecijalizacijaDialog(Specijalizacija specijalizacija = null)
+    public DodajIzmeniSpecijalizacijaDialog(SpecijalizacijaPregled? specijalizacijaPregled = null)
     {
         InitializeComponent();
-        this.Text = "Izmena specijalizacije";
 
-        // Ako postoji specijalizacija, popuni polja
-        this.Specijalizacija = specijalizacija ?? new Specijalizacija();
-        txtTip.Text = this.Specijalizacija.Tip;
+        // Popunjavanje ComboBox-a sa kordinatorima (KordinatorBasic)
+        PopuniKordinatore();
+
+        if (specijalizacijaPregled != null)
+        {
+            this.Text = "Izmena specijalizacije";
+            _specijalizacijaIdToUpdate = specijalizacijaPregled.Id;
+            PopulateFields(specijalizacijaPregled);
+        }
+        else
+        {
+            this.Text = "Dodaj novu specijalizaciju";
+        }
+    }
+
+    private void PopuniKordinatore()
+    {
+        try
+        {
+            // Metoda VratiKordinatore vraća IList<KordinatorBasic>
+            IList<KordinatorBasic> kordinatori = DTOMAnager.VratiKoordinatore();
+            cmbKordinator.DataSource = kordinatori;
+            cmbKordinator.DisplayMember = "Ime"; // Prikazuje ime iz KordinatorBasic
+            cmbKordinator.ValueMember = "JMBG"; // Koristi JMBG kao vrednost
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Greška pri učitavanju kordinatora: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+
+    private void PopulateFields(SpecijalizacijaPregled specijalizacija)
+    {
+        txtTip.Text = specijalizacija.Tip;
+        if (!string.IsNullOrEmpty(specijalizacija.Kordinator))
+        {
+            cmbKordinator.SelectedValue = specijalizacija.Kordinator;
+        }
     }
 
     private void InitializeComponent()
     {
-        tlpMain = new TableLayoutPanel();
-        lblTip = new Label();
-        txtTip = new TextBox();
-        pnlButtons = new Panel();
-        btnSacuvaj = new Button();
-        btnOdustani = new Button();
-        tlpMain.SuspendLayout();
-        pnlButtons.SuspendLayout();
-        SuspendLayout();
-        // 
-        // tlpMain
-        // 
-        tlpMain.ColumnCount = 2;
+        this.ClientSize = new Size(400, 250);
+        this.FormBorderStyle = FormBorderStyle.FixedDialog;
+        this.StartPosition = FormStartPosition.CenterParent;
+        this.MaximizeBox = false;
+        this.MinimizeBox = false;
+
+        tlpMain = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(10), ColumnCount = 2, RowCount = 3 };
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-        tlpMain.Controls.Add(lblTip, 0, 0);
-        tlpMain.Controls.Add(txtTip, 1, 0);
-        tlpMain.Controls.Add(pnlButtons, 0, 1);
-        tlpMain.Location = new Point(0, 0);
-        tlpMain.Name = "tlpMain";
-        tlpMain.RowCount = 2;
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tlpMain.Size = new Size(200, 100);
-        tlpMain.TabIndex = 0;
-        // 
-        // lblTip
-        // 
-        lblTip.Location = new Point(3, 0);
-        lblTip.Name = "lblTip";
-        lblTip.Size = new Size(74, 20);
-        lblTip.TabIndex = 0;
-        // 
-        // txtTip
-        // 
-        txtTip.Location = new Point(83, 3);
-        txtTip.Name = "txtTip";
-        txtTip.Size = new Size(100, 27);
-        txtTip.TabIndex = 1;
-        // 
-        // pnlButtons
-        // 
-        tlpMain.SetColumnSpan(pnlButtons, 2);
+
+        lblTip = new Label { Text = "Tip:", TextAlign = ContentAlignment.MiddleLeft };
+        txtTip = new TextBox();
+
+        lblKordinator = new Label { Text = "Kordinator (JMBG):", TextAlign = ContentAlignment.MiddleLeft };
+        cmbKordinator = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
+
+        btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
+        btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
+
+        tlpMain.Controls.Add(lblTip, 0, 0); tlpMain.Controls.Add(txtTip, 1, 0);
+        tlpMain.Controls.Add(lblKordinator, 0, 1); tlpMain.Controls.Add(cmbKordinator, 1, 1);
+
+        var pnlButtons = new Panel { Dock = DockStyle.Fill };
         pnlButtons.Controls.Add(btnSacuvaj);
         pnlButtons.Controls.Add(btnOdustani);
-        pnlButtons.Location = new Point(3, 23);
-        pnlButtons.Name = "pnlButtons";
-        pnlButtons.Size = new Size(194, 74);
-        pnlButtons.TabIndex = 2;
-        // 
-        // btnSacuvaj
-        // 
         btnSacuvaj.Location = new Point(50, 10);
-        btnSacuvaj.Name = "btnSacuvaj";
-        btnSacuvaj.Size = new Size(75, 23);
-        btnSacuvaj.TabIndex = 0;
-        btnSacuvaj.Click += BtnSacuvaj_Click;
-        // 
-        // btnOdustani
-        // 
         btnOdustani.Location = new Point(160, 10);
-        btnOdustani.Name = "btnOdustani";
-        btnOdustani.Size = new Size(75, 23);
-        btnOdustani.TabIndex = 1;
-        // 
-        // DodajIzmeniSpecijalizacijaDialog
-        // 
-        ClientSize = new Size(350, 150);
-        Controls.Add(tlpMain);
-        FormBorderStyle = FormBorderStyle.FixedDialog;
-        MaximizeBox = false;
-        MinimizeBox = false;
-        Name = "DodajIzmeniSpecijalizacijaDialog";
-        StartPosition = FormStartPosition.CenterParent;
-        tlpMain.ResumeLayout(false);
-        tlpMain.PerformLayout();
-        pnlButtons.ResumeLayout(false);
-        ResumeLayout(false);
+
+        tlpMain.Controls.Add(pnlButtons, 0, 2); tlpMain.SetColumnSpan(pnlButtons, 2);
+        this.Controls.Add(tlpMain);
+
+        btnSacuvaj.Click += BtnSacuvaj_Click;
     }
 
-    private void BtnSacuvaj_Click(object sender, EventArgs e)
+    private void BtnSacuvaj_Click(object? sender, EventArgs e)
     {
         if (string.IsNullOrWhiteSpace(txtTip.Text))
         {
@@ -114,8 +104,20 @@ public class DodajIzmeniSpecijalizacijaDialog : Form
             return;
         }
 
-        this.Specijalizacija.Tip = txtTip.Text;
+        if (cmbKordinator.SelectedValue == null)
+        {
+            MessageBox.Show("Molimo odaberite kordinatora.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            this.DialogResult = DialogResult.None;
+            return;
+        }
+
+        this.SpecijalizacijaBasic = new SpecijalizacijaBasic
+        {
+            Id = _specijalizacijaIdToUpdate,
+            Tip = txtTip.Text,
+            Kordinator = new KordinatorBasic { JMBG = cmbKordinator.SelectedValue.ToString() }
+        };
+
         this.DialogResult = DialogResult.OK;
-        this.Close();
     }
 }

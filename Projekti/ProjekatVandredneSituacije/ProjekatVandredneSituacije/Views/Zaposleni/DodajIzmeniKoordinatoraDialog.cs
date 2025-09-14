@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ProjekatVandredneSituacije.Entiteti;
+using System.Text.RegularExpressions;
 
 public class DodajIzmeniKoordinatoraDialog : Form
 {
@@ -20,6 +21,8 @@ public class DodajIzmeniKoordinatoraDialog : Form
         this.Text = koordinator != null ? "Izmeni koordinatora" : "Dodaj koordinatora";
         if (koordinator != null)
         {
+            // Zaključavamo polje JMBG-a za izmene
+            txtJMBG.ReadOnly = true;
             PopulateFields();
         }
     }
@@ -106,12 +109,24 @@ public class DodajIzmeniKoordinatoraDialog : Form
             Zaposlen.Ime = txtIme.Text;
             Zaposlen.Prezime = txtPrezime.Text;
             Zaposlen.Datum_Rodjenja = dtpDatumRodjenja.Value;
-            Zaposlen.Pol = cmbPol.SelectedItem.ToString() ?? "";
+            Zaposlen.Pol = cmbPol.SelectedItem?.ToString() ?? "";
             Zaposlen.Kontakt_Telefon = txtTelefon.Text;
             Zaposlen.Email = txtEmail.Text;
             Zaposlen.AdresaStanovanja = txtAdresa.Text;
             Zaposlen.Datum_Zaposlenja = dtpDatumZaposlenja.Value;
-            Zaposlen.BrojTimova = int.Parse(txtBrojTimova.Text);
+
+            // Konverzija u int
+            if (int.TryParse(txtBrojTimova.Text, out int brojTimova))
+            {
+                Zaposlen.BrojTimova = brojTimova;
+            }
+            else
+            {
+                // Ovo ne bi trebalo da se desi zbog validacije, ali je dobra praksa
+                MessageBox.Show("Broj timova nije u ispravnom formatu.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.None;
+                return;
+            }
 
             this.DialogResult = DialogResult.OK;
             this.Close();
@@ -124,14 +139,43 @@ public class DodajIzmeniKoordinatoraDialog : Form
 
     private bool ValidateInput()
     {
-        if (string.IsNullOrWhiteSpace(txtJMBG.Text) || string.IsNullOrWhiteSpace(txtIme.Text) ||
-            string.IsNullOrWhiteSpace(txtPrezime.Text) || cmbPol.SelectedItem == null ||
-            string.IsNullOrWhiteSpace(txtTelefon.Text) || string.IsNullOrWhiteSpace(txtEmail.Text) ||
-            string.IsNullOrWhiteSpace(txtAdresa.Text) || !int.TryParse(txtBrojTimova.Text, out _))
+        // Validacija osnovnih polja
+        if (string.IsNullOrWhiteSpace(txtIme.Text) || string.IsNullOrWhiteSpace(txtPrezime.Text) ||
+            cmbPol.SelectedItem == null || string.IsNullOrWhiteSpace(txtAdresa.Text))
         {
-            MessageBox.Show("Molimo popunite sva polja ispravno.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Molimo popunite sva obavezna polja: Ime, Prezime, Pol, Adresa.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
+
+        // Validacija JMBG-a
+        if (!txtJMBG.ReadOnly && (string.IsNullOrWhiteSpace(txtJMBG.Text) || txtJMBG.Text.Length != 13 || !long.TryParse(txtJMBG.Text, out _)))
+        {
+            MessageBox.Show("JMBG mora da ima tačno 13 cifara.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        // Validacija e-mail formata
+        string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        if (!string.IsNullOrWhiteSpace(txtEmail.Text) && !Regex.IsMatch(txtEmail.Text, emailPattern))
+        {
+            MessageBox.Show("Molimo unesite ispravnu e-mail adresu.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        // Validacija broja timova
+        if (!int.TryParse(txtBrojTimova.Text, out int brojTimova) || brojTimova < 0)
+        {
+            MessageBox.Show("Broj timova mora biti pozitivan broj (ili 0).", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        // Validacija datuma rođenja
+        if (dtpDatumRodjenja.Value > DateTime.Now)
+        {
+            MessageBox.Show("Datum rođenja ne može biti u budućnosti.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
         return true;
     }
 }

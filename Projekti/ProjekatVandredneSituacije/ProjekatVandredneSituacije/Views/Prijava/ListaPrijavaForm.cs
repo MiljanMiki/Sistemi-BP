@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVandredneSituacije;
 
 public class ListaPrijavaForm : Form
 {
     private DataGridView dgvPrijave;
-    private Button btnDodaj, btnIzmeni, btnObrisi;
+    private Button btnDodaj, btnIzmeni, btnObrisi, btnOsvezi;
     private Panel pnlButtons, pnlContent;
-
-    // Mock lista za testiranje
-    private static List<Prijava> mockPrijave = new List<Prijava>();
 
     public ListaPrijavaForm()
     {
@@ -34,10 +31,12 @@ public class ListaPrijavaForm : Form
         btnDodaj = new Button { Text = "Dodaj", Location = new Point(10, 10), Width = 100 };
         btnIzmeni = new Button { Text = "Izmeni", Location = new Point(120, 10), Width = 100 };
         btnObrisi = new Button { Text = "Obriši", Location = new Point(230, 10), Width = 100 };
+        btnOsvezi = new Button { Text = "Osveži", Location = new Point(340, 10), Width = 100 };
 
         pnlButtons.Controls.Add(btnDodaj);
         pnlButtons.Controls.Add(btnIzmeni);
         pnlButtons.Controls.Add(btnObrisi);
+        pnlButtons.Controls.Add(btnOsvezi);
 
         pnlContent = new Panel();
         pnlContent.Dock = DockStyle.Fill;
@@ -57,45 +56,24 @@ public class ListaPrijavaForm : Form
         btnDodaj.Click += BtnDodaj_Click;
         btnIzmeni.Click += BtnIzmeni_Click;
         btnObrisi.Click += BtnObrisi_Click;
+        btnOsvezi.Click += BtnOsvezi_Click;
     }
 
     private void ListaPrijavaForm_Load(object? sender, EventArgs e)
     {
-        if (mockPrijave.Count == 0)
-        {
-            mockPrijave.Add(new Prijava
-            {
-                Id = 1,
-                Datum_I_Vreme = new DateTime(2025, 9, 14, 10, 30, 0),
-                Tip = "Požar",
-                Ime_Prijavioca = "Marko Petrović",
-                Kontakt = "060-111-222",
-                Lokacija = "Ulica Kneza Miloša 5",
-                Opis = "Veliki požar u napuštenoj zgradi.",
-                JMBG_Dispecer = "1234567890123",
-                Prioritet = 5
-            });
-            mockPrijave.Add(new Prijava
-            {
-                Id = 2,
-                Datum_I_Vreme = new DateTime(2025, 9, 14, 11, 45, 0),
-                Tip = "Poplava",
-                Ime_Prijavioca = "Ana Kovačević",
-                Kontakt = "064-333-444",
-                Lokacija = "Trg Republike 10",
-                Opis = "Poplavljen podrum zbog obilnih padavina.",
-                JMBG_Dispecer = "9876543210987",
-                Prioritet = 3
-            });
-        }
-
         RefreshDataGrid();
     }
 
     private void RefreshDataGrid()
     {
         dgvPrijave.DataSource = null;
-        dgvPrijave.DataSource = mockPrijave;
+        dgvPrijave.DataSource = DTOMAnager.VratiPrijave();
+    }
+
+    private void BtnOsvezi_Click(object? sender, EventArgs e)
+    {
+        RefreshDataGrid();
+        MessageBox.Show("Podaci su osveženi.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void BtnDodaj_Click(object? sender, EventArgs e)
@@ -105,9 +83,7 @@ public class ListaPrijavaForm : Form
         {
             if (dialog.Prijava != null)
             {
-                // Dodela ID-a (za mock podatke, u stvarnoj aplikaciji bi baza to radila)
-                dialog.Prijava.Id = mockPrijave.Any() ? mockPrijave.Max(p => p.Id) + 1 : 1;
-                mockPrijave.Add(dialog.Prijava);
+                DTOMAnager.DodajPrijavu(dialog.Prijava);
                 RefreshDataGrid();
                 MessageBox.Show("Prijava je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -118,10 +94,11 @@ public class ListaPrijavaForm : Form
     {
         if (dgvPrijave.SelectedRows.Count > 0)
         {
-            var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as Prijava;
+            var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as PrijavaBasic;
             var dialog = new DodajIzmeniPrijavuDialog(selectedPrijava!);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
+                DTOMAnager.IzmeniPrijavu(dialog.Prijava!);
                 RefreshDataGrid();
                 MessageBox.Show("Prijava je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -139,8 +116,8 @@ public class ListaPrijavaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabranu prijavu?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as Prijava;
-                mockPrijave.Remove(selectedPrijava!);
+                var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as PrijavaBasic;
+                DTOMAnager.ObrisiPrijavu(selectedPrijava!.Id);
                 RefreshDataGrid();
                 MessageBox.Show("Prijava je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

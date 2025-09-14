@@ -97,7 +97,7 @@ public class MainForm : Form
             case "Lista Int Jedinica":
                 return new ListaInterventnihJedinicaForm();
             case "Lista Intervencija":
-                return new ListaIntervencijaForm();
+                return new IntervencijeForm();
             case "Lista Vozila":
                 return new ListaVozilaForm();
             case "Lista Sektora":

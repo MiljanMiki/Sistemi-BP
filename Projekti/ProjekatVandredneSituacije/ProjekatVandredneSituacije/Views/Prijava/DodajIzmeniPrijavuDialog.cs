@@ -6,16 +6,17 @@ using ProjekatVandredneSituacije.Entiteti;
 public class DodajIzmeniPrijavuDialog : Form
 {
     private Label lblDatum, lblIdVanredne, lblTip, lblIme, lblKontakt, lblLokacija, lblOpis, lblJMBGDispecer, lblPrioritet;
-    private TextBox txtIdVanredne, txtTip, txtIme, txtKontakt, txtLokacija, txtOpis, txtJMBGDispecer, txtPrioritet;
+    private TextBox txtTip, txtIme, txtKontakt, txtLokacija, txtOpis, txtJMBGDispecer;
     private DateTimePicker dtpDatum;
+    private NumericUpDown numIdVanredne, numPrioritet;
     private Button btnSacuvaj, btnOdustani;
 
-    public Prijava? Prijava { get; private set; }
+    public PrijavaBasic? Prijava { get; private set; }
 
-    public DodajIzmeniPrijavuDialog(Prijava? prijava = null)
+    public DodajIzmeniPrijavuDialog(PrijavaBasic? prijava = null)
     {
         InitializeComponent();
-        this.Prijava = prijava ?? new Prijava();
+        this.Prijava = prijava ?? new PrijavaBasic();
         this.Text = prijava != null ? "Izmeni prijavu" : "Dodaj novu prijavu";
 
         if (prijava != null)
@@ -39,7 +40,7 @@ public class DodajIzmeniPrijavuDialog : Form
         lblDatum = new Label { Text = "Datum i vreme:", TextAlign = ContentAlignment.MiddleLeft };
         dtpDatum = new DateTimePicker { Format = DateTimePickerFormat.Custom, CustomFormat = "dd.MM.yyyy HH:mm:ss" };
         lblIdVanredne = new Label { Text = "ID Vanredne situacije:", TextAlign = ContentAlignment.MiddleLeft };
-        txtIdVanredne = new TextBox();
+        numIdVanredne = new NumericUpDown { Minimum = 1, Maximum = 100000 };
         lblTip = new Label { Text = "Tip:", TextAlign = ContentAlignment.MiddleLeft };
         txtTip = new TextBox();
         lblIme = new Label { Text = "Ime prijavioca:", TextAlign = ContentAlignment.MiddleLeft };
@@ -55,20 +56,20 @@ public class DodajIzmeniPrijavuDialog : Form
         lblJMBGDispecer = new Label { Text = "JMBG Dispečera:", TextAlign = ContentAlignment.MiddleLeft };
         txtJMBGDispecer = new TextBox();
         lblPrioritet = new Label { Text = "Prioritet (1-5):", TextAlign = ContentAlignment.MiddleLeft };
-        txtPrioritet = new TextBox();
+        numPrioritet = new NumericUpDown { Minimum = 1, Maximum = 5 };
 
         btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
         btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
 
         tlpMain.Controls.Add(lblDatum, 0, 0); tlpMain.Controls.Add(dtpDatum, 1, 0);
-        tlpMain.Controls.Add(lblIdVanredne, 0, 1); tlpMain.Controls.Add(txtIdVanredne, 1, 1);
+        tlpMain.Controls.Add(lblIdVanredne, 0, 1); tlpMain.Controls.Add(numIdVanredne, 1, 1);
         tlpMain.Controls.Add(lblTip, 0, 2); tlpMain.Controls.Add(txtTip, 1, 2);
         tlpMain.Controls.Add(lblIme, 0, 3); tlpMain.Controls.Add(txtIme, 1, 3);
         tlpMain.Controls.Add(lblKontakt, 0, 4); tlpMain.Controls.Add(txtKontakt, 1, 4);
         tlpMain.Controls.Add(lblLokacija, 0, 5); tlpMain.Controls.Add(txtLokacija, 1, 5);
         tlpMain.Controls.Add(lblOpis, 0, 6); tlpMain.Controls.Add(txtOpis, 1, 6);
         tlpMain.Controls.Add(lblJMBGDispecer, 0, 7); tlpMain.Controls.Add(txtJMBGDispecer, 1, 7);
-        tlpMain.Controls.Add(lblPrioritet, 0, 8); tlpMain.Controls.Add(txtPrioritet, 1, 8);
+        tlpMain.Controls.Add(lblPrioritet, 0, 8); tlpMain.Controls.Add(numPrioritet, 1, 8);
 
         var pnlButtons = new Panel { Dock = DockStyle.Fill };
         pnlButtons.Controls.Add(btnSacuvaj);
@@ -85,15 +86,14 @@ public class DodajIzmeniPrijavuDialog : Form
     private void PopulateFields()
     {
         dtpDatum.Value = Prijava?.Datum_I_Vreme ?? DateTime.Now;
-        // Za Id_VandrednaSituacija koristimo ID umesto objekta za prikaz
-        txtIdVanredne.Text = Prijava?.Id_VandrednaSituacija?.Id.ToString() ?? "";
+        numIdVanredne.Value = Prijava?.IdVandrednaSituacija ?? 1;
         txtTip.Text = Prijava?.Tip;
         txtIme.Text = Prijava?.Ime_Prijavioca;
-        txtKontakt.Text = Prijava?.Kontakt;
+        txtKontakt.Text = Prijava?.Kontakt_Prijavioca;
         txtLokacija.Text = Prijava?.Lokacija;
         txtOpis.Text = Prijava?.Opis;
         txtJMBGDispecer.Text = Prijava?.JMBG_Dispecer;
-        txtPrioritet.Text = Prijava?.Prioritet.ToString();
+        numPrioritet.Value = Prijava?.Prioritet ?? 1;
     }
 
     private void BtnSacuvaj_Click(object? sender, EventArgs e)
@@ -101,18 +101,16 @@ public class DodajIzmeniPrijavuDialog : Form
         if (ValidateInput())
         {
             Prijava!.Datum_I_Vreme = dtpDatum.Value;
-            // Ostavljamo Id_VandrednaSituacija kao null za mock podatke
-            // U realnoj aplikaciji bi morao da se poveze sa postojecim entitetom
+            Prijava.IdVandrednaSituacija = (int)numIdVanredne.Value;
             Prijava.Tip = txtTip.Text;
             Prijava.Ime_Prijavioca = txtIme.Text;
-            Prijava.Kontakt = txtKontakt.Text;
+            Prijava.Kontakt_Prijavioca = txtKontakt.Text;
             Prijava.Lokacija = txtLokacija.Text;
             Prijava.Opis = txtOpis.Text;
             Prijava.JMBG_Dispecer = txtJMBGDispecer.Text;
-            Prijava.Prioritet = int.Parse(txtPrioritet.Text);
+            Prijava.Prioritet = (int)numPrioritet.Value;
 
             this.DialogResult = DialogResult.OK;
-            this.Close();
         }
         else
         {
@@ -124,10 +122,9 @@ public class DodajIzmeniPrijavuDialog : Form
     {
         if (string.IsNullOrWhiteSpace(txtTip.Text) || string.IsNullOrWhiteSpace(txtIme.Text) ||
             string.IsNullOrWhiteSpace(txtKontakt.Text) || string.IsNullOrWhiteSpace(txtLokacija.Text) ||
-            string.IsNullOrWhiteSpace(txtOpis.Text) || string.IsNullOrWhiteSpace(txtJMBGDispecer.Text) ||
-            !int.TryParse(txtPrioritet.Text, out int prioritet) || prioritet < 1 || prioritet > 5)
+            string.IsNullOrWhiteSpace(txtOpis.Text) || string.IsNullOrWhiteSpace(txtJMBGDispecer.Text))
         {
-            MessageBox.Show("Molimo popunite sva polja ispravno. Prioritet mora biti broj između 1 i 5.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Molimo popunite sva polja.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
         return true;

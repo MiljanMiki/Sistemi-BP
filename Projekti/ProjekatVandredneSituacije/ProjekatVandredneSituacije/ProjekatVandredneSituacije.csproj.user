@@ -4,7 +4,19 @@
     <Compile Update="Forme\ZaposleniForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\Intervencija\IntervencijaDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\Intervencija\IntervencijeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\InterventnaJedinica\DodajIzmeniJedinicuDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\InterventnaJedinica\DodajIzmeniOpstaJedinicaDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\InterventnaJedinica\DodajIzmeniSpecijalnaJedinicaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\InterventnaJedinica\ListaInterventnihJedinicaForm.cs">
@@ -19,10 +31,16 @@
     <Compile Update="Views\Prijava\ListaPrijavaForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Views\Sertifikat\DodajIzmeniSertifikatDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Views\Sluzba\DodajIzmeniSluzbuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\Sluzba\ListaSluzbaForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Views\Specijalizacija\DodajIzmeniSpecijalizacijaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\Vanredna Situacija\DodajIzmeniVanrednuSituacijuDialog.cs">
@@ -44,24 +62,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\Zaposleni\DodajIzmeniOperativnogRadnikaDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Views\Intervencija\DodajIzmeniIntervencijuDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Views\Sertifikat\DodajIzmeniSertifikatDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Views\Specijalizacija\DodajIzmeniSpecijalizacijaDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Views\InterventnaJedinica\DodajIzmeniOpstaJedinicaDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Views\InterventnaJedinica\DodajIzmeniSpecijalnaJedinicaDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Views\Intervencija\ListaIntervencijaForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Views\Zaposleni\DodajIzmeniZaposlenogDialog.cs">

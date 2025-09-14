@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ProjekatVandredneSituacije.Entiteti;
+using System.Text.RegularExpressions;
 
 public class DodajIzmeniAnaliticaraDialog : Form
 {
@@ -20,6 +21,8 @@ public class DodajIzmeniAnaliticaraDialog : Form
         this.Text = analiticar != null ? "Izmeni analitičara" : "Dodaj analitičara";
         if (analiticar != null)
         {
+            // Zaključavamo polje JMBG-a za izmene
+            txtJMBG.ReadOnly = true;
             PopulateFields();
         }
     }
@@ -102,7 +105,7 @@ public class DodajIzmeniAnaliticaraDialog : Form
             Zaposlen.Ime = txtIme.Text;
             Zaposlen.Prezime = txtPrezime.Text;
             Zaposlen.Datum_Rodjenja = dtpDatumRodjenja.Value;
-            Zaposlen.Pol = cmbPol.SelectedItem.ToString() ?? "";
+            Zaposlen.Pol = cmbPol.SelectedItem?.ToString() ?? "";
             Zaposlen.Kontakt_Telefon = txtTelefon.Text;
             Zaposlen.Email = txtEmail.Text;
             Zaposlen.AdresaStanovanja = txtAdresa.Text;
@@ -119,14 +122,35 @@ public class DodajIzmeniAnaliticaraDialog : Form
 
     private bool ValidateInput()
     {
-        if (string.IsNullOrWhiteSpace(txtJMBG.Text) || string.IsNullOrWhiteSpace(txtIme.Text) ||
-            string.IsNullOrWhiteSpace(txtPrezime.Text) || cmbPol.SelectedItem == null ||
-            string.IsNullOrWhiteSpace(txtTelefon.Text) || string.IsNullOrWhiteSpace(txtEmail.Text) ||
-            string.IsNullOrWhiteSpace(txtAdresa.Text))
+        // Robusnija validacija
+        if (string.IsNullOrWhiteSpace(txtJMBG.Text) || txtJMBG.Text.Length != 13 || !long.TryParse(txtJMBG.Text, out _))
         {
-            MessageBox.Show("Molimo popunite sva polja ispravno.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("JMBG mora da ima tačno 13 cifara.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
+
+        if (string.IsNullOrWhiteSpace(txtIme.Text) || string.IsNullOrWhiteSpace(txtPrezime.Text) ||
+            cmbPol.SelectedItem == null || string.IsNullOrWhiteSpace(txtAdresa.Text))
+        {
+            MessageBox.Show("Molimo popunite sva obavezna polja: Ime, Prezime, Pol, Adresa.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        // Dodatna validacija za e-mail format
+        string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+        if (!string.IsNullOrWhiteSpace(txtEmail.Text) && !Regex.IsMatch(txtEmail.Text, emailPattern))
+        {
+            MessageBox.Show("Molimo unesite ispravnu e-mail adresu.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
+        // Dodatna validacija za datum rođenja (ne može biti u budućnosti)
+        if (dtpDatumRodjenja.Value > DateTime.Now)
+        {
+            MessageBox.Show("Datum rođenja ne može biti u budućnosti.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return false;
+        }
+
         return true;
     }
 }

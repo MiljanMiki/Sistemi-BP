@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVandredneSituacije.Entiteti;
 
 public class DodajIzmeniSluzbuDialog : Form
 {
@@ -9,21 +8,24 @@ public class DodajIzmeniSluzbuDialog : Form
     private TextBox txtTipSektora, txtPredstavnikJMBG;
     private Button btnSacuvaj, btnOdustani;
 
-    public Sluzba Sluzba { get; private set; }
+    // Javno svojstvo za SluzbaBasic DTO koji će se vratiti
+    public SluzbaBasic SluzbaBasic { get; private set; }
 
-    public DodajIzmeniSluzbuDialog(Sluzba? sluzba = null)
+    // Član klase za čuvanje Id_Sektora u modu izmene
+    private int _idSektoraToUpdate;
+
+    public DodajIzmeniSluzbuDialog(SluzbaPregled? sluzbaPregled = null)
     {
         InitializeComponent();
 
-        if (sluzba != null)
+        if (sluzbaPregled != null)
         {
-            this.Sluzba = sluzba;
             this.Text = "Izmeni službu";
-            PopulateFields();
+            _idSektoraToUpdate = sluzbaPregled.Id_Sektora; // Sačuvaj ID
+            PopulateFields(sluzbaPregled);
         }
         else
         {
-            this.Sluzba = new Sluzba();
             this.Text = "Dodaj službu";
         }
     }
@@ -63,12 +65,12 @@ public class DodajIzmeniSluzbuDialog : Form
         btnSacuvaj.Click += BtnSacuvaj_Click;
     }
 
-    private void PopulateFields()
+    private void PopulateFields(SluzbaPregled sluzba)
     {
-        txtTipSektora.Text = this.Sluzba.TipSektora;
-        if (this.Sluzba.Predstavnik != null)
+        txtTipSektora.Text = sluzba.TipSektora;
+        if (sluzba.Predstavnik != null)
         {
-            txtPredstavnikJMBG.Text = this.Sluzba.Predstavnik.JMBG;
+            txtPredstavnikJMBG.Text = sluzba.Predstavnik.JMBG;
         }
     }
 
@@ -81,17 +83,20 @@ public class DodajIzmeniSluzbuDialog : Form
             return;
         }
 
-        this.Sluzba.TipSektora = txtTipSektora.Text;
+        // Kreiranje novog DTO objekta za operaciju dodavanja ili izmene
+        this.SluzbaBasic = new SluzbaBasic
+        {
+            Id_Sektora = _idSektoraToUpdate, // Postavlja se samo ako se radi o izmeni
+            TipSektora = txtTipSektora.Text
+        };
 
-        // Dodato za predstavnika
         if (!string.IsNullOrWhiteSpace(txtPredstavnikJMBG.Text))
         {
-            // Ovdje bi se trebala uraditi validacija JMBG-a i pretraga predstavnika iz baze
-            this.Sluzba.Predstavnik = new Predstavnik { JMBG = txtPredstavnikJMBG.Text };
+            this.SluzbaBasic.Predstavnik = new PredstavnikBasic { JMBG = txtPredstavnikJMBG.Text };
         }
         else
         {
-            this.Sluzba.Predstavnik = null;
+            this.SluzbaBasic.Predstavnik = null;
         }
 
         this.DialogResult = DialogResult.OK;

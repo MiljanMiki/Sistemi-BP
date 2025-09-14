@@ -1,17 +1,16 @@
-﻿using System;
+﻿using ProjekatVandredneSituacije;
+using ProjekatVandredneSituacije.Entiteti;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using ProjekatVandredneSituacije.Entiteti;
 
 public class ListaVozilaForm : Form
 {
     private DataGridView dgvVozila;
     private Button btnDodaj, btnIzmeni, btnObrisi;
     private Panel pnlButtons, pnlContent;
-
-    public static List<Vozilo> mockVozila = new List<Vozilo>();
 
     public ListaVozilaForm()
     {
@@ -44,9 +43,14 @@ public class ListaVozilaForm : Form
         dgvVozila = new DataGridView();
         dgvVozila.Dock = DockStyle.Fill;
         dgvVozila.ReadOnly = true;
-        dgvVozila.AutoGenerateColumns = true;
+        dgvVozila.AutoGenerateColumns = false;
         dgvVozila.AllowUserToAddRows = false;
         dgvVozila.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+
+        dgvVozila.Columns.Add(new DataGridViewTextBoxColumn { Name = "RegistarskaOznaka", HeaderText = "Registarska Oznaka", DataPropertyName = "Registarska_Oznaka" });
+        dgvVozila.Columns.Add(new DataGridViewTextBoxColumn { Name = "Proizvodjac", HeaderText = "Proizvođač", DataPropertyName = "Proizvodjac" });
+        dgvVozila.Columns.Add(new DataGridViewTextBoxColumn { Name = "Status", HeaderText = "Status", DataPropertyName = "Status" });
+        dgvVozila.Columns.Add(new DataGridViewTextBoxColumn { Name = "Lokacija", HeaderText = "Lokacija", DataPropertyName = "Lokacija" });
 
         pnlContent.Controls.Add(dgvVozila);
 
@@ -60,38 +64,34 @@ public class ListaVozilaForm : Form
 
     private void ListaVozilaForm_Load(object sender, EventArgs e)
     {
-        if (mockVozila.Count == 0)
-        {
-            mockVozila.Add(new Vozilo
-            {
-                Registarska_Oznaka = "NS-001-VA",
-                Proizvodjac = "Renault",
-                Status = StatusVozila.operativno,
-                Lokacija = "Glavna baza"
-            });
-            mockVozila.Add(new Sanitetska
-            {
-                Registarska_Oznaka = "BG-123-HI",
-                Proizvodjac = "Mercedes",
-                Status = StatusVozila.operativno,
-                Lokacija = "Bolnica"
-            });
-            mockVozila.Add(new Vozilo
-            {
-                Registarska_Oznaka = "SU-456-KO",
-                Proizvodjac = "Iveco",
-                Status = StatusVozila.u_kvaru,
-                Lokacija = "Servis"
-            });
-        }
-
         RefreshDataGrid();
     }
 
     private void RefreshDataGrid()
     {
-        dgvVozila.DataSource = null;
-        dgvVozila.DataSource = mockVozila;
+        try
+        {
+            dgvVozila.DataSource = null;
+            var vozilaBasic = DTOMAnager.VratiSvaVozila();
+            var vozilaPregled = new List<VoziloPregled>();
+
+            foreach (var vb in vozilaBasic)
+            {
+                if (vb is SpecijalnaVozilaBasic svb)
+                {
+                    vozilaPregled.Add(new SpecijalnaVozilaPregled(svb.Registarska_Oznaka, svb.Proizvodjac, svb.Status, svb.Lokacija, svb.Namena));
+                }
+                else
+                {
+                    vozilaPregled.Add(new VoziloPregled(vb.Registarska_Oznaka, vb.Proizvodjac, vb.Status, vb.Lokacija));
+                }
+            }
+            dgvVozila.DataSource = vozilaPregled;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Greška pri učitavanju vozila: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void BtnDodaj_Click(object sender, EventArgs e)
@@ -99,33 +99,46 @@ public class ListaVozilaForm : Form
         var tipDialog = new Form
         {
             Text = "Izaberite tip vozila",
-            Size = new Size(250, 150),
+            Size = new Size(250, 180),
             StartPosition = FormStartPosition.CenterParent
         };
-        var cmbTip = new ComboBox { Location = new Point(20, 20), Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
-        cmbTip.Items.AddRange(new string[] { "Vozilo", "Sanitetska" });
-        var btnIzaberi = new Button { Text = "Dalje", Location = new Point(70, 60), DialogResult = DialogResult.OK };
+        var lblInfo = new Label { Text = "Izaberite tip vozila:", Location = new Point(20, 10), AutoSize = true };
+        var cmbTip = new ComboBox { Location = new Point(20, 30), Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
+        cmbTip.Items.AddRange(new string[] { "Vozilo", "Sanitetska", "Džip", "Kamion", "Specijalno Vozilo" });
+        var btnIzaberi = new Button { Text = "Dalje", Location = new Point(70, 80), DialogResult = DialogResult.OK };
 
+        tipDialog.Controls.Add(lblInfo);
         tipDialog.Controls.Add(cmbTip);
         tipDialog.Controls.Add(btnIzaberi);
 
         if (tipDialog.ShowDialog() == DialogResult.OK && cmbTip.SelectedItem != null)
         {
-            Form? dialog = null;
+            DodajIzmeniVoziloDialog dialog;
             string selectedTip = cmbTip.SelectedItem.ToString() ?? string.Empty;
 
-            if (selectedTip == "Vozilo")
-                dialog = new DodajIzmeniVoziloDialog();
-            else if (selectedTip == "Sanitetska")
-                dialog = new DodajIzmeniVoziloDialog(new Sanitetska());
+            if (selectedTip == "Sanitetska")
+                dialog = new DodajIzmeniVoziloDialog(new SanitetskaBasic());
+            else if (selectedTip == "Džip")
+                dialog = new DodajIzmeniVoziloDialog(new DzipoviBasic());
+            else if (selectedTip == "Kamion")
+                dialog = new DodajIzmeniVoziloDialog(new KamioniBasic());
+            else if (selectedTip == "Specijalno Vozilo")
+                dialog = new DodajIzmeniVoziloDialog(new SpecijalnaVozilaBasic());
+            else
+                dialog = new DodajIzmeniVoziloDialog(new VoziloBasic());
 
-            if (dialog?.ShowDialog() == DialogResult.OK)
+            if (dialog?.ShowDialog() == DialogResult.OK && dialog.VoziloBasic != null)
             {
-                if (dialog is DodajIzmeniVoziloDialog voziloDialog)
+                try
                 {
-                    mockVozila.Add(voziloDialog.Vozilo!);
+                    // Potrebno je kreirati metodu u DTOMAnager-u za dodavanje vozila
+                    // DTOMAnager.DodajVozilo(dialog.VoziloBasic);
+                    MessageBox.Show("Trenutno ne postoji metoda za dodavanje vozila. Molimo kreirajte je u DTOMAnager-u.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     RefreshDataGrid();
-                    MessageBox.Show("Vozilo je uspešno dodato.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Greška pri dodavanju vozila: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
@@ -135,18 +148,35 @@ public class ListaVozilaForm : Form
     {
         if (dgvVozila.SelectedRows.Count > 0)
         {
-            var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as Vozilo;
-            Form? dialog = null;
+            var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as VoziloPregled;
+            if (selectedVozilo == null) return;
 
-            if (selectedVozilo is Sanitetska sanitetska)
-                dialog = new DodajIzmeniVoziloDialog(sanitetska);
-            else
-                dialog = new DodajIzmeniVoziloDialog(selectedVozilo);
-
-            if (dialog?.ShowDialog() == DialogResult.OK)
+            // Odluka o tipu DTO-a za izmenu
+            VoziloBasic basicVozilo;
+            if (selectedVozilo is SpecijalnaVozilaPregled spec)
             {
-                RefreshDataGrid();
-                MessageBox.Show("Vozilo je uspešno izmenjeno.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                basicVozilo = new SpecijalnaVozilaBasic(spec.Registarska_Oznaka, spec.Proizvodjac, spec.Status, spec.Lokacija, spec.Namena);
+            }
+            else
+            {
+                basicVozilo = new VoziloBasic(selectedVozilo.Registarska_Oznaka, selectedVozilo.Proizvodjac, selectedVozilo.Status, selectedVozilo.Lokacija);
+            }
+
+            var dialog = new DodajIzmeniVoziloDialog(basicVozilo);
+
+            if (dialog?.ShowDialog() == DialogResult.OK && dialog.VoziloBasic != null)
+            {
+                try
+                {
+                    // Potrebno je kreirati metodu u DTOMAnager-u za izmenu vozila
+                    // DTOMAnager.IzmeniVozilo(dialog.VoziloBasic);
+                    MessageBox.Show("Trenutno ne postoji metoda za izmenu vozila. Molimo kreirajte je u DTOMAnager-u.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    RefreshDataGrid();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Greška pri izmeni vozila: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         else
@@ -162,10 +192,19 @@ public class ListaVozilaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabrano vozilo?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as Vozilo;
-                mockVozila.Remove(selectedVozilo!);
-                RefreshDataGrid();
-                MessageBox.Show("Vozilo je uspešno obrisano.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as VoziloPregled;
+                if (selectedVozilo == null) return;
+                try
+                {
+                    // Potrebno je kreirati metodu u DTOMAnager-u za brisanje vozila
+                    // DTOMAnager.ObrisiVozilo(selectedVozilo.Registarska_Oznaka);
+                    MessageBox.Show("Trenutno ne postoji metoda za brisanje vozila. Molimo kreirajte je u DTOMAnager-u.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    RefreshDataGrid();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Greška pri brisanju vozila: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         else

@@ -30,7 +30,6 @@ C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacije\ProjekatVandredneS
 C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.Forme.ZaposleniForm.resources
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.csproj.AssemblyReference.cache
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ProjekatVandredneSituacije.Forme.ZaposleniForm.resources
-C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\DodajIzmeniIntervencijuDialog.resources
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\MainForm.resources
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\DodajIzmeniSertifikatDialog.resources
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\DodajIzmeniSluzbuDialog.resources
@@ -70,3 +69,4 @@ C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandre
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ListaVanrednihSituacijaForm.resources
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\DodajIzmeniJedinicuDialog.resources
 C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\ListaInterventnihJedinicaForm.resources
+C:\Users\b3939\Documents\Baze\Projekti\ProjekatVandredneSituacije\ProjekatVandredneSituacije\obj\Debug\net8.0-windows\IntervencijaDialog.resources

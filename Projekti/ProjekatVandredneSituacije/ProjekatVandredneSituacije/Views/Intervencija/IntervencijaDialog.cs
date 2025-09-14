@@ -2,9 +2,9 @@
 using System.Windows.Forms;
 using ProjekatVandredneSituacije.Entiteti;
 
-public class DodajIzmeniIntervencijuDialog : Form
+public class IntervencijaDialog : Form
 {
-    private Intervencija _intervencija;
+    private IntervencijaBasic _intervencija;
     private bool _isUpdate = false;
 
     private Label lblDatumVreme, lblLokacija, lblStatus, lblResursi, lblBrojSpasenih, lblBrojPovredjenih, lblUspesnost;
@@ -14,18 +14,18 @@ public class DodajIzmeniIntervencijuDialog : Form
     private Button btnSacuvaj, btnOdustani;
     private TableLayoutPanel tlpMain;
 
-    public Intervencija Intervencija { get; private set; }
+    public IntervencijaBasic Intervencija { get; private set; }
 
     // Konstruktor za dodavanje nove intervencije
-    public DodajIzmeniIntervencijuDialog()
+    public IntervencijaDialog()
     {
         InitializeComponent();
         this.Text = "Dodaj novu intervenciju";
-        Intervencija = new Intervencija();
+        Intervencija = new IntervencijaBasic();
     }
 
     // Konstruktor za izmenu postojece intervencije
-    public DodajIzmeniIntervencijuDialog(Intervencija intervencija)
+    public IntervencijaDialog(IntervencijaBasic intervencija)
     {
         InitializeComponent();
         this.Text = "Izmeni intervenciju";
@@ -63,7 +63,7 @@ public class DodajIzmeniIntervencijuDialog : Form
         txtLokacija = new TextBox();
         lblStatus = new Label { Text = "Status:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
         cmbStatus = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
-        cmbStatus.Items.AddRange(Enum.GetNames(typeof(Status)));
+        cmbStatus.Items.AddRange(Enum.GetNames(typeof(ProjekatVandredneSituacije.Entiteti.Status)));
         lblResursi = new Label { Text = "Resursi:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
         txtResursi = new TextBox();
         lblBrojSpasenih = new Label { Text = "Broj Spasenih:", TextAlign = System.Drawing.ContentAlignment.MiddleLeft };
@@ -114,40 +114,57 @@ public class DodajIzmeniIntervencijuDialog : Form
             dtpDatumVreme.Value = _intervencija.Datum_I_Vreme;
             txtLokacija.Text = _intervencija.Lokacija;
             cmbStatus.SelectedItem = _intervencija.Status.ToString();
-            txtResursi.Text = _intervencija.Resursi;
+            // Resursi nisu u IntervencijaBasic, pa ih ne možemo popuniti
             txtBrojSpasenih.Text = _intervencija.Broj_Spasenih.ToString();
             txtBrojPovredjenih.Text = _intervencija.Broj_Povredjenih.ToString();
             txtUspesnost.Text = _intervencija.Uspesnost.ToString();
         }
     }
 
-    private void BtnSacuvaj_Click(object sender, EventArgs e)
+    private void BtnSacuvaj_Click(object? sender, EventArgs e)
     {
         if (ValidateInput())
         {
-            if (_isUpdate)
+            try
             {
-                Intervencija = _intervencija;
+                if (_isUpdate)
+                {
+                    Intervencija = _intervencija;
+                }
+                else
+                {
+                    Intervencija = new IntervencijaBasic();
+                }
+
+                Intervencija.Datum_I_Vreme = dtpDatumVreme.Value;
+                Intervencija.Lokacija = txtLokacija.Text;
+                Intervencija.Status = (ProjekatVandredneSituacije.Entiteti.Status)Enum.Parse(typeof(ProjekatVandredneSituacije.Entiteti.Status), cmbStatus.SelectedItem!.ToString()!);
+                // Resursi nisu u DTO-u
+                Intervencija.Broj_Spasenih = int.Parse(txtBrojSpasenih.Text);
+                Intervencija.Broj_Povredjenih = int.Parse(txtBrojPovredjenih.Text);
+                Intervencija.Uspesnost = int.Parse(txtUspesnost.Text);
+
+                if (_isUpdate)
+                {
+                    ProjekatVandredneSituacije.DTOMAnager.IzmeniIntervenciju(Intervencija);
+                }
+                else
+                {
+                    ProjekatVandredneSituacije.DTOMAnager.DodajIntervenciju(Intervencija);
+                }
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            else
+            catch (Exception ex)
             {
-                Intervencija = new Intervencija();
+                MessageBox.Show($"Došlo je do greške prilikom čuvanja intervencije: {ex.Message}", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.None;
             }
-
-            Intervencija.Datum_I_Vreme = dtpDatumVreme.Value;
-            Intervencija.Lokacija = txtLokacija.Text;
-            Intervencija.Status = (Status)Enum.Parse(typeof(Status), cmbStatus.SelectedItem.ToString());
-            Intervencija.Resursi = txtResursi.Text;
-            Intervencija.Broj_Spasenih = int.Parse(txtBrojSpasenih.Text);
-            Intervencija.Broj_Povredjenih = int.Parse(txtBrojPovredjenih.Text);
-            Intervencija.Uspesnost = int.Parse(txtUspesnost.Text);
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
         else
         {
-            this.DialogResult = DialogResult.None; // Sprečava zatvaranje forme
+            this.DialogResult = DialogResult.None;
         }
     }
 

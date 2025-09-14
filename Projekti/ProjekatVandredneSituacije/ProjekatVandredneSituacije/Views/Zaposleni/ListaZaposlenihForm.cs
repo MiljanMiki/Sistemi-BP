@@ -4,14 +4,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVandredneSituacije;
 
 public class ListaZaposlenihForm : Form
 {
     private DataGridView dgvZaposleni;
     private Button btnDodaj, btnIzmeni, btnObrisi;
     private Panel pnlButtons, pnlContent;
-
-    private static List<Zaposlen> mockZaposleni = new List<Zaposlen>();
 
     public ListaZaposlenihForm()
     {
@@ -60,97 +59,45 @@ public class ListaZaposlenihForm : Form
 
     private void ListaZaposlenihForm_Load(object sender, EventArgs e)
     {
-        if (mockZaposleni.Count == 0)
-        {
-            mockZaposleni.Add(new Analiticar
-            {
-                JMBG = "1234567890123",
-                Ime = "Petar",
-                Prezime = "Petrović",
-                Datum_Rodjenja = new DateTime(1990, 5, 15),
-                Pol = "M",
-                Kontakt_Telefon = "060-123-456",
-                Email = "petar.p@firma.com",
-                AdresaStanovanja = "Ulica Analitičara 5",
-                Datum_Zaposlenja = new DateTime(2018, 1, 10)
-            });
-            mockZaposleni.Add(new Kordinator
-            {
-                JMBG = "9876543210987",
-                Ime = "Marija",
-                Prezime = "Ilić",
-                Datum_Rodjenja = new DateTime(1985, 8, 20),
-                Pol = "Z",
-                Kontakt_Telefon = "064-987-654",
-                Email = "marija.i@firma.com",
-                AdresaStanovanja = "Ulica Koordinatora 10",
-                Datum_Zaposlenja = new DateTime(2015, 5, 25),
-                BrojTimova = 3
-            });
-            mockZaposleni.Add(new OperativniRadnik
-            {
-                JMBG = "1122334455667",
-                Ime = "Ivan",
-                Prezime = "Kovačević",
-                Datum_Rodjenja = new DateTime(1992, 3, 10),
-                Pol = "M",
-                Kontakt_Telefon = "063-112-233",
-                Email = "ivan.k@firma.com",
-                AdresaStanovanja = "Ulica Operativnih 20",
-                Datum_Zaposlenja = new DateTime(2020, 9, 1),
-                Broj_Sati = 160,
-                Fizicka_Spremnost = "Odlična"
-            });
-        }
-
         RefreshDataGrid();
     }
 
     private void RefreshDataGrid()
     {
-        dgvZaposleni.DataSource = null;
-        dgvZaposleni.DataSource = mockZaposleni;
+        try
+        {
+            dgvZaposleni.DataSource = DTOMAnager.VratiSveZaposlene();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Došlo je do greške prilikom učitavanja podataka o zaposlenima: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
     private void BtnDodaj_Click(object? sender, EventArgs e)
     {
-        // Otvaramo dijalog koji omogućava odabir tipa zaposlenog
-        var tipDialog = new Form
+        var dialog = new DodajIzmeniZaposlenogDialog();
+        if (dialog.ShowDialog() == DialogResult.OK && dialog.Zaposlen != null)
         {
-            Text = "Izaberite tip",
-            Size = new Size(250, 150),
-            StartPosition = FormStartPosition.CenterParent
-        };
-        var cmbTip = new ComboBox { Location = new Point(20, 20), Width = 200, DropDownStyle = ComboBoxStyle.DropDownList };
-        cmbTip.Items.AddRange(new string[] { "Analitičar", "Koordinator", "Operativni Radnik" });
-        var btnIzaberi = new Button { Text = "Dalje", Location = new Point(70, 60), DialogResult = DialogResult.OK };
-
-        tipDialog.Controls.Add(cmbTip);
-        tipDialog.Controls.Add(btnIzaberi);
-
-        if (tipDialog.ShowDialog() == DialogResult.OK && cmbTip.SelectedItem != null)
-        {
-            Form? dialog = null;
-            string selectedTip = cmbTip.SelectedItem.ToString() ?? string.Empty;
-
-            if (selectedTip == "Analitičar")
-                dialog = new DodajIzmeniAnaliticaraDialog();
-            else if (selectedTip == "Koordinator")
-                dialog = new DodajIzmeniKoordinatoraDialog();
-            else if (selectedTip == "Operativni Radnik")
-                dialog = new DodajIzmeniOperativnogRadnikaDialog();
-
-            if (dialog?.ShowDialog() == DialogResult.OK)
+            try
             {
-                if (dialog is DodajIzmeniAnaliticaraDialog analiticarDialog)
-                    mockZaposleni.Add(analiticarDialog.Zaposlen!);
-                else if (dialog is DodajIzmeniKoordinatoraDialog koordinatorDialog)
-                    mockZaposleni.Add(koordinatorDialog.Zaposlen!);
-                else if (dialog is DodajIzmeniOperativnogRadnikaDialog operativniDialog)
-                    mockZaposleni.Add(operativniDialog.Zaposlen!);
+                ZaposlenBasic? zaposlenBasic = MapToBasic(dialog.Zaposlen);
+                if (zaposlenBasic != null)
+                {
+                    if (zaposlenBasic is AnaliticarBasic analiticarBasic)
+                        DTOMAnager.DodajAnalitcar(analiticarBasic);
+                    else if (zaposlenBasic is KordinatorBasic koordinatorBasic)
+                        DTOMAnager.DodajKordinatora(koordinatorBasic);
+                    else if (zaposlenBasic is OperativniRadnikBasic operativniBasic)
+                        DTOMAnager.DodajOperativnogRadnik(operativniBasic);
 
-                RefreshDataGrid();
-                MessageBox.Show("Zaposleni je uspešno dodat.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RefreshDataGrid();
+                    MessageBox.Show("Zaposleni je uspešno dodat.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Došlo je do greške prilikom dodavanja zaposlenog: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
@@ -159,20 +106,53 @@ public class ListaZaposlenihForm : Form
     {
         if (dgvZaposleni.SelectedRows.Count > 0)
         {
-            var selectedZaposlen = dgvZaposleni.SelectedRows[0].DataBoundItem as Zaposlen;
-            Form? dialog = null;
-
-            if (selectedZaposlen is Analiticar)
-                dialog = new DodajIzmeniAnaliticaraDialog(selectedZaposlen as Analiticar);
-            else if (selectedZaposlen is Kordinator)
-                dialog = new DodajIzmeniKoordinatoraDialog(selectedZaposlen as Kordinator);
-            else if (selectedZaposlen is OperativniRadnik)
-                dialog = new DodajIzmeniOperativnogRadnikaDialog(selectedZaposlen as OperativniRadnik);
-
-            if (dialog?.ShowDialog() == DialogResult.OK)
+            try
             {
-                RefreshDataGrid();
-                MessageBox.Show("Podaci o zaposlenom su uspešno izmenjeni.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var selectedZaposlenBasic = dgvZaposleni.SelectedRows[0].DataBoundItem as ZaposlenBasic;
+                if (selectedZaposlenBasic == null) return;
+
+                Zaposlen? zaposlenEntitet = null;
+
+                if (selectedZaposlenBasic is AnaliticarBasic analiticarBasic)
+                {
+                    var analiticarDto = DTOMAnager.VratiAnaliticara(analiticarBasic.JMBG);
+                    zaposlenEntitet = MapFromBasicToEntity(analiticarDto);
+                }
+                else if (selectedZaposlenBasic is KordinatorBasic koordinatorBasic)
+                {
+                    var koordinatorDto = DTOMAnager.VratiKoordinatora(koordinatorBasic.JMBG);
+                    zaposlenEntitet = MapFromBasicToEntity(koordinatorDto);
+                }
+                else if (selectedZaposlenBasic is OperativniRadnikBasic operativacBasic)
+                {
+                    var operativacDto = DTOMAnager.VratiOperativnogRadnika(operativacBasic.JMBG);
+                    zaposlenEntitet = MapFromBasicToEntity(operativacDto);
+                }
+
+                if (zaposlenEntitet != null)
+                {
+                    var dialog = new DodajIzmeniZaposlenogDialog(zaposlenEntitet);
+                    if (dialog.ShowDialog() == DialogResult.OK && dialog.Zaposlen != null)
+                    {
+                        ZaposlenBasic? izmenjenBasic = MapToBasic(dialog.Zaposlen);
+                        if (izmenjenBasic != null)
+                        {
+                            if (izmenjenBasic is AnaliticarBasic analitcarBasic)
+                                DTOMAnager.IzmeniAnaliticar(analitcarBasic);
+                            else if (izmenjenBasic is KordinatorBasic koordinatorBasic)
+                                DTOMAnager.IzmeniKordinatora(koordinatorBasic);
+                            else if (izmenjenBasic is OperativniRadnikBasic operativniBasic)
+                                DTOMAnager.IzmeniOperativnog(operativniBasic);
+
+                            RefreshDataGrid();
+                            MessageBox.Show("Podaci o zaposlenom su uspešno izmenjeni.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Došlo je do greške prilikom izmene zaposlenog: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         else
@@ -188,15 +168,161 @@ public class ListaZaposlenihForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabranog zaposlenog?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedZaposlen = dgvZaposleni.SelectedRows[0].DataBoundItem as Zaposlen;
-                mockZaposleni.Remove(selectedZaposlen!);
-                RefreshDataGrid();
-                MessageBox.Show("Zaposleni je uspešno obrisan.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                try
+                {
+                    var selectedZaposlenBasic = dgvZaposleni.SelectedRows[0].DataBoundItem as ZaposlenBasic;
+                    if (selectedZaposlenBasic != null)
+                    {
+                        if (selectedZaposlenBasic is AnaliticarBasic)
+                            DTOMAnager.ObrisiAnaliticara(selectedZaposlenBasic.JMBG);
+                        else if (selectedZaposlenBasic is KordinatorBasic)
+                            DTOMAnager.ObrisiKordinatora(selectedZaposlenBasic.JMBG);
+                        else if (selectedZaposlenBasic is OperativniRadnikBasic)
+                            DTOMAnager.ObrisiOperativnogRadnika(selectedZaposlenBasic.JMBG);
+                    }
+
+                    RefreshDataGrid();
+                    MessageBox.Show("Zaposleni je uspešno obrisan.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Došlo je do greške prilikom brisanja zaposlenog: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         else
         {
             MessageBox.Show("Molimo odaberite zaposlenog za brisanje.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
+    }
+
+    // Metoda za mapiranje DTO objekta u Entitet objekat.
+    private Zaposlen? MapFromBasicToEntity(ZaposlenBasic basic)
+    {
+        if (basic is AnaliticarBasic analiticarBasic)
+        {
+            return new Analiticar
+            {
+                JMBG = analiticarBasic.JMBG,
+                Ime = analiticarBasic.Ime,
+                Prezime = analiticarBasic.Prezime,
+                Datum_Rodjenja = analiticarBasic.Datum_Rodjenja,
+                Pol = analiticarBasic.Pol,
+                Kontakt_Telefon = analiticarBasic.Kontakt_Telefon,
+                Email = analiticarBasic.Email,
+                AdresaStanovanja = analiticarBasic.AdresaStanovanja,
+                Datum_Zaposlenja = analiticarBasic.Datum_Zaposlenja
+            };
+        }
+        else if (basic is KordinatorBasic koordinatorBasic)
+        {
+            return new Kordinator
+            {
+                JMBG = koordinatorBasic.JMBG,
+                Ime = koordinatorBasic.Ime,
+                Prezime = koordinatorBasic.Prezime,
+                Datum_Rodjenja = koordinatorBasic.Datum_Rodjenja,
+                Pol = koordinatorBasic.Pol,
+                Kontakt_Telefon = koordinatorBasic.Kontakt_Telefon,
+                Email = koordinatorBasic.Email,
+                AdresaStanovanja = koordinatorBasic.AdresaStanovanja,
+                Datum_Zaposlenja = koordinatorBasic.Datum_Zaposlenja,
+                BrojTimova = koordinatorBasic.BrojTimova
+            };
+        }
+        else if (basic is OperativniRadnikBasic operativacBasic)
+        {
+            // Opet moramo ručno preuzeti entitet za interventnu jedinicu.
+            var opstaJedinicaDto = DTOMAnager.VratiOpstuJedinicu(operativacBasic.IdInterventnaJedinica);
+            InterventnaJedinica? interventnaJedinica = null;
+
+            if (opstaJedinicaDto != null)
+            {
+                interventnaJedinica = MapToInterventnaJedinicaEntity(opstaJedinicaDto);
+            }
+            else
+            {
+                var specijalnaJedinicaDto = DTOMAnager.VratiSpecijalnuJedinicu(operativacBasic.IdInterventnaJedinica);
+                if (specijalnaJedinicaDto != null)
+                {
+                    interventnaJedinica = MapToInterventnaJedinicaEntity(specijalnaJedinicaDto);
+                }
+            }
+
+            return new OperativniRadnik
+            {
+                JMBG = operativacBasic.JMBG,
+                Ime = operativacBasic.Ime,
+                Prezime = operativacBasic.Prezime,
+                Datum_Rodjenja = operativacBasic.Datum_Rodjenja,
+                Pol = operativacBasic.Pol,
+                Kontakt_Telefon = operativacBasic.Kontakt_Telefon,
+                Email = operativacBasic.Email,
+                AdresaStanovanja = operativacBasic.AdresaStanovanja,
+                Datum_Zaposlenja = operativacBasic.Datum_Zaposlenja,
+                Broj_Sati = operativacBasic.Broj_Sati,
+                Fizicka_Spremnost = operativacBasic.Fizicka_Spremnost,
+                InterventnaJedinica = interventnaJedinica
+            };
+        }
+        return null;
+    }
+
+    // Metoda za mapiranje Entitet objekta u DTO objekat.
+    private ZaposlenBasic? MapToBasic(Zaposlen entity)
+    {
+        if (entity is Analiticar analiticar)
+        {
+            return new AnaliticarBasic(analiticar.JMBG, analiticar.Ime, analiticar.Prezime, analiticar.Datum_Rodjenja, analiticar.Pol, analiticar.Kontakt_Telefon, analiticar.Email, analiticar.AdresaStanovanja, analiticar.Datum_Zaposlenja);
+        }
+        else if (entity is Kordinator koordinator)
+        {
+            return new KordinatorBasic(koordinator.JMBG, koordinator.Ime, koordinator.Prezime, koordinator.Datum_Rodjenja, koordinator.Pol, koordinator.Kontakt_Telefon, koordinator.Email, koordinator.AdresaStanovanja, koordinator.Datum_Zaposlenja, koordinator.BrojTimova);
+        }
+        else if (entity is OperativniRadnik operativac)
+        {
+            return new OperativniRadnikBasic(operativac.JMBG, operativac.Ime, operativac.Prezime, operativac.Datum_Rodjenja, operativac.Pol, operativac.Kontakt_Telefon, operativac.Email, operativac.AdresaStanovanja, operativac.Datum_Zaposlenja, operativac.Broj_Sati, operativac.Fizicka_Spremnost, operativac.InterventnaJedinica.Jedinstveni_Broj);
+        }
+        return null;
+    }
+
+    // Metoda za mapiranje DTO objekta interventne jedinice u Entitet.
+    private InterventnaJedinica? MapToInterventnaJedinicaEntity(InterventnaJedinicaBasic basic)
+    {
+        if (basic == null) return null;
+
+        if (basic is OpstaInterventnaJedBasic opstaBasic)
+        {
+            var opstaEntitet = new OpstaIntervetnaJed();
+            opstaEntitet.Jedinstveni_Broj = opstaBasic.Jedinstveni_Broj;
+            opstaEntitet.Naziv = opstaBasic.Naziv;
+            opstaEntitet.BrojClanova = opstaBasic.BrojClanova;
+
+            // ISPRVA: opstaEntitet.Komandir = DTOMAnager.VratiOperativnogRadnika(opstaBasic.Komandir);
+            // SADA: Prvo preuzimamo DTO, a zatim mapiramo u entitet.
+            var komandirDto = DTOMAnager.VratiOperativnogRadnika(opstaBasic.Komandir);
+            opstaEntitet.Komandir = MapFromBasicToEntity(komandirDto) as OperativniRadnik;
+
+            opstaEntitet.Baza = opstaBasic.Baza;
+            return opstaEntitet;
+        }
+        else if (basic is SpecijalnaInterventnaJedinicaBasic specijalnaBasic)
+        {
+            var specijalnaEntitet = new SpecijalnaInterventna();
+            specijalnaEntitet.Jedinstveni_Broj = specijalnaBasic.Jedinstveni_Broj;
+            specijalnaEntitet.Naziv = specijalnaBasic.Naziv;
+            specijalnaEntitet.BrojClanova = specijalnaBasic.BrojClanova;
+
+            // ISPRVA: specijalnaEntitet.Komandir = DTOMAnager.VratiOperativnogRadnika(specijalnaBasic.Komandir);
+            // SADA: Prvo preuzimamo DTO, a zatim mapiramo u entitet.
+            var komandirDto = DTOMAnager.VratiOperativnogRadnika(specijalnaBasic.Komandir);
+            specijalnaEntitet.Komandir = MapFromBasicToEntity(komandirDto) as OperativniRadnik;
+
+            specijalnaEntitet.Baza = specijalnaBasic.Baza;
+            specijalnaEntitet.TipSpecijalneJedinice = specijalnaBasic.TipSpecijalneJed;
+            return specijalnaEntitet;
+        }
+
+        return null;
     }
 }

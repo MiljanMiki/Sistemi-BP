@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using ProjekatVandredneSituacije;
 using ProjekatVandredneSituacije.Entiteti;
 
-public class ListaIntervencijaForm : Form
+public class IntervencijeForm : Form
 {
     private DataGridView dgvIntervencije;
     private Button btnDodaj, btnIzmeni, btnObrisi;
     private Panel pnlButtons, pnlContent;
 
-    private static List<Intervencija> mockIntervencije = new List<Intervencija>();
-
-    public ListaIntervencijaForm()
+    public IntervencijeForm()
     {
         InitializeComponent();
-        this.Load += new EventHandler(Form_Load);
+        this.Load += new EventHandler(IntervencijeForm_Load);
         this.btnDodaj.Click += new EventHandler(BtnDodaj_Click);
         this.btnIzmeni.Click += new EventHandler(BtnIzmeni_Click);
         this.btnObrisi.Click += new EventHandler(BtnObrisi_Click);
@@ -27,6 +26,7 @@ public class ListaIntervencijaForm : Form
     {
         this.Text = "Lista Intervencija";
         this.BackColor = SystemColors.Control;
+        this.Size = new Size(1000, 600);
 
         // Kreiranje panela za dugmad na vrhu
         pnlButtons = new Panel();
@@ -62,41 +62,35 @@ public class ListaIntervencijaForm : Form
         this.Controls.Add(pnlButtons);
     }
 
-    private void Form_Load(object sender, EventArgs e)
+    private void IntervencijeForm_Load(object? sender, EventArgs e)
     {
-        PopulateMockData();
         RefreshDataGrid();
-    }
-
-    private void PopulateMockData()
-    {
-        if (mockIntervencije.Count == 0)
-        {
-            mockIntervencije.Add(new Intervencija { Id = 1, Datum_I_Vreme = DateTime.Now, Lokacija = "Beograd", Status = Status.Uspesna, Resursi = "Vatrogasci", Broj_Spasenih = 5, Broj_Povredjenih = 1, Uspesnost = 90 });
-            mockIntervencije.Add(new Intervencija { Id = 2, Datum_I_Vreme = DateTime.Now.AddDays(-1), Lokacija = "Nis", Status = Status.Neuspesna, Resursi = "Policija", Broj_Spasenih = 0, Broj_Povredjenih = 3, Uspesnost = 45 });
-        }
     }
 
     private void RefreshDataGrid()
     {
-        dgvIntervencije.DataSource = null;
-        dgvIntervencije.DataSource = mockIntervencije;
+        try
+        {
+            var intervencije = DTOMAnager.VratiIntervencije();
+            dgvIntervencije.DataSource = intervencije;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Došlo je do greške prilikom učitavanja podataka: {ex.Message}", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
     }
 
-    private void BtnDodaj_Click(object sender, EventArgs e)
+    private void BtnDodaj_Click(object? sender, EventArgs e)
     {
-        var dodajIntervencijuDialog = new DodajIzmeniIntervencijuDialog();
+        var dodajIntervencijuDialog = new IntervencijaDialog();
         if (dodajIntervencijuDialog.ShowDialog() == DialogResult.OK)
         {
-            var novaIntervencija = dodajIntervencijuDialog.Intervencija;
-            novaIntervencija.Id = mockIntervencije.Count > 0 ? mockIntervencije.Max(i => i.Id) + 1 : 1;
-            mockIntervencije.Add(novaIntervencija);
             RefreshDataGrid();
             MessageBox.Show("Intervencija je uspesno dodata!");
         }
     }
 
-    private void BtnIzmeni_Click(object sender, EventArgs e)
+    private void BtnIzmeni_Click(object? sender, EventArgs e)
     {
         if (dgvIntervencije.SelectedRows.Count == 0)
         {
@@ -104,10 +98,10 @@ public class ListaIntervencijaForm : Form
             return;
         }
 
-        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as Intervencija;
+        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as IntervencijaBasic;
         if (selectedIntervencija != null)
         {
-            var izmenaDialog = new DodajIzmeniIntervencijuDialog(selectedIntervencija);
+            var izmenaDialog = new IntervencijaDialog(selectedIntervencija);
             if (izmenaDialog.ShowDialog() == DialogResult.OK)
             {
                 RefreshDataGrid();
@@ -116,7 +110,7 @@ public class ListaIntervencijaForm : Form
         }
     }
 
-    private void BtnObrisi_Click(object sender, EventArgs e)
+    private void BtnObrisi_Click(object? sender, EventArgs e)
     {
         if (dgvIntervencije.SelectedRows.Count == 0)
         {
@@ -124,28 +118,35 @@ public class ListaIntervencijaForm : Form
             return;
         }
 
-        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as Intervencija;
+        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as IntervencijaBasic;
         if (selectedIntervencija != null)
         {
             var rezultat = MessageBox.Show($"Da li ste sigurni da želite da obrišete intervenciju na lokaciji '{selectedIntervencija.Lokacija}'?",
                                            "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (rezultat == DialogResult.Yes)
             {
-                mockIntervencije.Remove(selectedIntervencija);
-                RefreshDataGrid();
-                MessageBox.Show("Intervencija je uspesno obrisana.");
+                try
+                {
+                    DTOMAnager.ObrisiIntervenciju(selectedIntervencija.ID);
+                    RefreshDataGrid();
+                    MessageBox.Show("Intervencija je uspesno obrisana.");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Došlo je do greške prilikom brisanja: {ex.Message}", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }
 
-    private void DgvIntervencije_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+    private void DgvIntervencije_CellDoubleClick(object? sender, DataGridViewCellEventArgs e)
     {
         if (e.RowIndex < 0) return;
 
-        var selectedItem = dgvIntervencije.Rows[e.RowIndex].DataBoundItem as Intervencija;
+        var selectedItem = dgvIntervencije.Rows[e.RowIndex].DataBoundItem as IntervencijaBasic;
         if (selectedItem != null)
         {
-            MessageBox.Show($"Dvoklik na intervenciju: {selectedItem.Lokacija}. Ovde ce se otvoriti forma sa detaljima intervencije.");
+            MessageBox.Show($"Dvoklik na intervenciju sa ID: {selectedItem.ID}. Ovde ce se otvoriti forma sa detaljima intervencije.");
         }
     }
 }

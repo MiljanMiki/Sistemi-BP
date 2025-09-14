@@ -1,36 +1,58 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
+﻿using ProjekatVandredneSituacije;
 using ProjekatVandredneSituacije.Entiteti;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 public class DodajIzmeniJedinicuDialog : Form
 {
     private Label lblNaziv, lblBrojClanova, lblBaza, lblKomandir, lblTipSpecijalne;
-    private TextBox txtNaziv, txtBrojClanova, txtBaza, txtTipSpecijalne;
+    private TextBox txtNaziv, txtBaza, txtTipSpecijalne;
+    private NumericUpDown numBrojClanova;
     private ComboBox cmbKomandir;
     private Button btnSacuvaj, btnOdustani;
-    private bool isSpecialniTip;
 
-    public InterventnaJedinica Jedinica { get; private set; }
+    private InterventnaJedinicaBasic Jedinica;
+    private IList<OperativniRadnikBasic> sviKomandiri;
 
     // Konstruktor za dodavanje nove jedinice
-    public DodajIzmeniJedinicuDialog(bool isSpecialni = false)
+    public DodajIzmeniJedinicuDialog()
     {
-        isSpecialniTip = isSpecialni;
-        Jedinica = isSpecialni ? new SpecijalnaInterventna() : new OpstaIntervetnaJed();
+        Jedinica = null;
         InitializeComponent();
         this.Text = "Dodaj novu jedinicu";
+        this.btnSacuvaj.Text = "Dodaj";
+        UcitajKomandire();
     }
 
     // Konstruktor za izmenu postojeće jedinice
-    public DodajIzmeniJedinicuDialog(InterventnaJedinica jedinica)
+    public DodajIzmeniJedinicuDialog(InterventnaJedinicaBasic jedinica)
     {
         Jedinica = jedinica;
-        isSpecialniTip = jedinica is SpecijalnaInterventna;
         InitializeComponent();
         this.Text = "Izmeni jedinicu";
-        PopulateFields();
+        this.btnSacuvaj.Text = "Sačuvaj izmene";
+        UcitajKomandire();
+        PopuniPolja();
+    }
+
+    private void UcitajKomandire()
+    {
+        try
+        {
+            sviKomandiri = DTOMAnager.VratiOperativneRadnike();
+            cmbKomandir.DataSource = sviKomandiri;
+            cmbKomandir.DisplayMember = "Ime";
+            cmbKomandir.ValueMember = "JMBG";
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("Došlo je do greške prilikom učitavanja komandira: " + ex.Message);
+            this.DialogResult = DialogResult.Abort;
+            this.Close();
+        }
     }
 
     private void InitializeComponent()
@@ -48,28 +70,22 @@ public class DodajIzmeniJedinicuDialog : Form
         lblNaziv = new Label { Text = "Naziv:", TextAlign = ContentAlignment.MiddleLeft };
         txtNaziv = new TextBox();
         lblBrojClanova = new Label { Text = "Broj članova:", TextAlign = ContentAlignment.MiddleLeft };
-        txtBrojClanova = new TextBox();
+        numBrojClanova = new NumericUpDown { Minimum = 1, Maximum = 1000 };
         lblBaza = new Label { Text = "Baza:", TextAlign = ContentAlignment.MiddleLeft };
         txtBaza = new TextBox();
         lblKomandir = new Label { Text = "Komandir:", TextAlign = ContentAlignment.MiddleLeft };
         cmbKomandir = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
 
-        lblTipSpecijalne = new Label { Text = "Tip specijalne jedinice:", TextAlign = ContentAlignment.MiddleLeft, Visible = isSpecialniTip };
-        txtTipSpecijalne = new TextBox { Visible = isSpecialniTip };
+        lblTipSpecijalne = new Label { Text = "Tip specijalne jedinice:", TextAlign = ContentAlignment.MiddleLeft };
+        txtTipSpecijalne = new TextBox();
 
         btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
         btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
 
-        // Mock podaci za komandire, u stvarnoj aplikaciji bi se dobijali iz baze
-        var mockKomandiri = ListaInterventnihJedinicaForm.mockRadnici.Select(r => new { r.Ime, r.Prezime, r.JMBG }).ToList();
-        cmbKomandir.DataSource = mockKomandiri;
-        cmbKomandir.DisplayMember = "Ime"; // Prikazuje samo ime
-
         tlpMain.Controls.Add(lblNaziv, 0, 0); tlpMain.Controls.Add(txtNaziv, 1, 0);
-        tlpMain.Controls.Add(lblBrojClanova, 0, 1); tlpMain.Controls.Add(txtBrojClanova, 1, 1);
+        tlpMain.Controls.Add(lblBrojClanova, 0, 1); tlpMain.Controls.Add(numBrojClanova, 1, 1);
         tlpMain.Controls.Add(lblBaza, 0, 2); tlpMain.Controls.Add(txtBaza, 1, 2);
         tlpMain.Controls.Add(lblKomandir, 0, 3); tlpMain.Controls.Add(cmbKomandir, 1, 3);
-
         tlpMain.Controls.Add(lblTipSpecijalne, 0, 4); tlpMain.Controls.Add(txtTipSpecijalne, 1, 4);
 
         var pnlButtons = new Panel { Dock = DockStyle.Fill };
@@ -82,63 +98,107 @@ public class DodajIzmeniJedinicuDialog : Form
         this.Controls.Add(tlpMain);
 
         btnSacuvaj.Click += BtnSacuvaj_Click;
+        this.Load += (sender, e) =>
+        {
+            if (Jedinica is OpstaInterventnaJedBasic)
+            {
+                lblTipSpecijalne.Visible = false;
+                txtTipSpecijalne.Visible = false;
+            }
+            else if (Jedinica is SpecijalnaInterventnaJedinicaBasic)
+            {
+                lblTipSpecijalne.Visible = true;
+                txtTipSpecijalne.Visible = true;
+            }
+        };
     }
 
-    private void PopulateFields()
+    private void PopuniPolja()
     {
         txtNaziv.Text = Jedinica.Naziv;
-        txtBrojClanova.Text = Jedinica.BrojClanova.ToString();
+        numBrojClanova.Value = Jedinica.BrojClanova;
         txtBaza.Text = Jedinica.Baza;
 
         if (Jedinica.Komandir != null)
         {
-            var komandir = ListaInterventnihJedinicaForm.mockRadnici.FirstOrDefault(r => r.JMBG == Jedinica.Komandir.JMBG);
+            var komandir = sviKomandiri.FirstOrDefault(r => r.JMBG == Jedinica.Komandir);
             if (komandir != null)
             {
-                cmbKomandir.SelectedItem = new { komandir.Ime, komandir.Prezime, komandir.JMBG };
+                cmbKomandir.SelectedItem = komandir;
             }
         }
 
-        if (isSpecialniTip && Jedinica is SpecijalnaInterventna specijalna)
+        if (Jedinica is SpecijalnaInterventnaJedinicaBasic specijalna)
         {
-            txtTipSpecijalne.Text = specijalna.TipSpecijalneJedinice;
+            txtTipSpecijalne.Text = specijalna.TipSpecijalneJed;
         }
     }
 
     private void BtnSacuvaj_Click(object? sender, EventArgs e)
     {
-        if (ValidateInput())
+        try
         {
-            Jedinica.Naziv = txtNaziv.Text;
-            Jedinica.BrojClanova = int.Parse(txtBrojClanova.Text);
-            Jedinica.Baza = txtBaza.Text;
-
-            var selectedKomandir = cmbKomandir.SelectedItem as dynamic;
-            Jedinica.Komandir = ListaInterventnihJedinicaForm.mockRadnici.FirstOrDefault(r => r.JMBG == selectedKomandir.JMBG)!;
-
-            if (isSpecialniTip && Jedinica is SpecijalnaInterventna specijalna)
+            if (Jedinica == null) // Dodavanje nove jedinice
             {
-                specijalna.TipSpecijalneJedinice = txtTipSpecijalne.Text;
-            }
+                if (ValidateInput())
+                {
+                    var novaJedinica = new OpstaInterventnaJedBasic();
+                    novaJedinica.Jedinstveni_Broj = DTOMAnager.VratiSveJedinice().Any() ? DTOMAnager.VratiSveJedinice().Max(j => j.Jedinstveni_Broj) + 1 : 1;
+                    novaJedinica.Naziv = txtNaziv.Text;
+                    novaJedinica.BrojClanova = (int)numBrojClanova.Value;
+                    novaJedinica.Baza = txtBaza.Text;
+                    novaJedinica.Komandir = (cmbKomandir.SelectedItem as OperativniRadnikBasic).JMBG;
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+                    DTOMAnager.DodajOpstuIntervetnuJedinicu(novaJedinica);
+                    this.DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    this.DialogResult = DialogResult.None;
+                }
+            }
+            else // Izmena postojeće jedinice
+            {
+                if (ValidateInput())
+                {
+                    Jedinica.Naziv = txtNaziv.Text;
+                    Jedinica.BrojClanova = (int)numBrojClanova.Value;
+                    Jedinica.Baza = txtBaza.Text;
+                    Jedinica.Komandir = (cmbKomandir.SelectedItem as OperativniRadnikBasic).JMBG;
+
+                    if (Jedinica is OpstaInterventnaJedBasic opsta)
+                    {
+                        DTOMAnager.izmeniOpstuInterventnuJedinicu(opsta);
+                    }
+                    else if (Jedinica is SpecijalnaInterventnaJedinicaBasic specijalna)
+                    {
+                        specijalna.TipSpecijalneJed = txtTipSpecijalne.Text;
+                        DTOMAnager.izmeniSpecijalnuInterventnuJedinicu(specijalna);
+                    }
+                    this.DialogResult = DialogResult.OK;
+                }
+                else
+                {
+                    this.DialogResult = DialogResult.None;
+                }
+            }
         }
-        else
+        catch (Exception ex)
         {
+            MessageBox.Show("Došlo je do greške: " + ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             this.DialogResult = DialogResult.None;
         }
     }
 
     private bool ValidateInput()
     {
-        if (string.IsNullOrWhiteSpace(txtNaziv.Text) || !int.TryParse(txtBrojClanova.Text, out _) || string.IsNullOrWhiteSpace(txtBaza.Text) || cmbKomandir.SelectedItem == null)
+        if (string.IsNullOrWhiteSpace(txtNaziv.Text) || string.IsNullOrWhiteSpace(txtBaza.Text) || cmbKomandir.SelectedItem == null)
         {
-            MessageBox.Show("Molimo popunite sva obavezna polja ispravno. Broj članova mora biti broj.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show("Molimo popunite sva obavezna polja.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
-        if (isSpecialniTip && string.IsNullOrWhiteSpace(txtTipSpecijalne.Text))
+        if (Jedinica is SpecijalnaInterventnaJedinicaBasic && string.IsNullOrWhiteSpace(txtTipSpecijalne.Text))
         {
             MessageBox.Show("Molimo unesite tip specijalne jedinice.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
