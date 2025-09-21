@@ -1,7 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Projekti",
+    "\\Projekti\\ProjekatVandredneSituacije",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni",
+    "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Mapiranja"
   ],
-  "SelectedNode": "\\ProjekatVandredneSituacije.sln",
+  "SelectedNode": "\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Mapiranja\\ZaposleniMapiranja.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Entiteti
+namespace ProjekatVanredneSituacije.Entiteti
 {
     public class Prijava
     {
         public virtual int Id {  get; set; }
 
         public virtual DateTime Datum_I_Vreme { get; set; }
-        public virtual VanrednaSituacija Id_VandrednaSituacija { get; set; }
+        public virtual VanrednaSituacija Id_VanrednaSituacija { get; set; }
         public virtual string Tip {  get; set; }
         public virtual string Ime_Prijavioca { get; set; }
         public virtual string Kontakt {  get; set; }    

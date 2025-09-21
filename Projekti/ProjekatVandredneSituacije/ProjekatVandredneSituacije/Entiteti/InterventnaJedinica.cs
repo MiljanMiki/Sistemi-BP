@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Entiteti
+namespace ProjekatVanredneSituacije.Entiteti
 {
     public abstract class InterventnaJedinica
     {

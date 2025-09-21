@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Mapiranja
+namespace ProjekatVanredneSituacije.Mapiranja
 {
     internal class SaradjujeMapiranja:ClassMap<Saradjuje>
     {
@@ -23,7 +23,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
                 .Not.Nullable();
 
             
-            References(x => x.VandrednaSituacija)
+            References(x => x.VanrednaSituacija)
                 .Column("Id_VandedneSituacije")
                 .Not.Nullable();
 

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Mapping;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 
 
-namespace ProjekatVandredneSituacije.Mapiranja
+namespace ProjekatVanredneSituacije.Mapiranja
 {
     class VoziloMapiranja : ClassMap<Vozilo>
     {

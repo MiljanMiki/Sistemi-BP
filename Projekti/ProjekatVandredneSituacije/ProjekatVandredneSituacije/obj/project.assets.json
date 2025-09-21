@@ -5480,23 +5480,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\srdja\\.nuget\\packages\\": {},
+    "C:\\Users\\b3939\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+      "projectUniqueName": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
       "projectName": "ProjekatVandredneSituacije",
-      "projectPath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
-      "packagesPath": "C:\\Users\\srdja\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\obj\\",
+      "projectPath": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije.csproj",
+      "packagesPath": "C:\\Users\\b3939\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\srdja\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\b3939\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5561,7 +5561,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

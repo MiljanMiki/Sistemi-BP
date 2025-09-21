@@ -1,15 +1,15 @@
-﻿using ProjekatVandredneSituacije.Entiteti;
+﻿using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
 
 
-    internal class VoziloView
+    public class VoziloView
     {
         public virtual string Registarska_Oznaka { get; set; }
         public virtual string Proizvodjac { get; set; }

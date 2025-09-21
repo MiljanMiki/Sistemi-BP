@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
-    internal class VanrednaSituacijaAddView
+    public class VanrednaSituacijaAddView
     {
         public virtual DateTime Datum_Od { get; set; }
         public virtual DateTime Datum_Do { get; set; }

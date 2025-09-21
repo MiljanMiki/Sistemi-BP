@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Entiteti
+namespace ProjekatVanredneSituacije.Entiteti
 {
     public class Sluzba
     {
@@ -13,12 +13,12 @@ namespace ProjekatVandredneSituacije.Entiteti
        
         
 
-        public IList<Saradjuje> VandredneSituacije {  get; set; }
+        public IList<Saradjuje> VanredneSituacije {  get; set; }
         public Predstavnik? Predstavnik { get; set;}
 
         public Sluzba()
         {
-            VandredneSituacije = new List<Saradjuje>();
+            VanredneSituacije = new List<Saradjuje>();
         }
     }
 }

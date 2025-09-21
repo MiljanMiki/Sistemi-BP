@@ -1,73 +1,76 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Compile Update="Forme\ZaposleniForm.cs">
+    <Compile Update="Forms\Intervencija\IntervencijaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\InterventnaJedinica\DodajIzmeniJedinicuDialog.cs">
+    <Compile Update="Forms\Intervencija\IntervencijeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\InterventnaJedinica\ListaInterventnihJedinicaForm.cs">
+    <Compile Update="Forms\InterventnaJedinica\DodajIzmeniJedinicuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\MainForm.cs">
+    <Compile Update="Forms\InterventnaJedinica\DodajIzmeniOpstaJedinicaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Prijava\DodajIzmeniPrijavuDialog.cs">
+    <Compile Update="Forms\InterventnaJedinica\DodajIzmeniSpecijalnaJedinicaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Prijava\ListaPrijavaForm.cs">
+    <Compile Update="Forms\InterventnaJedinica\ListaInterventnihJedinicaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Sluzba\DodajIzmeniSluzbuDialog.cs">
+    <Compile Update="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Sluzba\ListaSluzbaForm.cs">
+    <Compile Update="Forms\Oprema\DodajIzmeniOpremuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Vanredna Situacija\DodajIzmeniVanrednuSituacijuDialog.cs">
+    <Compile Update="Forms\Oprema\ListaOpremeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Vanredna Situacija\ListaVanrednihSituacijaForm.cs">
+    <Compile Update="Forms\Prijava\DodajIzmeniPrijavuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Vozilo\DodajIzmeniVoziloDialog.cs">
+    <Compile Update="Forms\Prijava\ListaPrijavaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Vozilo\ListaVozilaForm.cs">
+    <Compile Update="Forms\Sertifikat\DodajIzmeniSertifikatDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Zaposleni\DodajIzmeniAnaliticaraDialog.cs">
+    <Compile Update="Forms\Sluzba\DodajIzmeniSluzbuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Zaposleni\DodajIzmeniKoordinatoraDialog.cs">
+    <Compile Update="Forms\Sluzba\ListaSluzbaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Zaposleni\DodajIzmeniOperativnogRadnikaDialog.cs">
+    <Compile Update="Forms\Specijalizacija\DodajIzmeniSpecijalizacijaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Intervencija\DodajIzmeniIntervencijuDialog.cs">
+    <Compile Update="Forms\Vanredna Situacija\DodajIzmeniVanrednuSituacijuDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Sertifikat\DodajIzmeniSertifikatDialog.cs">
+    <Compile Update="Forms\Vanredna Situacija\ListaVanrednihSituacijaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Specijalizacija\DodajIzmeniSpecijalizacijaDialog.cs">
+    <Compile Update="Forms\Vozilo\DodajIzmeniVoziloDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\InterventnaJedinica\DodajIzmeniOpstaJedinicaDialog.cs">
+    <Compile Update="Forms\Vozilo\ListaVozilaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\InterventnaJedinica\DodajIzmeniSpecijalnaJedinicaDialog.cs">
+    <Compile Update="Forms\Zaposleni\DodajIzmeniAnaliticaraDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Intervencija\ListaIntervencijaForm.cs">
+    <Compile Update="Forms\Zaposleni\DodajIzmeniKoordinatoraDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Zaposleni\DodajIzmeniZaposlenogDialog.cs">
+    <Compile Update="Forms\Zaposleni\DodajIzmeniOperativnogRadnikaDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Views\Zaposleni\ListaZaposlenihForm.cs">
+    <Compile Update="Forms\Zaposleni\DodajIzmeniZaposlenogDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Zaposleni\ListaZaposlenihForm.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

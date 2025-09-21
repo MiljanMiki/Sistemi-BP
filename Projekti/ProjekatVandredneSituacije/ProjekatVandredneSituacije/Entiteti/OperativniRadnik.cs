@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Entiteti
+namespace ProjekatVanredneSituacije.Entiteti
 {
     public class OperativniRadnik : Zaposlen
     {

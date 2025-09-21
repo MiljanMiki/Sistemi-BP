@@ -1,4 +1,4 @@
-namespace ProjekatVandredneSituacije
+namespace ProjekatVanredneSituacije
 {
     internal static class Program
     {

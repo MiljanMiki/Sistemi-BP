@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
-    internal class ZaposleniView
+    public class ZaposleniView
     {
 
         public virtual string JMBG { get; set; }

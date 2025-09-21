@@ -1,13 +1,13 @@
 ﻿using FluentNHibernate.Mapping;
 using NHibernate.Mapping;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Mapiranja
+namespace ProjekatVanredneSituacije.Mapiranja
 {
     class KamioniMapiranja : SubclassMap<Kamioni>
     {

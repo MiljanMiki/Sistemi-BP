@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FluentNHibernate.Mapping;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 
-namespace ProjekatVandredneSituacije.Mapiranja
+namespace ProjekatVanredneSituacije.Mapiranja
 {
     class UcestvujeMapiranja : ClassMap<Ucestvuje>
     {
@@ -17,7 +17,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.IdInterventneJed, "IdIntervetneJed");
-            References(x => x.IdVandredneSituacije, "IdVanredneSituacije");
+            References(x => x.IdVanredneSituacije, "IdVanredneSituacije");
             References(x => x.IdIntervencije, "IdIntervencije");
 
         }

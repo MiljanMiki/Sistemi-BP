@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Entiteti
+namespace ProjekatVanredneSituacije.Entiteti
 {
     public class Saradjuje
     {
@@ -13,6 +13,6 @@ namespace ProjekatVandredneSituacije.Entiteti
         public string Uloga {  get; set; }
         public virtual Sluzba Sektor { get; set; }
 
-        public virtual VanrednaSituacija VandrednaSituacija { get; set; }
+        public virtual VanrednaSituacija VanrednaSituacija { get; set; }
     }
 }

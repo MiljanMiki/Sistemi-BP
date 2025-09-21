@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
     internal class SaradjujeView
     {
@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.DTOs
         public string Uloga { get; set; }
         public virtual SluzbaView Sektor { get; set; }
 
-        public virtual VanrednaSituacijaView VandrednaSituacija { get; set; }
+        public virtual VanrednaSituacijaView VanrednaSituacija { get; set; }
 
         public SaradjujeView()
         {
@@ -24,7 +24,7 @@ namespace ProjekatVandredneSituacije.DTOs
             Id = s.Id;
             Uloga = s.Uloga;
             Sektor = new SluzbaView(s.Sektor);
-            VandrednaSituacija = new VanrednaSituacijaView(s.VandrednaSituacija);
+            VanrednaSituacija = new VanrednaSituacijaView(s.VanrednaSituacija);
         }
 
     }

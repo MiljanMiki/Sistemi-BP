@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Mapiranja
+namespace ProjekatVanredneSituacije.Mapiranja
 {
     class PrijavaMapiranja:ClassMap<Prijava>
     {
@@ -19,7 +19,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Id(x => x.Id, "ID").GeneratedBy.Identity();
 
             
-            References(x => x.Id_VandrednaSituacija, "IdVandredne_Situacije");
+            References(x => x.Id_VanrednaSituacija, "IdVanredne_Situacije");
 
            
             Map(x => x.Datum_I_Vreme, "Datum_I_Vreme");

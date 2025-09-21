@@ -1,10 +1,11 @@
-﻿using FluentNHibernate.Conventions;
+﻿/*
+using FluentNHibernate.Conventions;
 using FluentNHibernate.Utils;
 using NHibernate;
 using NHibernate.Linq;
 using NHibernate.Mapping;
-using ProjekatVandredneSituacije;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,11 +15,11 @@ using System.Security.Policy;
 using System.Text;
 using System.Windows.Forms;
 
-namespace ProjekatVandredneSituacije
+namespace ProjekatVanredneSituacije
 {
     internal class DTOMAnager
     {
-        #region VandrednaSituacija
+        #region VanrednaSituacija
 
         public static void obrisiVandrednuSituaciju(int id)
         {
@@ -26,9 +27,9 @@ namespace ProjekatVandredneSituacije
             {
                 ISession s = DataLayer.GetSession();
 
-                VanrednaSituacija vandredna = s.Load<VanrednaSituacija>(id);
+                VanrednaSituacija Vanredna = s.Load<VanrednaSituacija>(id);
 
-                s.Delete(vandredna);
+                s.Delete(Vanredna);
                 s.Flush();
                 s.Close();
 
@@ -41,7 +42,7 @@ namespace ProjekatVandredneSituacije
 
         }
 
-        public static void DodajVandrednuSituaciju(VandrednaSituacijaBasic vs)
+        public static void DodajVandrednuSituaciju(VanrednaSituacijaBasic vs)
         {
             try
             {
@@ -68,9 +69,9 @@ namespace ProjekatVandredneSituacije
                 //handle exceptions
             }
         }
-        public static VandrednaSituacijaPregled VratiVandrednuSituaciju(int id)
+        public static VanrednaSituacijaPregled VratiVandrednuSituaciju(int id)
         {
-            VandrednaSituacijaPregled v = new VandrednaSituacijaPregled();
+            VanrednaSituacijaPregled v = new VanrednaSituacijaPregled();
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -96,19 +97,19 @@ namespace ProjekatVandredneSituacije
             return v;
 
         }
-        public static IList<VandrednaSituacijaBasic> VratiVandredneSituacije()
+        public static IList<VanrednaSituacijaBasic> VratiVanredneSituacije()
         {
-            List<VandrednaSituacijaBasic> vs = new List<VandrednaSituacijaBasic>();
+            List<VanrednaSituacijaBasic> vs = new List<VanrednaSituacijaBasic>();
             try
             {
                 ISession s = DataLayer.GetSession();
                 IEnumerable<Entiteti.VanrednaSituacija> v = from o in s.Query<VanrednaSituacija>()
                                                   select o;
 
-                foreach (VanrednaSituacija vandredna in v)
+                foreach (VanrednaSituacija Vanredna in v)
                 {
-                    vs.Add(new VandrednaSituacijaBasic(vandredna.Id, vandredna.Datum_Od, vandredna.Datum_Do, vandredna.Tip, vandredna.Broj_Ugrozenih_Osoba, vandredna.Nivo_Opasnosti,
-                        vandredna.Opstina, vandredna.Lokacija, vandredna.Opis, vandredna.Prijava_ID.Id));
+                    vs.Add(new VanrednaSituacijaBasic(Vanredna.Id, Vanredna.Datum_Od, Vanredna.Datum_Do, Vanredna.Tip, Vanredna.Broj_Ugrozenih_Osoba, Vanredna.Nivo_Opasnosti,
+                        Vanredna.Opstina, Vanredna.Lokacija, Vanredna.Opis, Vanredna.Prijava_ID.Id));
                 }
             }
             catch
@@ -117,7 +118,7 @@ namespace ProjekatVandredneSituacije
             }
             return vs;
         }
-        public static void IzmeniVandrednuSituaciju(VandrednaSituacijaBasic vs)
+        public static void IzmeniVandrednuSituaciju(VanrednaSituacijaBasic vs)
         {
             try
             {
@@ -492,7 +493,7 @@ namespace ProjekatVandredneSituacije
                 Entiteti.Prijava p = new Entiteti.Prijava();
                 p.Id = pr.Id;
                 p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.Id_VandrednaSituacija = s.Load<Entiteti.VanrednaSituacija>(pr.IdVandrednaSituacija.Value);
+                p.Id_VanrednaSituacija = s.Load<Entiteti.VanrednaSituacija>(pr.IdVanrednaSituacija.Value);
                 p.Tip = pr.Tip;
                 p.Ime_Prijavioca = pr.Ime_Prijavioca;
                 p.Kontakt = pr.Kontakt_Prijavioca;
@@ -539,7 +540,7 @@ namespace ProjekatVandredneSituacije
                 ISession s = DataLayer.GetSession();
                 Entiteti.Prijava p = s.Load<Prijava>(pr.Id);
                 p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.Id_VandrednaSituacija = s.Load<Entiteti.VanrednaSituacija>(pr.IdVandrednaSituacija);
+                p.Id_VanrednaSituacija = s.Load<Entiteti.VanrednaSituacija>(pr.IdVanrednaSituacija);
                 p.Tip = pr.Tip;
                 p.Ime_Prijavioca = pr.Ime_Prijavioca;
                 p.Kontakt = pr.Kontakt_Prijavioca;
@@ -569,7 +570,7 @@ namespace ProjekatVandredneSituacije
 
                 foreach (Prijava prijava in p)
                 {
-                    SvePrijave.Add(new PrijavaBasic(prijava.Id, prijava.Datum_I_Vreme, prijava.Id_VandrednaSituacija.Id, prijava.Tip, prijava.Ime_Prijavioca, prijava.Kontakt,
+                    SvePrijave.Add(new PrijavaBasic(prijava.Id, prijava.Datum_I_Vreme, prijava.Id_VanrednaSituacija.Id, prijava.Tip, prijava.Ime_Prijavioca, prijava.Kontakt,
                         prijava.Lokacija, prijava.Opis, prijava.JMBG_Dispecer, prijava.Prioritet));
                 }
             }
@@ -592,7 +593,7 @@ namespace ProjekatVandredneSituacije
 
                 p.Id = pr.Id;
                 p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.IdVandrednaSituacija = pr.Id_VandrednaSituacija.Id;
+                p.IdVanrednaSituacija = pr.Id_VanrednaSituacija.Id;
                 p.Tip = pr.Tip;
                 p.Ime_Prijavioca = pr.Ime_Prijavioca;
                 p.Kontakt_Prijavioca = pr.Kontakt;
@@ -1849,7 +1850,7 @@ namespace ProjekatVandredneSituacije
             {
                 ISession s = DataLayer.GetSession();
                 LicnaZastita liz = new LicnaZastita();
-                liz.Serijski_Broj = l.Serijski_Broj;
+                liz.Serijski_Broj = l.Serijski_Broj.ToString();
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
@@ -1887,7 +1888,7 @@ namespace ProjekatVandredneSituacije
             {
                 ISession s = DataLayer.GetSession();
                 LicnaZastita liz = s.Load<LicnaZastita>(l.Serijski_Broj);
-                liz.Serijski_Broj = l.Serijski_Broj;
+                liz.Serijski_Broj = l.Serijski_Broj.ToString();
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
@@ -2888,7 +2889,7 @@ namespace ProjekatVandredneSituacije
                 saradnja.Id=s.Id;
                 saradnja.Uloga= s.Uloga;
                 saradnja.Sektor = sess.Load<Sluzba>(s.IdSektor);
-                saradnja.VandrednaSituacija = sess.Load<VanrednaSituacija>(s.IdVandrednaSituacija);
+                saradnja.VanrednaSituacija = sess.Load<VanrednaSituacija>(s.IdVanrednaSituacija);
 
                 sess.Save(saradnja);
                 sess.Flush();
@@ -2925,7 +2926,7 @@ namespace ProjekatVandredneSituacije
                 saradnja.Id = s.Id;
                 saradnja.Uloga = s.Uloga;
                 saradnja.Sektor = sess.Load<Sluzba>(s.IdSektor);
-                saradnja.VandrednaSituacija = sess.Load<VanrednaSituacija>(s.IdVandrednaSituacija);
+                saradnja.VanrednaSituacija = sess.Load<VanrednaSituacija>(s.IdVanrednaSituacija);
                 sess.Update(saradnja);
                 sess.Flush();
                 sess.Close();
@@ -2945,7 +2946,7 @@ namespace ProjekatVandredneSituacije
                                                    select o;
                 foreach (Saradjuje saradnja in i)
                 {
-                    Saradnje.Add(new SaradjujeBasic(saradnja.Id, saradnja.Uloga, saradnja.Sektor.Id_Sektora, saradnja.VandrednaSituacija.Id));
+                    Saradnje.Add(new SaradjujeBasic(saradnja.Id, saradnja.Uloga, saradnja.Sektor.Id_Sektora, saradnja.VanrednaSituacija.Id));
                 }
                 s.Close();
             }
@@ -2965,7 +2966,7 @@ namespace ProjekatVandredneSituacije
                 saradnja.Id = s.Id;
                 saradnja.Uloga = s.Uloga;
                 saradnja.IdSektor = s.Sektor.Id_Sektora;
-                saradnja.IdVandrednaSituacija = s.VandrednaSituacija.Id;
+                saradnja.IdVanrednaSituacija = s.VanrednaSituacija.Id;
                 sess.Close();
             }
             catch (Exception ec)
@@ -2988,7 +2989,7 @@ namespace ProjekatVandredneSituacije
                     foreach (Saradjuje sa in sek)
                     {
                         SluzbaPregled sluzba = DTOMAnager.VratiSluzbu(sa.Sektor.Id_Sektora);
-                        VandrednaSituacijaPregled vs = DTOMAnager.VratiVandrednuSituaciju(sa.VandrednaSituacija.Id);
+                        VanrednaSituacijaPregled vs = DTOMAnager.VratiVandrednuSituaciju(sa.VanrednaSituacija.Id);
                         Saradnje.Add(new SaradjujePregled(sa.Id, sa.Uloga, sluzba, vs));
                     }
 
@@ -3151,7 +3152,7 @@ namespace ProjekatVandredneSituacije
                 Ucestvuje ucestvovanje = new Ucestvuje();
                 ucestvovanje.Id=u.Id;
                 ucestvovanje.IdInterventneJed = sess.Load<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = sess.Load<VanrednaSituacija>(u.IdVandredneSituacije);
+                ucestvovanje.IdVanredneSituacije = sess.Load<VanrednaSituacija>(u.IdVanredneSituacije);
                 ucestvovanje.IdIntervencije = sess.Load<Intervencija>(u.IdIntervencije);
                 sess.Save(ucestvovanje);
                 sess.Flush();
@@ -3185,7 +3186,7 @@ namespace ProjekatVandredneSituacije
                 Ucestvuje ucestvovanje = sess.Load<Ucestvuje>(u.Id);
                 ucestvovanje.Id = u.Id;
                 ucestvovanje.IdInterventneJed = sess.Load<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = sess.Load<VanrednaSituacija>(u.IdVandredneSituacije);
+                ucestvovanje.IdVanredneSituacije = sess.Load<VanrednaSituacija>(u.IdVanredneSituacije);
                 ucestvovanje.IdIntervencije = sess.Load<Intervencija>(u.IdIntervencije);
                 sess.Update(ucestvovanje);
                 sess.Flush();
@@ -3208,7 +3209,7 @@ namespace ProjekatVandredneSituacije
                 foreach (Ucestvuje u in i)
                 {
 
-                    ucestvuj.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    ucestvuj.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVanredneSituacije.Id, u.IdIntervencije.Id));
                 }
                 s.Close();
             }
@@ -3226,7 +3227,7 @@ namespace ProjekatVandredneSituacije
                 ISession sess = DataLayer.GetSession();
                 Ucestvuje u = sess.Load<Ucestvuje>(Id);
                 ucestv.Id = u.Id;
-                ucestv.IdVandredneSituacije = u.IdVandredneSituacije.Id;
+                ucestv.IdVanredneSituacije = u.IdVanredneSituacije.Id;
                 ucestv.IdInterventneJed = u.IdInterventneJed.Jedinstveni_Broj;
                 ucestv.IdIntervencije = u.IdIntervencije.Id;
                 sess.Close();
@@ -3245,11 +3246,11 @@ namespace ProjekatVandredneSituacije
             {
                 ISession s = DataLayer.GetSession();
                 IEnumerable<Entiteti.Ucestvuje> i = from o in s.Query<Ucestvuje>()
-                                                      where o.IdVandredneSituacije.Id == IdVS
+                                                      where o.IdVanredneSituacije.Id == IdVS
                                                       select o;
                 foreach (Ucestvuje u in i)
                 {
-                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVanredneSituacije.Id, u.IdIntervencije.Id));
                 }
                 s.Close();
             }
@@ -3271,7 +3272,7 @@ namespace ProjekatVandredneSituacije
                                                     select o;
                 foreach (Ucestvuje u in i)
                 {
-                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVanredneSituacije.Id, u.IdIntervencije.Id));
                 }
                 s.Close();
             }
@@ -3293,7 +3294,7 @@ namespace ProjekatVandredneSituacije
                                                     select o;
                 foreach (Ucestvuje u in i)
                 {
-                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVanredneSituacije.Id, u.IdIntervencije.Id));
                 }
                 s.Close();
             }
@@ -3400,9 +3401,9 @@ namespace ProjekatVandredneSituacije
             return sluzba;
         }
 
-        public static IList<SaradjujePregled> VratiSveVandredneUKojimaSaradjujeSektor(int IdSektor)
+        public static IList<SaradjujePregled> VratiSveVanredneUKojimaSaradjujeSektor(int IdSektor)
         {
-            List<SaradjujePregled> Vandredne = new List<SaradjujePregled>();
+            List<SaradjujePregled> Vanredne = new List<SaradjujePregled>();
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -3412,16 +3413,16 @@ namespace ProjekatVandredneSituacije
                 foreach (Saradjuje saradnja in i)
                 {
 
-                    VandrednaSituacijaPregled v= DTOMAnager.VratiVandrednuSituaciju(saradnja.VandrednaSituacija.Id);
+                    VanrednaSituacijaPregled v= DTOMAnager.VratiVandrednuSituaciju(saradnja.VanrednaSituacija.Id);
                     SluzbaPregled sluzba= DTOMAnager.VratiSluzbu(saradnja.Sektor.Id_Sektora);
-                    Vandredne.Add(new SaradjujePregled(saradnja.Id, saradnja.Uloga,sluzba, v ));
+                    Vanredne.Add(new SaradjujePregled(saradnja.Id, saradnja.Uloga,sluzba, v ));
                 }
                 s.Close();
             }
             catch (Exception e)
             {
             }
-            return Vandredne;
+            return Vanredne;
         }
         public static IList<SaradjujePregled> VratiSveSluzbeKojeSaradjujuSaVS(int IdVS)
         {
@@ -3430,12 +3431,12 @@ namespace ProjekatVandredneSituacije
             {
                 ISession s = DataLayer.GetSession();
                 IEnumerable<Entiteti.Saradjuje> i = from o in s.Query<Saradjuje>()
-                                                    where o.VandrednaSituacija.Id == IdVS
+                                                    where o.VanrednaSituacija.Id == IdVS
                                                     select o;
                 foreach (Saradjuje saradnja in i)
                 {
 
-                    VandrednaSituacijaPregled v = DTOMAnager.VratiVandrednuSituaciju(saradnja.VandrednaSituacija.Id);
+                    VanrednaSituacijaPregled v = DTOMAnager.VratiVandrednuSituaciju(saradnja.VanrednaSituacija.Id);
                     SluzbaPregled sluzba = DTOMAnager.VratiSluzbu(saradnja.Sektor.Id_Sektora);
                     Sluzbe.Add(new SaradjujePregled(saradnja.Id, saradnja.Uloga, sluzba, v));
                 }
@@ -3564,3 +3565,4 @@ namespace ProjekatVandredneSituacije
         #endregion
     }
 }
+*/

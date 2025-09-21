@@ -1,24 +1,24 @@
-﻿using ProjekatVandredneSituacije.Entiteti;
+﻿using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
     internal class SluzbaView
     {
         public virtual int Id_Sektora { get; set; }
         public virtual string TipSektora { get; set; }
-        public IList<SaradjujeView> VandredneSituacije { get; set; }
+        public IList<SaradjujeView> VanredneSituacije { get; set; }
         public PredstavnikView? Predstavnik { get; set; }
 
 
 
         public SluzbaView()
         {
-            VandredneSituacije = new List<SaradjujeView>();
+            VanredneSituacije = new List<SaradjujeView>();
         }
 
         public SluzbaView(Sluzba s)

@@ -1,13 +1,13 @@
-﻿using ProjekatVandredneSituacije.Entiteti;
+﻿using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
-    internal class EkspertizaView
+    public class EkspertizaView
     {
         public virtual int Id { get; set; }
         public virtual AnaliticarView Analiticar { get; set; }

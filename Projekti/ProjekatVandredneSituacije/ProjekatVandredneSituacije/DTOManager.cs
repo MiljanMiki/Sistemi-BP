@@ -3,8 +3,8 @@ using FluentNHibernate.Utils;
 using NHibernate;
 using NHibernate.Linq;
 using NHibernate.Mapping;
-using ProjekatVandredneSituacije;
-using ProjekatVandredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,17 +12,18 @@ using System.Linq;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Policy;
 using System.Text;
-using ProjekatVandredneSituacije.DTOs;
-using ProjekatVandredneSituacije.Mapiranja;
+using ProjekatVanredneSituacije.DTOs;
+using ProjekatVanredneSituacije.Mapiranja;
 using System.Text.RegularExpressions;
 using NHibernate.Util;
 using Remotion.Linq.Parsing;
 using NHibernate.Cfg.Loquacious;
 using System.Diagnostics.Eventing.Reader;
 using System.Runtime.InteropServices;
+using ProjekatVanredneSituacije;
 
 
-namespace ProjekatVandredneSituacije
+namespace VanrednaSituacijaLibrary
 {
     internal class DTOManager
     {
@@ -65,7 +66,7 @@ namespace ProjekatVandredneSituacije
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Entiteti.VanrednaSituacija v = new Entiteti.VanrednaSituacija();
+                ProjekatVanredneSituacije.Entiteti.VanrednaSituacija v = new ProjekatVanredneSituacije.Entiteti.VanrednaSituacija();
                 v.Datum_Od = vs.Datum_Od;
                 v.Datum_Do = vs.Datum_Do;
                 v.Tip = vs.Tip;
@@ -222,7 +223,7 @@ namespace ProjekatVandredneSituacije
                 throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static async Task   izmeniOpstuInterventnuJedinicu(OpstaInterventnaView i, int Id)
+        public static async Task IzmeniOpstuInterventnuJedinicu(OpstaInterventnaView i, int Id)
             {
                 try
                 {
@@ -602,9 +603,9 @@ namespace ProjekatVandredneSituacije
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Entiteti.Prijava p = new Entiteti.Prijava();
+                ProjekatVanredneSituacije.Entiteti.Prijava p = new ProjekatVanredneSituacije.Entiteti.Prijava();
                 p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.Id_VandrednaSituacija =await s.LoadAsync<VanrednaSituacija>(pr.Id_VandrednaSituacija);
+                p.Id_VanrednaSituacija =await s.LoadAsync<VanrednaSituacija>(pr.Id_VanrednaSituacija);
                 p.Tip = pr.Tip;
                 p.Ime_Prijavioca = pr.Ime_Prijavioca;
                 p.Kontakt = pr.Kontakt;
@@ -659,13 +660,13 @@ namespace ProjekatVandredneSituacije
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Entiteti.Prijava p = await s.LoadAsync<Prijava>(pr.Id);
+                ProjekatVanredneSituacije.Entiteti.Prijava p = await s.LoadAsync<Prijava>(pr.Id);
                 if (p == null)
                 {
                     throw new KeyNotFoundException("Zao nam je ne postoji Prijava sa ovim Id-em");
                 }
                 p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.Id_VandrednaSituacija =await s.LoadAsync<Entiteti.VanrednaSituacija>(pr.Id_VandrednaSituacija);
+                p.Id_VanrednaSituacija =await s.LoadAsync<ProjekatVanredneSituacije.Entiteti.VanrednaSituacija>(pr.Id_VanrednaSituacija);
                 p.Tip = pr.Tip;
                 p.Ime_Prijavioca = pr.Ime_Prijavioca;
                 p.Kontakt = pr.Kontakt;
@@ -3655,8 +3656,8 @@ namespace ProjekatVandredneSituacije
                 Saradjuje saradnja = new Saradjuje();
                 saradnja.Uloga= s.Uloga;
                 saradnja.Sektor = await sess.LoadAsync<Sluzba>(s.SektorID);
-                saradnja.VandrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
-                if(saradnja.Sektor==null || saradnja.VandrednaSituacija ==null)
+                saradnja.VanrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
+                if(saradnja.Sektor==null || saradnja.VanrednaSituacija ==null)
                 {
                     throw new KeyNotFoundException("zao nam je jedno od obaveznih polja je neispravno");
                 }
@@ -3706,8 +3707,8 @@ namespace ProjekatVandredneSituacije
                 }
                 saradnja.Uloga = s.Uloga;
                 saradnja.Sektor = await sess.LoadAsync<Sluzba>(s.SektorID);
-                saradnja.VandrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
-                if (saradnja.Sektor == null ||  saradnja.VandrednaSituacija == null)
+                saradnja.VanrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
+                if (saradnja.Sektor == null ||  saradnja.VanrednaSituacija == null)
                 {
                     throw new KeyNotFoundException("Zao nam je neki od podataka nisu tacni");
                 }
@@ -3727,7 +3728,7 @@ namespace ProjekatVandredneSituacije
             {
                 ISession s = DataLayer.GetSession();
                 Saradnje =await  s.Query<Saradjuje>()
-                         .Fetch(s => s.VandrednaSituacija)
+                         .Fetch(s => s.VanrednaSituacija)
                          .Fetch(s => s.Sektor)
                          .Select(s => new SaradjujeView(s))
                          .ToListAsync();
@@ -3768,7 +3769,7 @@ namespace ProjekatVandredneSituacije
                     ISession s = DataLayer.GetSession();
 
                 var Saradnja = await s.Query<Saradjuje>()
-                               .Where(s => s.VandrednaSituacija.Id == IdVS)
+                               .Where(s => s.VanrednaSituacija.Id == IdVS)
                                .Fetch(s => s.Sektor)
                                .ToListAsync();
 
@@ -3798,12 +3799,12 @@ namespace ProjekatVandredneSituacije
 
                 var Saradnja =await  s.Query<Saradjuje>()
                                .Where(s => s.Sektor.Id_Sektora == IdSluzbe)
-                               .Fetch(s => s.VandrednaSituacija)
+                               .Fetch(s => s.VanrednaSituacija)
                                .ToListAsync();
 
                 foreach (var S in Saradnja)
                 {
-                    VSituacije.Add(new VanrednaSituacijaView(S.VandrednaSituacija));
+                    VSituacije.Add(new VanrednaSituacijaView(S.VanrednaSituacija));
                 }
 
 
@@ -4051,9 +4052,9 @@ namespace ProjekatVandredneSituacije
                 ISession sess = DataLayer.GetSession();
                 Ucestvuje ucestvovanje = new Ucestvuje();
                 ucestvovanje.IdInterventneJed = await sess.LoadAsync<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVandredneSituacije);
+                ucestvovanje.IdVanredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVanredneSituacije);
                 ucestvovanje.IdIntervencije = await sess.LoadAsync<Intervencija>(u.IdIntervencije);
-                if (ucestvovanje.IdInterventneJed == null || ucestvovanje.IdVandredneSituacije == null || ucestvovanje.IdIntervencije == null)
+                if (ucestvovanje.IdInterventneJed == null || ucestvovanje.IdVanredneSituacije == null || ucestvovanje.IdIntervencije == null)
                 {
                     throw new KeyNotFoundException("Zao nam je nemate obavezne stavke");
                 }
@@ -4101,9 +4102,9 @@ namespace ProjekatVandredneSituacije
                 }
                 ucestvovanje.Id = u.Id;
                 ucestvovanje.IdInterventneJed = await sess.LoadAsync<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVandredneSituacije);
+                ucestvovanje.IdVanredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVanredneSituacije);
                 ucestvovanje.IdIntervencije = await sess.LoadAsync<Intervencija>(u.IdIntervencije);
-                if(ucestvovanje.IdInterventneJed==null || ucestvovanje.IdVandredneSituacije==null|| ucestvovanje.IdIntervencije==null)
+                if(ucestvovanje.IdInterventneJed==null || ucestvovanje.IdVanredneSituacije==null|| ucestvovanje.IdIntervencije==null)
                 {
                     throw new KeyNotFoundException("Zao nam je nemate obavezne stavke"); 
                 }
@@ -4177,7 +4178,7 @@ namespace ProjekatVandredneSituacije
                 }
                 var Ucestvovalo =await s.Query<Ucestvuje>()
                                  .Fetch(s => s.IdInterventneJed)
-                                 .Where(s => s.IdVandredneSituacije.Id == IdVS)
+                                 .Where(s => s.IdVanredneSituacije.Id == IdVS)
                                  .ToListAsync();
                 foreach (var v in Ucestvovalo)
                 {
@@ -4387,7 +4388,7 @@ namespace ProjekatVandredneSituacije
                              .Where(o => o.Sektor.Id_Sektora == IdSektor)
                              .Fetch(o => o.Sektor)
                              .ToList();
-                Vanredne =  Query.Select(o => new VanrednaSituacijaView(o.VandrednaSituacija))
+                Vanredne =  Query.Select(o => new VanrednaSituacijaView(o.VanrednaSituacija))
                                             .Distinct()
                                             .ToList();
                 s.Close();
@@ -4409,8 +4410,8 @@ namespace ProjekatVandredneSituacije
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 var izvuciSluzbe = s.Query<Saradjuje>()
-                             .Where(o => o.VandrednaSituacija.Id == IdVS)
-                             .Fetch(o => o.VandrednaSituacija)
+                             .Where(o => o.VanrednaSituacija.Id == IdVS)
+                             .Fetch(o => o.VanrednaSituacija)
                              .ToList();
                 Sluzbe =  izvuciSluzbe.Select(o => new SluzbaView(o.Sektor))
                                             .Distinct()

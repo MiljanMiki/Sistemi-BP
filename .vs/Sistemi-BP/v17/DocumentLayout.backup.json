@@ -1,0 +1,479 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\MainForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\MainForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\ListaZaposlenihForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\ListaZaposlenihForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniZaposlenogDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniZaposlenogDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniOperativnogRadnikaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniOperativnogRadnikaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniKoordinatoraDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniKoordinatoraDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniAnaliticaraDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniAnaliticaraDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\ListaVozilaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\ListaVozilaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\DodajIzmeniVoziloDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\DodajIzmeniVoziloDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\ListaVanrednihSituacijaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\ListaVanrednihSituacijaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\DodajIzmeniVanrednuSituacijuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\DodajIzmeniVanrednuSituacijuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija\\DodajIzmeniSpecijalizacijaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija\\DodajIzmeniSpecijalizacijaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\ListaSluzbaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\ListaSluzbaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\DodajIzmeniSluzbuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\DodajIzmeniSluzbuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sertifikat\\DodajIzmeniSertifikatDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sertifikat\\DodajIzmeniSertifikatDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\ListaPrijavaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\ListaPrijavaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\DodajIzmeniPrijavuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\DodajIzmeniPrijavuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\ListaOpremeForm.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\ListaOpremeForm.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\DodajIzmeniOpremuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\DodajIzmeniOpremuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\ListaInterventnihJedinicaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\ListaInterventnihJedinicaForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniSpecijalnaJedinicaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniSpecijalnaJedinicaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniOpstaJedinicaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniOpstaJedinicaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniJedinicuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniJedinicuDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijeForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijeForm.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijaDialog.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTOManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTOManager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 26,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ListaZaposlenihForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\ListaZaposlenihForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\ListaZaposlenihForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\ListaZaposlenihForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\ListaZaposlenihForm.cs",
+              "ViewState": "AgIAACYBAAAAAAAAAAAAADQBAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:55:04.196Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DodajIzmeniZaposlenogDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniZaposlenogDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniZaposlenogDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniZaposlenogDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniZaposlenogDialog.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAAAAAGYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:54:52.011Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "DodajIzmeniOperativnogRadnikaDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniOperativnogRadnikaDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniOperativnogRadnikaDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniOperativnogRadnikaDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniOperativnogRadnikaDialog.cs",
+              "ViewState": "AgIAAJ8AAAAAAAAAAAAAALcAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:54:27.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DodajIzmeniKoordinatoraDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniKoordinatoraDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniKoordinatoraDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniKoordinatoraDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniKoordinatoraDialog.cs",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAAAKQAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:54:14.377Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DodajIzmeniAnaliticaraDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniAnaliticaraDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniAnaliticaraDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniAnaliticaraDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Zaposleni\\DodajIzmeniAnaliticaraDialog.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAAAI4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:54:04.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ListaVozilaForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\ListaVozilaForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\ListaVozilaForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\ListaVozilaForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\ListaVozilaForm.cs",
+              "ViewState": "AgIAAKUAAAAAAAAAAAAAAMAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:53:45.998Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ListaVanrednihSituacijaForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\ListaVanrednihSituacijaForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\ListaVanrednihSituacijaForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\ListaVanrednihSituacijaForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\ListaVanrednihSituacijaForm.cs",
+              "ViewState": "AgIAAJwAAAAAAAAAAAAAAE8AAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:53:04.906Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DodajIzmeniVanrednuSituacijuDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\DodajIzmeniVanrednuSituacijuDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\DodajIzmeniVanrednuSituacijuDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\DodajIzmeniVanrednuSituacijuDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vanredna Situacija\\DodajIzmeniVanrednuSituacijuDialog.cs",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAAACAAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:52:58.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DodajIzmeniSpecijalizacijaDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija\\DodajIzmeniSpecijalizacijaDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija\\DodajIzmeniSpecijalizacijaDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija\\DodajIzmeniSpecijalizacijaDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Specijalizacija\\DodajIzmeniSpecijalizacijaDialog.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAAACoAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:52:47.344Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ListaSluzbaForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\ListaSluzbaForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\ListaSluzbaForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\ListaSluzbaForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\ListaSluzbaForm.cs",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAAAIYAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:52:34.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "DodajIzmeniSluzbuDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\DodajIzmeniSluzbuDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\DodajIzmeniSluzbuDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\DodajIzmeniSluzbuDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sluzba\\DodajIzmeniSluzbuDialog.cs",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAAFUAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:52:19.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "DodajIzmeniSertifikatDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sertifikat\\DodajIzmeniSertifikatDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sertifikat\\DodajIzmeniSertifikatDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sertifikat\\DodajIzmeniSertifikatDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Sertifikat\\DodajIzmeniSertifikatDialog.cs",
+              "ViewState": "AgIAAMYAAAAAAAAAAAAAAIMAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:52:08.337Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "ListaPrijavaForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\ListaPrijavaForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\ListaPrijavaForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\ListaPrijavaForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\ListaPrijavaForm.cs",
+              "ViewState": "AgIAAGkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:52:03.857Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "DodajIzmeniSpecijalnaJedinicaDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniSpecijalnaJedinicaDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniSpecijalnaJedinicaDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniSpecijalnaJedinicaDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniSpecijalnaJedinicaDialog.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:51:00.405Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "DodajIzmeniOpstaJedinicaDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniOpstaJedinicaDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniOpstaJedinicaDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniOpstaJedinicaDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniOpstaJedinicaDialog.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAABYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:50:53.075Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "DodajIzmeniJedinicuDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniJedinicuDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniJedinicuDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniJedinicuDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\DodajIzmeniJedinicuDialog.cs",
+              "ViewState": "AgIAAKsAAAAAAAAAAAAAAJ0AAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:50:33.877Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "IntervencijeForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijeForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijeForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijeForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijeForm.cs",
+              "ViewState": "AgIAAHUAAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:50:18.934Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "DodajIzmeniPrijavuDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\DodajIzmeniPrijavuDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\DodajIzmeniPrijavuDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\DodajIzmeniPrijavuDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Prijava\\DodajIzmeniPrijavuDialog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:48:20.156Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "DodajIzmeniVoziloDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\DodajIzmeniVoziloDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\DodajIzmeniVoziloDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\DodajIzmeniVoziloDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Vozilo\\DodajIzmeniVoziloDialog.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:43:05.874Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "IntervencijaDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijaDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijaDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijaDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Intervencija\\IntervencijaDialog.cs",
+              "ViewState": "AgIAANgAAAAAAAAAAAAAALwAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:38:41.025Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\MainForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\MainForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\MainForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\MainForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:27:48.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "DodajIzmeniOpremuDialog.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\DodajIzmeniOpremuDialog.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\DodajIzmeniOpremuDialog.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\DodajIzmeniOpremuDialog.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\DodajIzmeniOpremuDialog.cs",
+              "ViewState": "AgIAAJkAAAAAAAAAAAAAAKIAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:27:16.463Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ListaOpremeForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\ListaOpremeForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\ListaOpremeForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\ListaOpremeForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\Oprema\\ListaOpremeForm.cs",
+              "ViewState": "AgIAANIAAAAAAAAAAAAAALwAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:26:16.01Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "DTO.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTO.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTO.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTO.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTO.cs",
+              "ViewState": "AgIAAC8FAAAAAAAAAAAowDkFAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:23:00.806Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ListaInterventnihJedinicaForm.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\ListaInterventnihJedinicaForm.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\ListaInterventnihJedinicaForm.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\ListaInterventnihJedinicaForm.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Forms\\InterventnaJedinica\\ListaInterventnihJedinicaForm.cs",
+              "ViewState": "AgIAALEAAAAAAAAAAAAAAFYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:15:48.383Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "DTOManager.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTOManager.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTOManager.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTOManager.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\DTOManager.cs",
+              "ViewState": "AgIAACoHAAAAAAAAAAAowD0HAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T17:15:26.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Program.cs",
+              "RelativeDocumentMoniker": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Program.cs",
+              "ToolTip": "C:\\Users\\b3939\\Documents\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Program.cs",
+              "RelativeToolTip": "Projekti\\ProjekatVandredneSituacije\\ProjekatVandredneSituacije\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T16:07:32.681Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

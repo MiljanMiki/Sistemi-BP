@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVandredneSituacije.Mapiranja;
+using ProjekatVanredneSituacije.Mapiranja;
 
-namespace ProjekatVandredneSituacije
+namespace ProjekatVanredneSituacije
 {
      class DataLayer
     {
@@ -44,7 +44,7 @@ namespace ProjekatVandredneSituacije
 
                 return Fluently.Configure()
                     .Database(cfg)
-                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<VandrednaSituacijeMapiranja>())
+                    .Mappings(m => m.FluentMappings.AddFromAssemblyOf<VanrednaSituacijeMapiranja>())
                     .BuildSessionFactory();
             }
             catch (Exception ec)

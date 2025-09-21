@@ -1,8 +1,8 @@
 ﻿using FluentNHibernate.Utils;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Impl;
-using ProjekatVandredneSituacije;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static SaradjujeBasic;
 
-namespace ProjekatVandredneSituacije
+namespace ProjekatVanredneSituacije
 {
    public class ZaposlenBasic
     {
@@ -229,7 +229,7 @@ namespace ProjekatVandredneSituacije
 
     public class OpremaBasic
     {
-    public int Serijski_Broj;
+    public string Serijski_Broj;
 
     public string Naziv;
 
@@ -248,7 +248,7 @@ namespace ProjekatVandredneSituacije
 
     }
 
-    public OpremaBasic(int Serijski_Broj,string Naziv, string Status, DateTime DatumNabavke, int IdJedinica)
+    public OpremaBasic(string Serijski_Broj,string Naziv, string Status, DateTime DatumNabavke, int IdJedinica)
     {
         this.Serijski_Broj = Serijski_Broj;
         this.Naziv = Naziv;
@@ -262,7 +262,7 @@ namespace ProjekatVandredneSituacije
 
     public class OpremaPregled
     {
-    public int Serijski_Broj;
+    public string Serijski_Broj;
 
     public string Naziv;
 
@@ -279,7 +279,7 @@ namespace ProjekatVandredneSituacije
 
     }
 
-    public OpremaPregled(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica)
+    public OpremaPregled(string Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica)
     {
         this.Serijski_Broj = Serijski_Broj;
         this.Naziv = Naziv;
@@ -290,7 +290,7 @@ namespace ProjekatVandredneSituacije
     }
 }
 
-    public class VandrednaSituacijaBasic
+    public class VanrednaSituacijaBasic
     {
     public  int Id;
     public  DateTime Datum_Od;
@@ -308,13 +308,13 @@ namespace ProjekatVandredneSituacije
     public  IList<UcestvujeBasic> Ucestvuje;
     public  IList<SaradjujeBasic> Saradjuje;
 
-    public VandrednaSituacijaBasic()
+    public VanrednaSituacijaBasic()
     {
         Ucestvuje = new List<UcestvujeBasic>();
         Saradjuje = new List<SaradjujeBasic>();
     }
 
-    public VandrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, int IdPrijava)
+    public VanrednaSituacijaBasic(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip, int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, int IdPrijava)
     {
         Id = id;
         this.Tip = Tip;
@@ -327,7 +327,7 @@ namespace ProjekatVandredneSituacije
     }
 }
 
-    public class VandrednaSituacijaPregled
+    public class VanrednaSituacijaPregled
     {
     public  int Id;
     public DateTime Datum_Od;
@@ -343,14 +343,14 @@ namespace ProjekatVandredneSituacije
     public  IList<UcestvujePregled> Ucestvuje;
     public  IList<SaradjujePregled> Saradjuje;
 
-    public VandrednaSituacijaPregled()
+    public VanrednaSituacijaPregled()
     {
         Ucestvuje = new List<UcestvujePregled>();
         Saradjuje = new List<SaradjujePregled>();
     }
 
 
-    public VandrednaSituacijaPregled(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip,
+    public VanrednaSituacijaPregled(int id, DateTime Datum_Od, DateTime Datum_Do, String Tip,
     int Broj_Ugrozenih_Osoba, NivoOpasnosti Nivo_Opasnosti, string Opstina, string Lokacija, string Opis, int IdPrijava)
     {
         Id = id;
@@ -1094,7 +1094,7 @@ public class Istorija_Uloga_ZaposlenihPregled
     {
     public int Id;
     public  int IdInterventneJed;
-    public  int IdVandredneSituacije;
+    public  int IdVanredneSituacije;
 
     public  int IdIntervencije;
 
@@ -1102,11 +1102,11 @@ public class Istorija_Uloga_ZaposlenihPregled
     {
 
     }
-    public UcestvujeBasic(int Id,int IdInterventneJedinice, int IdVandredneSituacije, int IdIntervencije)
+    public UcestvujeBasic(int Id,int IdInterventneJedinice, int IdVanredneSituacije, int IdIntervencije)
     {
         this.Id = Id;
         this.IdInterventneJed = IdInterventneJedinice;
-        this.IdVandredneSituacije = IdVandredneSituacije;
+        this.IdVanredneSituacije = IdVanredneSituacije;
         this.IdIntervencije = IdIntervencije;
     }
 }
@@ -1114,7 +1114,7 @@ public class Istorija_Uloga_ZaposlenihPregled
     {
     public int Id;
     public InterventnaJedinicaPregled IdInterventneJed;
-    public VandrednaSituacijaPregled IdVandredneSituacije;
+    public VanrednaSituacijaPregled IdVanredneSituacije;
 
     public IntervencijaPregled IdIntervencije;
     
@@ -1123,11 +1123,11 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public UcestvujePregled(int Id, InterventnaJedinicaPregled IdInterventneJedinice, VandrednaSituacijaPregled IdVandredneSituacije, IntervencijaPregled IdIntervencije)
+    public UcestvujePregled(int Id, InterventnaJedinicaPregled IdInterventneJedinice, VanrednaSituacijaPregled IdVanredneSituacije, IntervencijaPregled IdIntervencije)
     {
         this.Id = Id;
         this.IdInterventneJed = IdInterventneJedinice;
-        this.IdVandredneSituacije = IdVandredneSituacije;
+        this.IdVanredneSituacije = IdVanredneSituacije;
         this.IdIntervencije = IdIntervencije;
     }
 }
@@ -1138,12 +1138,12 @@ public class Istorija_Uloga_ZaposlenihPregled
     public  string TipSektora;
     
 
-    public IList<SaradjujeBasic> VandredneSituacije;
+    public IList<SaradjujeBasic> VanredneSituacije;
     public PredstavnikBasic? Predstavnik;
 
     public SluzbaBasic()
     {
-        VandredneSituacije = new List<SaradjujeBasic>();
+        VanredneSituacije = new List<SaradjujeBasic>();
     }
 
     public SluzbaBasic(int Id_Sektora, string TipSektora, PredstavnikBasic predstavnik)
@@ -1159,12 +1159,12 @@ public class Istorija_Uloga_ZaposlenihPregled
     public string TipSektora;
 
 
-    public IList<SaradjujePregled> VandredneSituacije;
+    public IList<SaradjujePregled> VanredneSituacije;
     public PredstavnikPregled? Predstavnik;
 
     public SluzbaPregled()
     {
-        VandredneSituacije = new List<SaradjujePregled>();
+        VanredneSituacije = new List<SaradjujePregled>();
     }
 
     public SluzbaPregled(int Id_Sektora, string TipSektora, PredstavnikPregled predstavnik)
@@ -1185,7 +1185,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public ZaliheBasic(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, DatumNabavke,IdJedinica)
+    public ZaliheBasic(string Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, DatumNabavke,IdJedinica)
     {
         this.Zalihe = Zalihe;
         this.Kolicina = Kolicina;
@@ -1200,7 +1200,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public ZalihePregled(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
+    public ZalihePregled(string Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, int Kolicina, TipZalihe Zalihe) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Zalihe = Zalihe;
         this.Kolicina = Kolicina;
@@ -1215,7 +1215,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public MedicinskaOpremaBasic(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, TipMedicinske medicinske) : base(Serijski_Broj, Naziv, Status ,DatumNabavke, IdJedinica)
+    public MedicinskaOpremaBasic(string Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, TipMedicinske medicinske) : base(Serijski_Broj, Naziv, Status ,DatumNabavke, IdJedinica)
     {
         this.Medicinska = medicinske;
     }
@@ -1230,7 +1230,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public MedicinskaOpremaPregled(int Serijski_Broj, string Naziv, string Status,DateTime DatumNabavke, int IdJedinica,TipMedicinske Medicinska) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
+    public MedicinskaOpremaPregled(string Serijski_Broj, string Naziv, string Status,DateTime DatumNabavke, int IdJedinica,TipMedicinske Medicinska) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
     }
 }
@@ -1242,7 +1242,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public LicnaZastitaBasic(int Serijski_Broj,string Naziv, string Status, DateTime DatumNabavke,int IdJedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status,  DatumNabavke, IdJedinica)
+    public LicnaZastitaBasic(string Serijski_Broj,string Naziv, string Status, DateTime DatumNabavke,int IdJedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status,  DatumNabavke, IdJedinica)
     {
         this.Licna = Licna;
     }
@@ -1255,7 +1255,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public LicnaZastitaPregled(int Serijski_Broj, string Naziv, string Status,  DateTime DatumNabavke, int IdJedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
+    public LicnaZastitaPregled(string Serijski_Broj, string Naziv, string Status,  DateTime DatumNabavke, int IdJedinica, TipLicneZastite Licna) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Licna = Licna;
     }
@@ -1269,7 +1269,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public TehnickaOpremaBasic(int Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
+    public TehnickaOpremaBasic(string Serijski_Broj, string Naziv, string Status, DateTime DatumNabavke, int IdJedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Tehnicka = Tehnicka;
     }
@@ -1282,7 +1282,7 @@ public class Istorija_Uloga_ZaposlenihPregled
 
     }
 
-    public TehnickaOpremaPregled(int Serijski_Broj, string Naziv, string Status,  DateTime DatumNabavke, int IdJedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
+    public TehnickaOpremaPregled(string Serijski_Broj, string Naziv, string Status,  DateTime DatumNabavke, int IdJedinica, TipTehnicke Tehnicka) : base(Serijski_Broj, Naziv, Status, DatumNabavke, IdJedinica)
     {
         this.Tehnicka = Tehnicka;
     }
@@ -1335,7 +1335,7 @@ public class PrijavaBasic
     public  int Id ;
     
     public  DateTime Datum_I_Vreme ;
-    public int? IdVandrednaSituacija;
+    public int? IdVanrednaSituacija;
     public  string Tip ;
     public  string Ime_Prijavioca ;
     public  string Kontakt_Prijavioca ;
@@ -1350,11 +1350,11 @@ public class PrijavaBasic
 
     }
 
-    public PrijavaBasic(int Id, DateTime Datum_I_Vreme, int IdVandrednaSituacija,  string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
+    public PrijavaBasic(int Id, DateTime Datum_I_Vreme, int IdVanrednaSituacija,  string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
     {
         this.Id = Id;
         this.Datum_I_Vreme = Datum_I_Vreme;
-        this.IdVandrednaSituacija = IdVandrednaSituacija;
+        this.IdVanrednaSituacija = IdVanrednaSituacija;
         this.Tip = Tip;
         this.Ime_Prijavioca = Ime_Prijavioca;
         this.Kontakt_Prijavioca = Kontakt_Prijavioca;
@@ -1369,7 +1369,7 @@ public class PrijavaBasic
     public  int Id ;
     
     public  DateTime Datum_I_Vreme ;
-    public int IdVandrednaSituacija;
+    public int IdVanrednaSituacija;
     public  string Tip ;
     public  string Ime ;
     public  string Kontakt ;
@@ -1385,11 +1385,11 @@ public class PrijavaBasic
 
     }
 
-    public PrijavaPregled(  DateTime Datum_I_Vreme, int IdVandrednaSituacija,string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
+    public PrijavaPregled(  DateTime Datum_I_Vreme, int IdVanrednaSituacija,string Tip, string Ime_Prijavioca, string Kontakt_Prijavioca, string Lokacija, string Opis, string JMBG_Dispecer, int Prioritet)
     {
         
         this.Datum_I_Vreme = Datum_I_Vreme;
-        this.IdVandrednaSituacija = IdVandrednaSituacija;
+        this.IdVanrednaSituacija = IdVanrednaSituacija;
         this.Tip = Tip;
         this.Ime = Ime_Prijavioca;
         this.Kontakt = Kontakt_Prijavioca;
@@ -1406,19 +1406,19 @@ public class SaradjujeBasic
     public string Uloga;
 
     public int IdSektor;
-    public int IdVandrednaSituacija;
+    public int IdVanrednaSituacija;
 
     public SaradjujeBasic()
     {
 
     }
 
-    public SaradjujeBasic(int Id, string Uloga, int IdSektor, int IdVandrednaSituacija)
+    public SaradjujeBasic(int Id, string Uloga, int IdSektor, int IdVanrednaSituacija)
     {
         this.Id = Id;
         this.Uloga = Uloga;
         this.IdSektor = IdSektor;
-        this.IdVandrednaSituacija = IdVandrednaSituacija;
+        this.IdVanrednaSituacija = IdVanrednaSituacija;
     }
 }
 public class SaradjujePregled
@@ -1428,19 +1428,19 @@ public class SaradjujePregled
     public string Uloga;
 
     public SluzbaPregled IdSektor;
-    public VandrednaSituacijaPregled IdVandrednaSituacija;
+    public VanrednaSituacijaPregled IdVanrednaSituacija;
 
     public SaradjujePregled()
     {
 
     }
 
-    public SaradjujePregled(int Id, string Uloga, SluzbaPregled IdSektor, VandrednaSituacijaPregled IdVandrednaSituacija)
+    public SaradjujePregled(int Id, string Uloga, SluzbaPregled IdSektor, VanrednaSituacijaPregled IdVanrednaSituacija)
     {
         this.Id = Id;
         this.Uloga = Uloga;
         this.IdSektor = IdSektor;
-        this.IdVandrednaSituacija = IdVandrednaSituacija;
+        this.IdVanrednaSituacija = IdVanrednaSituacija;
     }
 }
     public class SoftverBasic

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 
-namespace ProjekatVandredneSituacije.DTOs
+namespace ProjekatVanredneSituacije.DTOs
 {
     internal class PrijavaView
     {
@@ -24,7 +24,7 @@ namespace ProjekatVandredneSituacije.DTOs
 
         public virtual int Prioritet { get; set; }
 
-        public virtual VanrednaSituacijaView? Id_VandrednaSituacija { get; set; }
+        public virtual VanrednaSituacijaView? Id_VanrednaSituacija { get; set; }
 
         public PrijavaView()
         {
@@ -41,12 +41,12 @@ namespace ProjekatVandredneSituacije.DTOs
             Opis = p.Opis;
             JMBG_Dispecer = p.JMBG_Dispecer;
             Prioritet = p.Prioritet;
-            if (p.Id_VandrednaSituacija != null)
-            Id_VandrednaSituacija = new VanrednaSituacijaView(p.Id_VandrednaSituacija);
+            if (p.Id_VanrednaSituacija != null)
+            Id_VanrednaSituacija = new VanrednaSituacijaView(p.Id_VanrednaSituacija);
         }
     }
 
-    internal class PrijavaAddView
+    public class PrijavaAddView
     {
         public virtual int Id { get; set; }
 
@@ -61,7 +61,7 @@ namespace ProjekatVandredneSituacije.DTOs
 
         public virtual int Prioritet { get; set; }
 
-        public virtual int Id_VandrednaSituacija { get; set; }
+        public virtual int Id_VanrednaSituacija { get; set; }
 
         public PrijavaAddView()
         {
@@ -78,8 +78,8 @@ namespace ProjekatVandredneSituacije.DTOs
             Opis = p.Opis;
             JMBG_Dispecer = p.JMBG_Dispecer;
             Prioritet = p.Prioritet;
-            if (p.Id_VandrednaSituacija != null)
-                Id_VandrednaSituacija = p.Id_VandrednaSituacija.Id;
+            if (p.Id_VanrednaSituacija != null)
+                Id_VanrednaSituacija = p.Id_VanrednaSituacija.Id;
         }
     }
 

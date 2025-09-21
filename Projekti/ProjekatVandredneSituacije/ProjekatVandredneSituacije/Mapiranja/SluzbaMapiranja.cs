@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVandredneSituacije.Entiteti;
+using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVandredneSituacije.Mapiranja
+namespace ProjekatVanredneSituacije.Mapiranja
 {
      class SluzbaMapiranja:ClassMap<Sluzba>
     {
@@ -21,7 +21,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             References(x => x.Predstavnik).Column("JMBG");
 
 
-            HasMany(x => x.VandredneSituacije)
+            HasMany(x => x.VanredneSituacije)
            .Cascade.All()
            .Inverse()
            .KeyColumn("Id_Sluzbe");
