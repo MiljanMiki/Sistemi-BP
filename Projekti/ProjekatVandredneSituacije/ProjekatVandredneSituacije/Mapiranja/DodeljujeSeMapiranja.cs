@@ -17,10 +17,9 @@ namespace ProjekatVandredneSituacije.Mapiranja
             References(x=> x.Vozilo, "Registarska_Oznaka").Nullable();
   
 
-            References(x => x.Radnik, "JMBG").Nullable();
+            References(x => x.Radnik, "JMBG_Pojedinca").Nullable();
 
-            References(x => x.Jedinica, "Id").Nullable();
-
+            References(x => x.Jedinica, "IdJedinice").Nullable();
             Map(x=> x.DatumOd).Column("Datum_Od");
             Map(x => x.DatumDo).Column("Datum_Do");
         }

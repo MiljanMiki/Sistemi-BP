@@ -1,0 +1,8 @@
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.csproj.AssemblyReference.cache
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.AssemblyInfoInputs.cache
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.AssemblyInfo.cs
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.csproj.CoreCompileInputs.cache
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\ProjekatVanredneSituacijeWebApi\obj\Debug\net8.0\ProjekatVanredneSituacijeWebApi.sourcelink.json

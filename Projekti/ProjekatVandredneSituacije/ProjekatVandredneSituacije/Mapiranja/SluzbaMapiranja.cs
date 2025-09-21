@@ -17,16 +17,14 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Id(x => x.Id_Sektora, "Id_Sektora").GeneratedBy.TriggerIdentity();
 
             Map(x => x.TipSektora).Column("Tip");
-            
-          
-           
-            References(x => x.Predstavnik).Column("JMBGPredstavnika");
+
+            References(x => x.Predstavnik).Column("JMBG");
 
 
             HasMany(x => x.VandredneSituacije)
            .Cascade.All()
            .Inverse()
-           .KeyColumn("VandredneSituacije");
+           .KeyColumn("Id_Sluzbe");
 
             
         }

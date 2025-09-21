@@ -14,7 +14,16 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Analiticar");
 
             KeyColumn("JMBG");
-            
+
+            HasMany(x => x.Softveri)
+           .Cascade.All()
+           .Inverse()
+           .KeyColumn("JMBG_Analiticara");
+
+            HasMany(x => x.Ekspertiza)
+           .Cascade.All()
+           .Inverse()
+           .KeyColumn("JMBG");
 
         } 
     }

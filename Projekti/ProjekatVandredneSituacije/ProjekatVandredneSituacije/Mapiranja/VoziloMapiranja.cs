@@ -15,7 +15,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("Vozilo");
 
-            Id(x => x.Registarska_Oznaka, "Registarska_Oznaka").GeneratedBy.TriggerIdentity();
+            Id(x => x.Registarska_Oznaka, "Registarska_Oznaka").GeneratedBy.Assigned();
 
             Map(x => x.Proizvodjac).Column("Proizvodjac");
             ;
@@ -26,12 +26,12 @@ namespace ProjekatVandredneSituacije.Mapiranja
             HasMany(x => x.Servisi)
            .Cascade.All()              
            .Inverse()                  
-           .KeyColumn("Registarska_Oznaka");  
+           .KeyColumn("Vozilo");  
 
             HasMany(x => x.Dodeljuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("Registarska_Oznaka");
+                .KeyColumn("Vozilo");
 
             
         }

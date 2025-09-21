@@ -16,7 +16,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("SpecijalnoVozilo");
 
-            Id(x => x.Registarska_Oznaka).GeneratedBy.TriggerIdentity();
+            
 
             Map(x => x.Namena).Column("Namena").CustomType<string>();
             

@@ -18,14 +18,12 @@ namespace ProjekatVandredneSituacije.Entiteti
         public virtual IList<DodeljujeSe> Dodeljuje {  get; set; }
        
   
-
         public virtual IList<OperativniRadnik> Radnici {  get; set; }
 
         public virtual IList<Ucestvuje> Ucestvuje { get; set; }
 
        
-        public virtual IList<Ucestvovalo> AngazovanaVozila {  get; set; }
-
+     
         public virtual IList<Oprema> Oprema { get; set; }
 
         public InterventnaJedinica()
@@ -33,9 +31,7 @@ namespace ProjekatVandredneSituacije.Entiteti
             Dodeljuje = new List<DodeljujeSe>();
             Radnici= new List<OperativniRadnik>();
             Ucestvuje = new List<Ucestvuje>();
-            AngazovanaVozila = new List<Ucestvovalo>();
             Oprema = new List<Oprema>();
-
         }
     }
 

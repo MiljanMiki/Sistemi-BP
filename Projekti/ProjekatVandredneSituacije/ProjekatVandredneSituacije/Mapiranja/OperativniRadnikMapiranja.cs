@@ -24,7 +24,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             HasMany(x => x.Sertifikats)
            .Cascade.All()
            .Inverse()
-           .KeyColumn("Sertifikat");
+           .KeyColumn("JMBG");
 
             References(x => x.InterventnaJedinica).Column("Jedinstveni_Broj");
 
@@ -32,7 +32,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             HasMany(x => x.Dodeljuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("Pojedinac");
+                .KeyColumn("JMBG_Pojedinca");
 
 
         }

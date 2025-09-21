@@ -8,28 +8,28 @@ namespace ProjekatVandredneSituacije.Entiteti
 {
     public enum TipLicneZastite
     {
-        odela, 
-        maske,
-        kacige
+        Odelo, 
+        Maska,
+        Kaciga
     }
 
     public enum TipTehnicke
     {
-        pumpe, detektori, radio_stanice
+        Pumpa, Detektor, Radio_stanica
     }
 
     public enum TipMedicinske
     {
-        prenosive_nosiljke, defibrilatori, kompleti_za_reanimaciju
+        Prenosive_nosiljka, Defibrilator, Komplet_za_reanimaciju
     }
 
     public enum TipZalihe
     {
-        satori, hrana, voda, lekovi
+        Sator, Hrana, Voda, Lek
     }
     public abstract class Oprema
     {
-        public virtual int Serijski_Broj {  get; set; }    
+        public virtual string Serijski_Broj {  get; set; }    
         public virtual string Naziv {  get; set; }
 
        

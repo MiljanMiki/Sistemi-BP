@@ -16,9 +16,9 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Ucestvuje");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.IdInterventneJed, "Jedinstveni_Broj");
-            References(x => x.IdVandredneSituacije, "Id");
-            References(x => x.IdIntervencije, "Id");
+            References(x => x.IdInterventneJed, "IdIntervetneJed");
+            References(x => x.IdVandredneSituacije, "IdVanredneSituacije");
+            References(x => x.IdIntervencije, "IdIntervencije");
 
         }
     }

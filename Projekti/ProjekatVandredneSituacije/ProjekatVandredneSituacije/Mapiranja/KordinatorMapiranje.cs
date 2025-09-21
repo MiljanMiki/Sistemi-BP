@@ -16,6 +16,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
             KeyColumn("JMBG");
 
             Map(x => x.BrojTimova).Column("BrojTimova");
+            HasMany(x => x.Specijalizacija)
+                .KeyColumn("JMBG_Kordinatora")
+                .Inverse()
+                .Cascade.All();
 
         }
     }

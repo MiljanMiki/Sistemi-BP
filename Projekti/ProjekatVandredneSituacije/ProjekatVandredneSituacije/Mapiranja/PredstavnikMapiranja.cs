@@ -19,7 +19,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             
             Id(x => x.JMBG, "JMBG").GeneratedBy.Identity();
 
-            References(x => x.Sektor, "Id_Sektora");
+         
 
           
             Map(x => x.Ime).Column("Ime");
@@ -27,6 +27,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Pozicija).Column("Pozicija");
             Map(x => x.Telefon).Column("Telefon");
             Map(x => x.Email).Column("Email");
+            References(x => x.Sluzba, "Id_Sluzbe");
         }
     }
 }

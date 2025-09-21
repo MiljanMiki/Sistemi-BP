@@ -9,6 +9,8 @@ public class DodajIzmeniVoziloDialog : Form
     private TextBox txtRegistarskaOznaka, txtProizvodjac, txtLokacija;
     private ComboBox cmbStatus;
     private Button btnSacuvaj, btnOdustani;
+    private TableLayoutPanel tlpMain;
+    private Panel pnlButtons;
 
     public Vozilo? Vozilo { get; private set; }
 
@@ -26,44 +28,140 @@ public class DodajIzmeniVoziloDialog : Form
 
     private void InitializeComponent()
     {
-        this.ClientSize = new Size(400, 300);
-        this.FormBorderStyle = FormBorderStyle.FixedDialog;
-        this.StartPosition = FormStartPosition.CenterParent;
-        this.MaximizeBox = false;
-        this.MinimizeBox = false;
-
-        var tlpMain = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(10), ColumnCount = 2 };
+        tlpMain = new TableLayoutPanel();
+        lblRegistarskaOznaka = new Label();
+        txtRegistarskaOznaka = new TextBox();
+        lblProizvodjac = new Label();
+        txtProizvodjac = new TextBox();
+        lblStatus = new Label();
+        cmbStatus = new ComboBox();
+        lblLokacija = new Label();
+        txtLokacija = new TextBox();
+        pnlButtons = new Panel();
+        btnSacuvaj = new Button();
+        btnOdustani = new Button();
+        tlpMain.SuspendLayout();
+        pnlButtons.SuspendLayout();
+        SuspendLayout();
+        // 
+        // tlpMain
+        // 
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
         tlpMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
-
-        lblRegistarskaOznaka = new Label { Text = "Registarska Oznaka:", TextAlign = ContentAlignment.MiddleLeft };
-        txtRegistarskaOznaka = new TextBox();
-        lblProizvodjac = new Label { Text = "Proizvođač:", TextAlign = ContentAlignment.MiddleLeft };
-        txtProizvodjac = new TextBox();
-        lblStatus = new Label { Text = "Status:", TextAlign = ContentAlignment.MiddleLeft };
-        cmbStatus = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
-        cmbStatus.Items.AddRange(Enum.GetNames(typeof(StatusVozila)));
-        lblLokacija = new Label { Text = "Lokacija:", TextAlign = ContentAlignment.MiddleLeft };
-        txtLokacija = new TextBox();
-
-        btnSacuvaj = new Button { Text = "Sačuvaj", DialogResult = DialogResult.OK };
-        btnOdustani = new Button { Text = "Odustani", DialogResult = DialogResult.Cancel };
-
-        tlpMain.Controls.Add(lblRegistarskaOznaka, 0, 0); tlpMain.Controls.Add(txtRegistarskaOznaka, 1, 0);
-        tlpMain.Controls.Add(lblProizvodjac, 0, 1); tlpMain.Controls.Add(txtProizvodjac, 1, 1);
-        tlpMain.Controls.Add(lblStatus, 0, 2); tlpMain.Controls.Add(cmbStatus, 1, 2);
-        tlpMain.Controls.Add(lblLokacija, 0, 3); tlpMain.Controls.Add(txtLokacija, 1, 3);
-
-        var pnlButtons = new Panel { Dock = DockStyle.Fill };
+        tlpMain.Controls.Add(lblRegistarskaOznaka, 0, 0);
+        tlpMain.Controls.Add(txtRegistarskaOznaka, 1, 0);
+        tlpMain.Controls.Add(lblProizvodjac, 0, 1);
+        tlpMain.Controls.Add(txtProizvodjac, 1, 1);
+        tlpMain.Controls.Add(lblStatus, 0, 2);
+        tlpMain.Controls.Add(cmbStatus, 1, 2);
+        tlpMain.Controls.Add(lblLokacija, 0, 3);
+        tlpMain.Controls.Add(txtLokacija, 1, 3);
+        tlpMain.Controls.Add(pnlButtons, 0, 4);
+        tlpMain.Location = new Point(0, 0);
+        tlpMain.Name = "tlpMain";
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        tlpMain.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+        tlpMain.Size = new Size(200, 100);
+        tlpMain.TabIndex = 0;
+        // 
+        // lblRegistarskaOznaka
+        // 
+        lblRegistarskaOznaka.Location = new Point(3, 0);
+        lblRegistarskaOznaka.Name = "lblRegistarskaOznaka";
+        lblRegistarskaOznaka.Size = new Size(74, 20);
+        lblRegistarskaOznaka.TabIndex = 0;
+        // 
+        // txtRegistarskaOznaka
+        // 
+        txtRegistarskaOznaka.Location = new Point(83, 3);
+        txtRegistarskaOznaka.Name = "txtRegistarskaOznaka";
+        txtRegistarskaOznaka.Size = new Size(100, 27);
+        txtRegistarskaOznaka.TabIndex = 1;
+        // 
+        // lblProizvodjac
+        // 
+        lblProizvodjac.Location = new Point(3, 20);
+        lblProizvodjac.Name = "lblProizvodjac";
+        lblProizvodjac.Size = new Size(74, 20);
+        lblProizvodjac.TabIndex = 2;
+        // 
+        // txtProizvodjac
+        // 
+        txtProizvodjac.Location = new Point(83, 23);
+        txtProizvodjac.Name = "txtProizvodjac";
+        txtProizvodjac.Size = new Size(100, 27);
+        txtProizvodjac.TabIndex = 3;
+        // 
+        // lblStatus
+        // 
+        lblStatus.Location = new Point(3, 40);
+        lblStatus.Name = "lblStatus";
+        lblStatus.Size = new Size(74, 20);
+        lblStatus.TabIndex = 4;
+        // 
+        // cmbStatus
+        // 
+        cmbStatus.Items.AddRange(new object[] { "operativno", "u_kvaru" });
+        cmbStatus.Location = new Point(83, 43);
+        cmbStatus.Name = "cmbStatus";
+        cmbStatus.Size = new Size(114, 28);
+        cmbStatus.TabIndex = 5;
+        // 
+        // lblLokacija
+        // 
+        lblLokacija.Location = new Point(3, 60);
+        lblLokacija.Name = "lblLokacija";
+        lblLokacija.Size = new Size(74, 20);
+        lblLokacija.TabIndex = 6;
+        // 
+        // txtLokacija
+        // 
+        txtLokacija.Location = new Point(83, 63);
+        txtLokacija.Name = "txtLokacija";
+        txtLokacija.Size = new Size(100, 27);
+        txtLokacija.TabIndex = 7;
+        // 
+        // pnlButtons
+        // 
+        tlpMain.SetColumnSpan(pnlButtons, 2);
         pnlButtons.Controls.Add(btnSacuvaj);
         pnlButtons.Controls.Add(btnOdustani);
+        pnlButtons.Location = new Point(3, 83);
+        pnlButtons.Name = "pnlButtons";
+        pnlButtons.Size = new Size(194, 14);
+        pnlButtons.TabIndex = 8;
+        // 
+        // btnSacuvaj
+        // 
         btnSacuvaj.Location = new Point(50, 10);
-        btnOdustani.Location = new Point(160, 10);
-
-        tlpMain.Controls.Add(pnlButtons, 0, 4); tlpMain.SetColumnSpan(pnlButtons, 2);
-        this.Controls.Add(tlpMain);
-
+        btnSacuvaj.Name = "btnSacuvaj";
+        btnSacuvaj.Size = new Size(75, 23);
+        btnSacuvaj.TabIndex = 0;
         btnSacuvaj.Click += BtnSacuvaj_Click;
+        // 
+        // btnOdustani
+        // 
+        btnOdustani.Location = new Point(160, 10);
+        btnOdustani.Name = "btnOdustani";
+        btnOdustani.Size = new Size(75, 23);
+        btnOdustani.TabIndex = 1;
+        // 
+        // DodajIzmeniVoziloDialog
+        // 
+        ClientSize = new Size(400, 300);
+        Controls.Add(tlpMain);
+        FormBorderStyle = FormBorderStyle.FixedDialog;
+        MaximizeBox = false;
+        MinimizeBox = false;
+        Name = "DodajIzmeniVoziloDialog";
+        StartPosition = FormStartPosition.CenterParent;
+        tlpMain.ResumeLayout(false);
+        tlpMain.PerformLayout();
+        pnlButtons.ResumeLayout(false);
+        ResumeLayout(false);
     }
 
     protected void PopulateFields()

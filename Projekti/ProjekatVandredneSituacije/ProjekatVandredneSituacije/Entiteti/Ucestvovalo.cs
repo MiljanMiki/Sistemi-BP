@@ -11,6 +11,10 @@ namespace ProjekatVandredneSituacije.Entiteti
 
         public virtual int ID { get; set; }
         public virtual Vozilo Vozilo { get; set; }
-        public virtual InterventnaJedinica Jedinica { get; set; }
+        public virtual Intervencija Intervencija { get; set; }
+
+        public virtual DateTime Datum_Od { get; set; }
+
+        public virtual DateTime Datum_Do {  get; set; }
     }
 }

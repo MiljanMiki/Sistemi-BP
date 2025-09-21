@@ -11,12 +11,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public SoftverMapiranja()
         {
-            Table("Softver");
+            Table("SoftverAnaliticara");
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Analiticar, "Analiticar");
+            References(x => x.Analiticar, "JMBG_Analiticar");
             Map(x => x.Naziv, "Naziv");
-            
-
         }
     }
 }

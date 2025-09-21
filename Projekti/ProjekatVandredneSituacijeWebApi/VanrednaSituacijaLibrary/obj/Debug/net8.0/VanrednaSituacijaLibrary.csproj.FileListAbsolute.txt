@@ -1,0 +1,5 @@
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\VanrednaSituacijaLibrary\obj\Debug\net8.0\VanrednaSituacijaLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\VanrednaSituacijaLibrary\obj\Debug\net8.0\VanrednaSituacijaLibrary.AssemblyInfoInputs.cache
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\VanrednaSituacijaLibrary\obj\Debug\net8.0\VanrednaSituacijaLibrary.AssemblyInfo.cs
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\VanrednaSituacijaLibrary\obj\Debug\net8.0\VanrednaSituacijaLibrary.csproj.CoreCompileInputs.cache
+C:\Users\srdja\Sistemi-BP\Projekti\ProjekatVandredneSituacijeWebApi\VanrednaSituacijaLibrary\obj\Debug\net8.0\VanrednaSituacijaLibrary.sourcelink.json

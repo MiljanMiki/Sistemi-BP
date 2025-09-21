@@ -16,7 +16,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Specijalizacija");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Kordinator, "JMBG");
+            References(x => x.Kordinator, "JMBG_Kordinatora");
             References(x => x.Tip, "Oblast");
 
         }

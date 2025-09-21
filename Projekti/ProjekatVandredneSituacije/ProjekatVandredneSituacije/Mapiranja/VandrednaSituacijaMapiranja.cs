@@ -12,7 +12,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public VandrednaSituacijeMapiranja()
         {
-            Table("VandrednaSituacija");
+            Table("VanrednaSituacija");
 
             Id(x => x.Id).GeneratedBy.TriggerIdentity();
 

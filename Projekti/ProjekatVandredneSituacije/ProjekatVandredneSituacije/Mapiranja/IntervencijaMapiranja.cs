@@ -31,7 +31,12 @@ namespace ProjekatVandredneSituacije.Mapiranja
             HasMany(x => x.Ucestvuje)
                 .KeyColumn("IdIntervencije") 
                 .Inverse()
-                .Cascade.All(); 
+                .Cascade.All();
+
+            HasMany(x => x.Ucestvovalos)
+                .KeyColumn("IdIntervencije")
+                .Inverse()
+                .Cascade.All();
         }
     }
 }

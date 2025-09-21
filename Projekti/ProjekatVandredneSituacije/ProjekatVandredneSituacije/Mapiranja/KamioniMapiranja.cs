@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
     {
         public KamioniMapiranja()
         {
-            Table("Kamnioni");
+            Table("Kamioni");
             KeyColumn("Registarska_Oznaka");
         }
     }

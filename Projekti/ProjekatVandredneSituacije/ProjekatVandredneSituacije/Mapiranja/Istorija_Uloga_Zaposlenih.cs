@@ -15,7 +15,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Istorija_Uloga_Zaposlenih");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Zaposleni, "JMBG");
+            References(x => x.Zaposleni, "Zaposleni");
             Map(x => x.Uloga, "Uloga");
 
 

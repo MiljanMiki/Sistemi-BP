@@ -12,42 +12,60 @@ using System.Linq;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Policy;
 using System.Text;
-using System.Windows.Forms;
+using ProjekatVandredneSituacije.DTOs;
+using ProjekatVandredneSituacije.Mapiranja;
+using System.Text.RegularExpressions;
+using NHibernate.Util;
+using Remotion.Linq.Parsing;
+using NHibernate.Cfg.Loquacious;
+using System.Diagnostics.Eventing.Reader;
+using System.Runtime.InteropServices;
+
 
 namespace ProjekatVandredneSituacije
 {
-    internal class DTOMAnager
+    internal class DTOManager
     {
-        #region VandrednaSituacija
+        #region VanrednaSituacija
 
-        public static void obrisiVandrednuSituaciju(int id)
+        public static async Task obrisiVanrednuSituaciju(int id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-
-                VanrednaSituacija vandredna = s.Load<VanrednaSituacija>(id);
-
-                s.Delete(vandredna);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri sesiji");
+                }
+                VanrednaSituacija Vanredna =await s.LoadAsync<VanrednaSituacija>(id);
+                if(Vanredna == null)
+                {
+                    throw new Exception("Ne postoji Vanredna situacija sa ovim Id-em");
+                }
+                await s.DeleteAsync(Vanredna);
+                await s.FlushAsync();
+                
                 s.Close();
 
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!" ,ec);
             }
-
+            
 
         }
 
-        public static void DodajVandrednuSituaciju(VandrednaSituacijaBasic vs)
+        public static async Task DodajVanrednuSituaciju(VanrednaSituacijaAddView vs)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Entiteti.VanrednaSituacija v = new Entiteti.VanrednaSituacija();
-                v.Id = vs.Id;
                 v.Datum_Od = vs.Datum_Od;
                 v.Datum_Do = vs.Datum_Do;
                 v.Tip = vs.Tip;
@@ -56,89 +74,99 @@ namespace ProjekatVandredneSituacije
                 v.Opstina = vs.Opstina;
                 v.Lokacija = vs.Lokacija;
                 v.Opis = vs.Opis;
-                v.Prijava_ID = s.Load<Prijava>(vs.IdPrijava);
-                s.SaveOrUpdate(v);
-                s.Flush();
-                s.Close();
-
-
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-        public static VandrednaSituacijaPregled VratiVandrednuSituaciju(int id)
-        {
-            VandrednaSituacijaPregled v = new VandrednaSituacijaPregled();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-
-                VanrednaSituacija vs = s.Load<VanrednaSituacija>(id);
-
-                v.Id = vs.Id;
-                v.Datum_Od = vs.Datum_Od;
-                v.Datum_Do = vs.Datum_Do;
-                v.Tip = vs.Tip;
-                v.Broj_Ugrozenih_Osoba = vs.Broj_Ugrozenih_Osoba;
-                v.Opstina = vs.Opstina;
-                v.Opis = vs.Opis;
-                v.IdPrijava = vs.Prijava_ID.Id;
-                s.Close();
-
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-
-            return v;
-
-        }
-        public static IList<VandrednaSituacijaBasic> VratiVandredneSituacije()
-        {
-            List<VandrednaSituacijaBasic> vs = new List<VandrednaSituacijaBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.VanrednaSituacija> v = from o in s.Query<VanrednaSituacija>()
-                                                  select o;
-
-                foreach (VanrednaSituacija vandredna in v)
+                v.Prijava_ID =await s.LoadAsync<Prijava>(vs.IdPrijave);
+                if (v.Prijava_ID == null)
                 {
-                    vs.Add(new VandrednaSituacijaBasic(vandredna.Id, vandredna.Datum_Od, vandredna.Datum_Do, vandredna.Tip, vandredna.Broj_Ugrozenih_Osoba, vandredna.Nivo_Opasnosti,
-                        vandredna.Opstina, vandredna.Lokacija, vandredna.Opis, vandredna.Prijava_ID.Id));
+                    throw new KeyNotFoundException("Doslo je do greske sa ucitavanjem prijave tj. nemamo prijavu sa ovim Id-em");
                 }
+                await s.SaveOrUpdateAsync(v);
+                await s.FlushAsync();
+                
             }
-            catch
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task<VanrednaSituacijaView> VratiVanrednuSituaciju(int id)
+        {
+            VanrednaSituacijaView vanredna=null;
+            
+            try
+            {
+                ISession s = DataLayer.GetSession();
 
+                VanrednaSituacija vs =await s.LoadAsync<VanrednaSituacija>(id);
+                if(vs==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je Vanredna situacija sa ovim Id-jem ne postoji");
+                }
+                vanredna = new VanrednaSituacijaView(vs);
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return vanredna;
+
+
+        }
+        public static async Task<IList<VanrednaSituacijaView>> VratiVanredneSituacije()
+        {
+            List<VanrednaSituacijaView> vs = new List<VanrednaSituacijaView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
+                vs = await s.Query<VanrednaSituacija>()
+                    .Fetch(v => v.Prijava_ID) // N+1 potencijalni
+                    .Select(v => new VanrednaSituacijaView(v))
+                    .ToListAsync();
+                s.Close(); 
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return vs;
         }
-        public static void IzmeniVandrednuSituaciju(VandrednaSituacijaBasic vs)
+        public static async Task IzmeniVanrednuSituaciju(VanrednaSituacijaAddView vs, int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                VanrednaSituacija v= s.Load<VanrednaSituacija>(vs.Id);
-                v.Id = vs.Id;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                VanrednaSituacija v= await s.LoadAsync<VanrednaSituacija>(Id);
+
+                if(v==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je Vanredna situacija sa ovim Id ne postoji");
+                }
                 v.Datum_Od = vs.Datum_Od;
                 v.Datum_Do = vs.Datum_Do;
                 v.Tip = vs.Tip;
                 v.Broj_Ugrozenih_Osoba = vs.Broj_Ugrozenih_Osoba;
                 v.Opstina = vs.Opstina;
                 v.Opis = vs.Opis;
-                v.Prijava_ID = s.Load<Prijava>(vs.IdPrijava);
-
-                s.Update(v);
-                s.Flush();
+                v.Prijava_ID= await s.LoadAsync<Prijava>(vs.IdPrijave);
+                if (v.Prijava_ID == null)
+                {
+                    throw new Exception("Zao nam je ne postoji Prijava sa ovim idem");
+                }
+                await s.UpdateAsync(v);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch(Exception e)
+            catch (Exception ec)
             {
-
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
@@ -146,230 +174,294 @@ namespace ProjekatVandredneSituacije
         #endregion
 
         #region IntervetnaJedinica
-        public void DodajOpstuIntervetnuJedinicu(InterventnaJedinicaBasic i)
+        public static async Task DodajOpstuIntervetnuJedinicu(InterventnaJedinicaView i)
         {
+
             try
             {
+                
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
                 OpstaIntervetnaJed ij = new OpstaIntervetnaJed();
-                ij.Jedinstveni_Broj = i.Jedinstveni_Broj;
                 ij.Naziv = i.Naziv;
                 ij.BrojClanova= i.BrojClanova;
-                ij.Komandir = s.Load<OperativniRadnik>(i.Komandir);
+                ij.Komandir = await s.LoadAsync<OperativniRadnik>(i.JMBGKomandira);
                 ij.Baza= i.Baza;
-                s.SaveOrUpdate(ij);
-                s.Flush();
+                await s.SaveOrUpdateAsync(ij);
+                await s.FlushAsync();
                 s.Close();
 
             }
-            catch(Exception e)
+            catch (Exception ec)
             {
-
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiOpstuInterventnuJedinicu(int id)
+        public static async Task ObrisiOpstuInterventnuJedinicu(int id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                OpstaIntervetnaJed ij = s.Load<OpstaIntervetnaJed>(id);
-                s.Delete(ij);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
+                OpstaIntervetnaJed ij =await s.LoadAsync<OpstaIntervetnaJed>(id);
+                await s.DeleteAsync(ij);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void izmeniOpstuInterventnuJedinicu(OpstaIntervetnaJed i)
+        public static async Task   izmeniOpstuInterventnuJedinicu(OpstaInterventnaView i, int Id)
             {
                 try
                 {
                     ISession s = DataLayer.GetSession();
-                    OpstaIntervetnaJed ij = s.Load<OpstaIntervetnaJed>(i.Jedinstveni_Broj);
-                    ij.Jedinstveni_Broj = i.Jedinstveni_Broj;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
+                OpstaIntervetnaJed ij = await s.LoadAsync<OpstaIntervetnaJed>(Id);
+                if(ij == null)
+                {
+                    throw new Exception($"Opsta jedinica sa Id=em{Id} ne postoji");    
+                }
                     ij.Naziv = i.Naziv;
                     ij.BrojClanova = i.BrojClanova;
-                    ij.Komandir = s.Load<OperativniRadnik>(i.Komandir);
+                    ij.Komandir =await s.LoadAsync<OperativniRadnik>(i.JMBGKomandira);
+                    if (ij.Komandir == null)
+                    {
+                        throw new KeyNotFoundException("Zao nam je komandir sa ovim JMBG ne postoji!");
+                    }
                     ij.Baza = i.Baza;
-                    s.Update(ij);
-                    s.Flush();
+                    await s.UpdateAsync(ij);
+                    s.FlushAsync();
                     s.Close();
                 }
-                catch (Exception e)
+                catch (Exception ec)
                 {
+                    throw new Exception("Zao nam je doslo je do greske!", ec);
                 }
         }
-        public static IList<OpstaInterventnaJedBasic> VratiOpstejedinice()
+        public static async Task<IList<OpstaIntervetnaGetView>> VratiOpstejedinice()
         {
-            List<OpstaInterventnaJedBasic> sveJedinice = new List<OpstaInterventnaJedBasic>();
+            List<OpstaIntervetnaGetView> sveJedinice = new List<OpstaIntervetnaGetView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.OpstaIntervetnaJed> p = from o in s.Query<OpstaIntervetnaJed>()
-                                                  select o;
-
-                foreach (OpstaIntervetnaJed o in p)
+                if (s == null)
                 {
-                    
-                    sveJedinice.Add(new OpstaInterventnaJedBasic(o.Jedinstveni_Broj, o.Naziv, o.BrojClanova, o.Komandir.JMBG, o.Baza));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-            }
-            catch (Exception e)
-            {
-            }
-            return sveJedinice;
-        }
+                sveJedinice =await s.Query<OpstaIntervetnaJed>()
+                   .Fetch(o => o.Komandir) // N+1 potencijalni
+                   .Select(o => new OpstaIntervetnaGetView(o))
+                   .ToListAsync();
 
-        public static OpstaInterventnaJedBasic VratiOpstuJedinicu(int id)
-        {
-            OpstaInterventnaJedBasic o = new OpstaInterventnaJedBasic();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                OpstaIntervetnaJed ij = s.Load<OpstaIntervetnaJed>(id);
-                o.Jedinstveni_Broj = ij.Jedinstveni_Broj;
-                o.Naziv = ij.Naziv;
-                o.BrojClanova = ij.BrojClanova;
-                o.Komandir = ij.Komandir.JMBG;
-                o.Baza = ij.Baza;
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return sveJedinice;
+        }
+
+        public static async Task<OpstaIntervetnaGetView> VratiOpstuJedinicu(int id)
+        {
+            OpstaIntervetnaGetView o=null;
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                OpstaIntervetnaJed ij =await s.LoadAsync<OpstaIntervetnaJed>(id);
+                if(ij==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji Opsta Intervetna jedinica sa ovim Id-em");
+                }
+                o= new OpstaIntervetnaGetView(ij);
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return o;
         }
 
 
-        public void DodajSpecijalnuIntervetnuJedinicu(SpecijalnaInterventnaJedinicaBasic i)
+        public static async Task DodajSpecijalnuIntervetnuJedinicu(SpecijalnaIntervetnaJedinicaView i)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
                 SpecijalnaInterventna ij = new SpecijalnaInterventna();
-                ij.Jedinstveni_Broj = i.Jedinstveni_Broj;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 ij.Naziv = i.Naziv;
                 ij.BrojClanova = i.BrojClanova;
-                ij.Komandir = s.Load<OperativniRadnik>(i.Komandir);
+                ij.Komandir =await  s.LoadAsync<OperativniRadnik>(i.JMBGKomandira);
+                if (ij.Komandir == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je Komandir sa ovim JMBG-om ne postoji");
+                }
                 ij.Baza = i.Baza;
-                s.SaveOrUpdate(ij);
-                s.Flush();
+                await s.SaveOrUpdateAsync(ij);
+                await s.FlushAsync();
                 s.Close();
 
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
-
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiSpecijalnuInterventnuJedinicu(int id)
+        public static async Task ObrisiSpecijalnuInterventnuJedinicu(int id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                SpecijalnaInterventna ij = s.Load<SpecijalnaInterventna>(id);
-                s.Delete(ij);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                SpecijalnaInterventna ij =await s.LoadAsync<SpecijalnaInterventna>(id);
+                if(ij==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je intervetna jed sa ovim Id-em ne postoji");
+                }
+                await s.DeleteAsync(ij);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void izmeniSpecijalnuInterventnuJedinicu(SpecijalnaInterventnaJedinicaBasic i)
+        public static async Task   izmeniSpecijalnuInterventnuJedinicu(SpecijalnaIntervetnaJedinicaView i, int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                SpecijalnaInterventna ij = s.Load<SpecijalnaInterventna>(i.Jedinstveni_Broj);
-                ij.Jedinstveni_Broj = i.Jedinstveni_Broj;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                SpecijalnaInterventna ij = await s.LoadAsync<SpecijalnaInterventna>(Id);
+                if(ij==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je intervetna jed sa ovim Id-em ne postoji");
+                }
                 ij.Naziv = i.Naziv;
                 ij.BrojClanova = i.BrojClanova;
-                ij.Komandir = s.Load<OperativniRadnik>(i.Komandir);
+                ij.Komandir = await s.LoadAsync<OperativniRadnik>(i.JMBGKomandira);
                 ij.Baza = i.Baza;
-                ij.TipSpecijalneJedinice = i.TipSpecijalneJed;
+                ij.TipSpecijalneJedinice = i.TipSpecijalneJedinice;
 
-                s.Update(ij);
-                s.Flush();
+                await s.UpdateAsync(ij);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<SpecijalnaInterventnaJedinicaBasic> VratiSpecijalneJedinice()
+        public static async Task<IList<SpecijalnaIntervetnaGetView>> VratiSpecijalneJedinice()
         {
-            List<SpecijalnaInterventnaJedinicaBasic> sveJedinice = new List<SpecijalnaInterventnaJedinicaBasic>();
+            List<SpecijalnaIntervetnaGetView> sveJedinice = new List<SpecijalnaIntervetnaGetView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.SpecijalnaInterventna> p = from o in s.Query<SpecijalnaInterventna>()
-                                                             select o;
-
-                foreach (SpecijalnaInterventna o in p)
+                if (s == null)
                 {
-
-                    sveJedinice.Add(new SpecijalnaInterventnaJedinicaBasic(o.Jedinstveni_Broj, o.Naziv, o.BrojClanova, o.Komandir.JMBG, o.Baza, o.TipSpecijalneJedinice));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+
+                sveJedinice = await s.Query<SpecijalnaInterventna>()
+                   .Fetch(o => o.Komandir) // N+1 potencijalni
+                   .Select(v => new SpecijalnaIntervetnaGetView(v))
+                   .ToListAsync();
+
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sveJedinice;
         }
 
-        public static SpecijalnaInterventnaJedinicaBasic VratiSpecijalnuJedinicu(int id)
+        public static async Task<SpecijalnaIntervetnaGetView> VratiSpecijalnuJedinicu(int id)
         {
-            SpecijalnaInterventnaJedinicaBasic o = new SpecijalnaInterventnaJedinicaBasic();
+            SpecijalnaIntervetnaGetView o=null;
             try
             {
                 ISession s = DataLayer.GetSession();
-                SpecijalnaInterventna ij = s.Load<SpecijalnaInterventna>(id);
-                o.Jedinstveni_Broj = ij.Jedinstveni_Broj;
-                o.Naziv = ij.Naziv;
-                o.BrojClanova = ij.BrojClanova;
-                o.Komandir = ij.Komandir.JMBG;
-                o.Baza = ij.Baza;
-                o.TipSpecijalneJed = ij.TipSpecijalneJedinice;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                SpecijalnaInterventna ij =await s.LoadAsync<SpecijalnaInterventna>(id);
+                o= new SpecijalnaIntervetnaGetView(ij);
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return o;
         }
 
-        public static IList<InterventnaJedinicaBasic> VratiSveJedinice()
+        public static async Task<IList<InterventnaJedinicaGetView>> VratiSveJedinice()
         {
-            List<InterventnaJedinicaBasic> sveJedinice = new List<InterventnaJedinicaBasic>();
+            List<InterventnaJedinicaGetView> sveJedinice = new List<InterventnaJedinicaGetView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.InterventnaJedinica> p = from o in s.Query<InterventnaJedinica>()
-                                                             select o;
-                foreach (InterventnaJedinica o in p)
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
+                var sveJediniceQuery =await s.Query<OpstaIntervetnaJed>()
+                    .Fetch(o => o.Komandir) // N+1 potencijalni
+                    .ToListAsync();
+
+                foreach (InterventnaJedinica o in sveJediniceQuery)
                 {
                     if (o is OpstaIntervetnaJed)
                     {
                         OpstaIntervetnaJed oi = (OpstaIntervetnaJed)o;
-                        sveJedinice.Add(new OpstaInterventnaJedBasic(oi.Jedinstveni_Broj, oi.Naziv, oi.BrojClanova, oi.Komandir.JMBG, oi.Baza));
+                        sveJedinice.Add(new OpstaIntervetnaGetView(oi));
                     }
                     else
                     {
                         SpecijalnaInterventna si = (SpecijalnaInterventna)o;
-                        sveJedinice.Add(new SpecijalnaInterventnaJedinicaBasic(si.Jedinstveni_Broj, si.Naziv, si.BrojClanova, si.Komandir.JMBG, si.Baza, si.TipSpecijalneJedinice));
+                        sveJedinice.Add(new SpecijalnaIntervetnaGetView(si));
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sveJedinice;
         }
@@ -377,92 +469,109 @@ namespace ProjekatVandredneSituacije
 
 
         #region Intervencija
-        public static void DodajIntervenciju(IntervencijaBasic i)
+        public static async Task DodajIntervenciju(IntervencijaView i)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
                 Intervencija intervencija = new Intervencija();
-                intervencija.Id = i.ID;
                 intervencija.Datum_I_Vreme = i.Datum_I_Vreme;
                 intervencija.Lokacija = i.Lokacija;
                 intervencija.Status = i.Status;
                 intervencija.Broj_Spasenih = i.Broj_Spasenih;
                 intervencija.Broj_Povredjenih = i.Broj_Povredjenih;
                 intervencija.Uspesnost = i.Uspesnost;
-                s.Save(intervencija);
-                s.Flush();
-                s.Close();
-            }
-            catch(Exception e)
-            {
-
-            }
-        }
-
-        public static void ObrisiIntervenciju()
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Intervencija i = s.Load<Intervencija>(1);
-                s.Delete(i);
-                s.Flush();
+                await s.SaveAsync(intervencija);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void IzmeniIntervenciju(IntervencijaBasic i)
+
+        public static async Task ObrisiIntervenciju()
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Intervencija intervencija = s.Load<Intervencija>(i.ID);
-                intervencija.Id = i.ID;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Intervencija i =await s.LoadAsync<Intervencija>(1);
+                await s.DeleteAsync(i);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task IzmeniIntervenciju(IntervencijaView i, int Id)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Intervencija intervencija =await s.LoadAsync<Intervencija>(Id);
+                if (intervencija == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je intervencija s aovim Id-em ne postoji");
+                }
                 intervencija.Datum_I_Vreme = i.Datum_I_Vreme;
                 intervencija.Lokacija = i.Lokacija;
                 intervencija.Status = i.Status;
                 intervencija.Broj_Spasenih = i.Broj_Spasenih;
                 intervencija.Broj_Povredjenih = i.Broj_Povredjenih;
                 intervencija.Uspesnost = i.Uspesnost;
-                s.Update(intervencija);
-                s.Flush();
+                await s.UpdateAsync(intervencija);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<IntervencijaBasic> VratiIntervencije()
+        public static async Task<IList<IntervencijaView>> VratiIntervencije()
         {
-            List<IntervencijaBasic> sveIntervencije = new List<IntervencijaBasic>();
+            List<IntervencijaView> sveIntervencije = new List<IntervencijaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Intervencija> p = from o in s.Query<Intervencija>()
-                                                  select o;
-                foreach (Intervencija i in p)
+                if (s == null)
                 {
-                    sveIntervencije.Add(new IntervencijaBasic(i.Id, i.Datum_I_Vreme, i.Lokacija, i.Status, i.Broj_Spasenih, i.Broj_Povredjenih, i.Uspesnost));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sveIntervencije = await s.Query<Intervencija>()
+                                  .Select(i => new IntervencijaView(i))
+                                  .ToListAsync();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sveIntervencije;
         }
 
-        public static IntervencijaBasic VratiIntervenciju(int id)
+        public static async Task<IntervencijaView> VratiIntervenciju(int id)
         {
-            IntervencijaBasic i = new IntervencijaBasic();
+            IntervencijaView i = new IntervencijaView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Intervencija intervencija = s.Load<Intervencija>(id);
-                i.ID = intervencija.Id;
+
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Intervencija intervencija =await s.LoadAsync<Intervencija>(id);
                 i.Datum_I_Vreme = intervencija.Datum_I_Vreme;
                 i.Lokacija = intervencija.Lokacija;
                 i.Status = intervencija.Status;
@@ -473,153 +582,175 @@ namespace ProjekatVandredneSituacije
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return i;
         }
 
         #endregion
+
+
         #region Prijava
 
-        public static void DodajPrijavu(PrijavaBasic pr)
+        public static async Task  DodajPrijavu(PrijavaAddView pr)
         {
 
             try
             {
                 ISession s = DataLayer.GetSession();
-                Entiteti.Prijava p = new Entiteti.Prijava();
-                p.Id = pr.Id;
-                p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.Id_VandrednaSituacija = s.Load<Entiteti.VanrednaSituacija>(pr.IdVandrednaSituacija.Value);
-                p.Tip = pr.Tip;
-                p.Ime_Prijavioca = pr.Ime_Prijavioca;
-                p.Kontakt = pr.Kontakt_Prijavioca;
-                p.Lokacija = pr.Lokacija;
-                p.Opis = pr.Opis;
-                p.JMBG_Dispecer = pr.JMBG_Dispecer;
-                p.Prioritet = pr.Prioritet;
-
-                s.SaveOrUpdate(p);
-
-                s.Flush();
-                s.Close();
-
-
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void ObrisiPrijavu(int id)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-
-                Prijava p = s.Load<Prijava>(id);
-
-                s.Delete(p);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void IzmeniPrijavu(PrijavaBasic pr)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Entiteti.Prijava p = s.Load<Prijava>(pr.Id);
-                p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.Id_VandrednaSituacija = s.Load<Entiteti.VanrednaSituacija>(pr.IdVandrednaSituacija);
-                p.Tip = pr.Tip;
-                p.Ime_Prijavioca = pr.Ime_Prijavioca;
-                p.Kontakt = pr.Kontakt_Prijavioca;
-                p.Lokacija = pr.Lokacija;
-                p.Opis = pr.Opis;
-                p.JMBG_Dispecer = pr.JMBG_Dispecer;
-                p.Prioritet = pr.Prioritet;
-
-                s.Update(p);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception e)
-            {
-
-            }
-        }
-
-        public static IList<PrijavaBasic> VratiPrijave()
-        {
-            List<PrijavaBasic> SvePrijave = new List<PrijavaBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Prijava> p = from o in s.Query<Prijava>()
-                                                  select o;
-
-                foreach (Prijava prijava in p)
+                if (s == null)
                 {
-                    SvePrijave.Add(new PrijavaBasic(prijava.Id, prijava.Datum_I_Vreme, prijava.Id_VandrednaSituacija.Id, prijava.Tip, prijava.Ime_Prijavioca, prijava.Kontakt,
-                        prijava.Lokacija, prijava.Opis, prijava.JMBG_Dispecer, prijava.Prioritet));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-            }
-            catch (Exception e)
-            {
+                Entiteti.Prijava p = new Entiteti.Prijava();
+                p.Datum_I_Vreme = pr.Datum_I_Vreme;
+                p.Id_VandrednaSituacija =await s.LoadAsync<VanrednaSituacija>(pr.Id_VandrednaSituacija);
+                p.Tip = pr.Tip;
+                p.Ime_Prijavioca = pr.Ime_Prijavioca;
+                p.Kontakt = pr.Kontakt;
+                p.Lokacija = pr.Lokacija;
+                p.Opis = pr.Opis;
+                p.JMBG_Dispecer = pr.JMBG_Dispecer;
+                p.Prioritet = pr.Prioritet;
 
+                await s.SaveOrUpdateAsync(p);
+
+                await s.FlushAsync();
+                s.Close();
+
+
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task ObrisiPrijavu(int id)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Prijava p = await s.LoadAsync<Prijava>(id);
+                if (p == null)
+                {
+                    throw new Exception("Zao nam je ne postoji Prijava sa ovim Id-em");
+                }
+                await s.DeleteAsync(p);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task IzmeniPrijavu(PrijavaAddView pr)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Entiteti.Prijava p = await s.LoadAsync<Prijava>(pr.Id);
+                if (p == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji Prijava sa ovim Id-em");
+                }
+                p.Datum_I_Vreme = pr.Datum_I_Vreme;
+                p.Id_VandrednaSituacija =await s.LoadAsync<Entiteti.VanrednaSituacija>(pr.Id_VandrednaSituacija);
+                p.Tip = pr.Tip;
+                p.Ime_Prijavioca = pr.Ime_Prijavioca;
+                p.Kontakt = pr.Kontakt;
+                p.Lokacija = pr.Lokacija;
+                p.Opis = pr.Opis;
+                p.JMBG_Dispecer = pr.JMBG_Dispecer;
+                p.Prioritet = pr.Prioritet;
+
+                await s.UpdateAsync(p);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task<IList<PrijavaAddView>> VratiPrijave()
+        {
+            List<PrijavaAddView> SvePrijave = new List<PrijavaAddView>(); // koristim drugi DTO zbog moguce rekurzije u obicnom DTO
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
+                SvePrijave =await s.Query<Prijava>().
+                             Select(p => new PrijavaAddView(p))
+                            .ToListAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
             return SvePrijave;
         }
 
-        public static PrijavaBasic VratiPrijavu(int idPrijave)
+        public static async Task<PrijavaMiniView> VratiPrijavu(int idPrijave)
         {
-            PrijavaBasic p = new PrijavaBasic();
+            PrijavaMiniView prijava=null;
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
 
-                Prijava pr = s.Load<Prijava>(idPrijave);
-
-                p.Id = pr.Id;
-                p.Datum_I_Vreme = pr.Datum_I_Vreme;
-                p.IdVandrednaSituacija = pr.Id_VandrednaSituacija.Id;
-                p.Tip = pr.Tip;
-                p.Ime_Prijavioca = pr.Ime_Prijavioca;
-                p.Kontakt_Prijavioca = pr.Kontakt;
-                p.Lokacija = pr.Lokacija;
-                p.Opis = pr.Opis;
-                p.JMBG_Dispecer = pr.JMBG_Dispecer;
-                p.Prioritet = pr.Prioritet;
+                Prijava pr = await s.LoadAsync<Prijava>(idPrijave);
+                if (pr == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je doslo je do greske prijava sa ovim Id-em ne postoji!");
+                }
+                prijava = new PrijavaMiniView(pr);
+              
 
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
-
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
-            return p;
+            return prijava;
         }
 
         #endregion
 
         #region Analiticar
 
-        public static void DodajAnalitcar(AnaliticarBasic a)
+        public static async Task DodajAnalitcar(AnaliticarView a)
         {
 
             try
             {
                 ISession s = DataLayer.GetSession();
-
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Analiticar analiticar = new Analiticar();
                 analiticar.JMBG = a.JMBG;
                 analiticar.Ime = a.Ime;
@@ -627,44 +758,55 @@ namespace ProjekatVandredneSituacije
                 analiticar.Datum_Rodjenja = a.Datum_Rodjenja;
                 analiticar.Pol = a.Pol;
                 analiticar.Kontakt_Telefon = a.Kontakt_Telefon;
-
                 analiticar.Email = a.Email;
                 analiticar.AdresaStanovanja = a.AdresaStanovanja;
                 analiticar.Datum_Zaposlenja = a.Datum_Zaposlenja;
 
-                s.Save(analiticar);
-                s.Flush();
+                await s.SaveAsync(analiticar);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiAnaliticara(string JMBG)
+        public static async Task ObrisiAnaliticara(string JMBG)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Analiticar z = s.Load<Analiticar>(JMBG);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Analiticar z =await s.LoadAsync<Analiticar>(JMBG);
+                if(z== null)
+                {
+                    throw new KeyNotFoundException("Zao nam je Analiticar sa ovim JMBG ne postoji");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniAnaliticar(AnaliticarBasic a)
+        public static async Task   IzmeniAnaliticar(AnaliticarView a)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Analiticar analiticar = s.Load<Analiticar>(a.JMBG);
-                analiticar.JMBG= a.JMBG;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Analiticar analiticar = await s.LoadAsync<Analiticar>(a.JMBG);
+                analiticar.JMBG= a.JMBG; // dozvolicemo da se menja JMBG ako slucajno dodje do greske prilikom ubacivanja korisnika 
                 analiticar.Ime = a.Ime;
                 analiticar.Prezime = a.Prezime;
                 analiticar.Datum_Rodjenja = a.Datum_Rodjenja;
@@ -673,46 +815,55 @@ namespace ProjekatVandredneSituacije
                 analiticar.AdresaStanovanja = a.AdresaStanovanja;
                 analiticar.Datum_Zaposlenja = a.Datum_Zaposlenja;
 
-                s.Update(analiticar);
-                s.Flush();
+                await s.UpdateAsync(analiticar);
+                await s.FlushAsync();
                 s.Close();
 
 
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<AnaliticarBasic> VratiAnaliticare()
+        public static async Task<IList<AnaliticarView>> VratiAnaliticare()
         {
-            List<AnaliticarBasic> sviAnaliticari = new List<AnaliticarBasic>();
+            List<AnaliticarView> sviAnaliticari = new List<AnaliticarView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Analiticar> z = from o in s.Query<Analiticar>()
-                                                     select o;
-                foreach (Analiticar analiticar in z)
+                if (s == null)
                 {
-                    sviAnaliticari.Add(new AnaliticarBasic(analiticar.JMBG, analiticar.Ime, analiticar.Prezime, analiticar.Datum_Rodjenja,
-                        analiticar.Pol, analiticar.Kontakt_Telefon, analiticar.Email, analiticar.AdresaStanovanja, analiticar.Datum_Zaposlenja));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviAnaliticari = await s.Query<Analiticar>()
+                                .Select(a => new AnaliticarView(a))
+                                .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviAnaliticari;
         }
 
-        public static AnaliticarBasic VratiAnaliticara(string JMBG)
+        public static async Task<AnaliticarView> VratiAnaliticara(string JMBG)
         {
-            AnaliticarBasic analiticar = new AnaliticarBasic();
+            AnaliticarView analiticar = new AnaliticarView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Analiticar a = s.Load<Analiticar>(JMBG);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Analiticar a = await s.LoadAsync<Analiticar>(JMBG);
+                if(a==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je Analiticar sa ovim Id-em ne postoji");
+                }
                 analiticar.JMBG = a.JMBG;
                 analiticar.Ime = a.Ime;
                 analiticar.Prezime = a.Prezime;
@@ -725,8 +876,9 @@ namespace ProjekatVandredneSituacije
 
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return analiticar;
         }
@@ -737,13 +889,16 @@ namespace ProjekatVandredneSituacije
         #region OperativniRadnik
 
 
-        public static void DodajOperativnogRadnik(OperativniRadnikBasic o)
+        public static async Task DodajOperativnogRadnik(OperativniRadnikView o, int IdJedinice)
         {
 
             try
             {
                 ISession s = DataLayer.GetSession();
-
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 OperativniRadnik op = new OperativniRadnik();
                 op.JMBG = o.JMBG;
                 op.Ime = o.Ime;
@@ -756,39 +911,59 @@ namespace ProjekatVandredneSituacije
                 op.Datum_Zaposlenja = o.Datum_Zaposlenja;
                 op.Broj_Sati = o.Broj_Sati;
                 op.Fizicka_Spremnost = o.Fizicka_Spremnost;
-                op.InterventnaJedinica = s.Load<InterventnaJedinica>(o.IdInterventnaJedinica);
+                op.InterventnaJedinica = await s.LoadAsync<InterventnaJedinica>(IdJedinice);
+                InterventnaJedinica ij = await s.LoadAsync<InterventnaJedinica>(IdJedinice);
+                
+                ij.BrojClanova++;
 
-                s.Save(op);
-                s.Flush();
+                await s.SaveAsync(op);
+                await s.UpdateAsync(ij);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiOperativnogRadnika(string JMBG)
+        public static async Task ObrisiOperativnogRadnika(string JMBG)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                OperativniRadnik op = s.Load<OperativniRadnik>(JMBG);
-                s.Delete(op);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                OperativniRadnik op = await s.LoadAsync<OperativniRadnik>(JMBG);
+                if (op == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji OperativniRadnik sa ovim JMBG");
+                }
+                InterventnaJedinica ij= await s.LoadAsync<InterventnaJedinica>(op.InterventnaJedinica.Jedinstveni_Broj);
+                ij.Radnici.Remove(op);
+                ij.BrojClanova--;
+                await s.UpdateAsync(ij);
+                await s.DeleteAsync(op);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniOperativnog(OperativniRadnikBasic o)
+        public static async Task   IzmeniOperativnog(OperativniRadnikChangeView o, int IdJedinice)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 OperativniRadnik op = new OperativniRadnik();
                 op.JMBG = o.JMBG;
                 op.Ime = o.Ime;
@@ -801,88 +976,112 @@ namespace ProjekatVandredneSituacije
                 op.Datum_Zaposlenja = o.Datum_Zaposlenja;
                 op.Broj_Sati = o.Broj_Sati;
                 op.Fizicka_Spremnost = o.Fizicka_Spremnost;
-                op.InterventnaJedinica = s.Load<InterventnaJedinica>(o.IdInterventnaJedinica);
 
-                s.Update(op);
-                s.Flush();
+                InterventnaJedinica oldij = await s.LoadAsync<InterventnaJedinica>(o.IdJedinice);
+                oldij.BrojClanova--;
+                oldij.Radnici.Remove(op);
+                await s.SaveOrUpdateAsync(oldij);
+
+                op.InterventnaJedinica = await s.LoadAsync<InterventnaJedinica>(IdJedinice);
+
+                InterventnaJedinica newij = await s.LoadAsync<InterventnaJedinica>(IdJedinice);
+                newij.BrojClanova++;
+
+                await s.SaveOrUpdateAsync(newij);
+
+                await s.UpdateAsync(op);
+                await s.FlushAsync();
                 s.Close();
 
 
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<OperativniRadnikBasic> VratiOperativneRadnike()
+        public static async Task<IList<OperativniRadnikView>> VratiOperativneRadnike()
         {
-            List<OperativniRadnikBasic> sviOp = new List<OperativniRadnikBasic>();
+            List<OperativniRadnikView> sviOp = new List<OperativniRadnikView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.OperativniRadnik> z = from o in s.Query<OperativniRadnik>()
-                                                           select o;
-                foreach (OperativniRadnik o in z)
+                if (s == null)
                 {
-                    sviOp.Add(new OperativniRadnikBasic(o.JMBG, o.Ime, o.Prezime, o.Datum_Rodjenja,
-                        o.Pol, o.Kontakt_Telefon, o.Email, o.AdresaStanovanja, o.Datum_Zaposlenja, o.Broj_Sati, o.Fizicka_Spremnost, o.InterventnaJedinica.Jedinstveni_Broj));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviOp = await s.Query<OperativniRadnik>()
+                        .Fetch( op => op.InterventnaJedinica)
+                        .Select(op => new OperativniRadnikView(op))
+                        .ToListAsync();
+               
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviOp;
         }
 
-        public static IList<OperativniRadnikBasic> VratiOperativneRadnikeIzJedincie(int IdJedinice)
+        public static async Task<IList<OperativniRadnikView>> VratiOperativneRadnikeIzJedincie(int IdJedinice)
         {
-            List<OperativniRadnikBasic> sviOp = new List<OperativniRadnikBasic>();
+            List<OperativniRadnikView> sviOp = new List<OperativniRadnikView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.OperativniRadnik> z = from o in s.Query<OperativniRadnik>()
-                                                           where o.InterventnaJedinica.Jedinstveni_Broj == IdJedinice
-                                                           select o;
-                foreach (OperativniRadnik o in z)
+                if (s == null)
                 {
-                    sviOp.Add(new OperativniRadnikBasic(o.JMBG, o.Ime, o.Prezime, o.Datum_Rodjenja,
-                        o.Pol, o.Kontakt_Telefon, o.Email, o.AdresaStanovanja, o.Datum_Zaposlenja, o.Broj_Sati, o.Fizicka_Spremnost, o.InterventnaJedinica.Jedinstveni_Broj));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviOp = s.Query<OperativniRadnik>()
+                      .Fetch(op => op.InterventnaJedinica)
+                      .Where(v => v.InterventnaJedinica.Jedinstveni_Broj == IdJedinice)
+                      .ToList()
+                      .Select(op => new OperativniRadnikView(op))
+                      .ToList();
+
+
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviOp;
         }
 
-        public static OperativniRadnikBasic VratiOperativnogRadnika(string JMBG)
+        public static async Task<OperativniRadnikView> VratiOperativnogRadnika(string JMBG)
         {
-            OperativniRadnikBasic op = new OperativniRadnikBasic();
+            OperativniRadnikView op=null;
             try
             {
                 ISession s = DataLayer.GetSession();
-                OperativniRadnik o = s.Load<OperativniRadnik>(JMBG);
-                op.JMBG = o.JMBG;
-                op.Ime = o.Ime;
-                op.Prezime = o.Prezime;
-                op.Datum_Rodjenja = o.Datum_Rodjenja;
-                op.Pol = o.Pol;
-                op.Kontakt_Telefon = o.Kontakt_Telefon;
-                op.Email = o.Email;
-                op.AdresaStanovanja = o.AdresaStanovanja;
-                op.Datum_Zaposlenja = o.Datum_Zaposlenja;
-                op.Broj_Sati = o.Broj_Sati;
-                op.Fizicka_Spremnost = o.Fizicka_Spremnost;
-                op.IdInterventnaJedinica = o.InterventnaJedinica.Jedinstveni_Broj;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                OperativniRadnik o = await s.LoadAsync<OperativniRadnik>(JMBG);
+                //op.JMBG = o.JMBG;
+                //op.Ime = o.Ime;
+                //op.Prezime = o.Prezime;
+                //op.Datum_Rodjenja = o.Datum_Rodjenja;
+                //op.Pol = o.Pol;
+                //op.Kontakt_Telefon = o.Kontakt_Telefon;
+                //op.Email = o.Email;
+                //op.AdresaStanovanja = o.AdresaStanovanja;
+                //op.Datum_Zaposlenja = o.Datum_Zaposlenja;
+                //op.Broj_Sati = o.Broj_Sati;
+                //op.Fizicka_Spremnost = o.Fizicka_Spremnost;
+                //op.InterventnaJedinica = o.InterventnaJedinica;
 
-
+                op= new OperativniRadnikView(o);
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return op;
         }
@@ -892,13 +1091,16 @@ namespace ProjekatVandredneSituacije
 
         #region Kordinator
 
-        public static void DodajKordinatora(KordinatorBasic k)
+        public static async Task DodajKordinatora(KordinatorView k)
         {
 
             try
             {
                 ISession s = DataLayer.GetSession();
-
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Kordinator kordinator = new Kordinator();
                 kordinator.JMBG = k.JMBG;
                 kordinator.Ime = k.Ime;
@@ -909,38 +1111,50 @@ namespace ProjekatVandredneSituacije
                 kordinator.Email = k.Email;
                 kordinator.Datum_Zaposlenja = k.Datum_Zaposlenja;
                 kordinator.BrojTimova = k.BrojTimova;
-                s.Save(kordinator);
-                s.Flush();
+                await s.SaveAsync(kordinator);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiKordinatora(string JMBG)
+        public static async Task   ObrisiKordinatora(string JMBG)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Kordinator z = s.Load<Kordinator>(JMBG);
-                s.Delete(z);
-                s.Flush();
+                Kordinator z = await s.LoadAsync<Kordinator>(JMBG);
+                if(z==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji kordinator sa ovim JMBG");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniKordinatora(KordinatorBasic k)
+        public static async Task   IzmeniKordinatora(KordinatorView k)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Kordinator kordinator = s.Load<Kordinator>(k.JMBG);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Kordinator kordinator = await s.LoadAsync<Kordinator>(k.JMBG);
+                if(kordinator==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je kordinator sa ovim JMBG ne postoji");
+                }
                 kordinator.JMBG = k.JMBG;
                 kordinator.Ime = k.Ime;
                 kordinator.Prezime = k.Prezime;
@@ -951,46 +1165,57 @@ namespace ProjekatVandredneSituacije
                 kordinator.Datum_Zaposlenja = k.Datum_Zaposlenja;
                 kordinator.BrojTimova = k.BrojTimova;
 
-                s.Update(kordinator);
-                s.Flush();
+                await s.UpdateAsync(kordinator);
+                await s.FlushAsync();
                 s.Close();
 
 
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<KordinatorBasic> VratiKordinatora()
+        public static async Task<IList<KordinatorView>> VratiKordinatora()
         {
-            List<KordinatorBasic> sviKordinatori = new List<KordinatorBasic>();
+            List<KordinatorView> sviKordinatori = new List<KordinatorView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Kordinator> z = from o in s.Query<Kordinator>()
-                                                     select o;
-                foreach (Kordinator k in z)
+                if (s == null)
                 {
-                    sviKordinatori.Add(new KordinatorBasic(k.JMBG, k.Ime, k.Prezime, k.Datum_Rodjenja,
-                        k.Pol, k.Kontakt_Telefon, k.Email, k.AdresaStanovanja, k.Datum_Zaposlenja, k.BrojTimova));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviKordinatori = await s.Query<Kordinator>()
+                                .Select(s => new KordinatorView(s))
+                                .ToListAsync();
+
+                
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviKordinatori;
         }
 
-        public static KordinatorBasic VratiKordinator(string JMBG)
+        public static async Task<KordinatorView> VratiKordinator(string JMBG)
         {
-            KordinatorBasic kordinator = new KordinatorBasic();
+            KordinatorView kordinator = new KordinatorView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Kordinator k = s.Load<Kordinator>(JMBG);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Kordinator k = await s.LoadAsync<Kordinator>(JMBG);
+                if(k==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji kordinator sa ovim Id-em");
+                }
                 kordinator.JMBG = k.JMBG;
                 kordinator.Ime = k.Ime;
                 kordinator.Prezime = k.Prezime;
@@ -1003,8 +1228,9 @@ namespace ProjekatVandredneSituacije
 
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return kordinator;
         }
@@ -1014,36 +1240,42 @@ namespace ProjekatVandredneSituacije
 
         #region Zaposleni
         
-        public static IList<ZaposlenBasic> VratiSveZaposlene()
+        public static async Task<IList<ZaposleniView>> VratiSveZaposlene()
         {
-            List<ZaposlenBasic> sviZaposleni = new List<ZaposlenBasic>();
+            List<ZaposleniView> sviZaposleni = new List<ZaposleniView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Zaposlen> z = from o in s.Query<Zaposlen>()
-                                                     select o;
-                foreach (Zaposlen zap in z)
+                if (s == null)
                 {
-                    if (z is Analiticar)
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var SviZaposleniQuery =await s.Query<Zaposlen>()
+                                        .ToListAsync();
+                                        
+                foreach (Zaposlen zap in SviZaposleniQuery)
+                {
+                    if (zap is Analiticar)
                     {
-                        Analiticar analiticar = (Analiticar)z;
-                        sviZaposleni.Add(new AnaliticarBasic(analiticar.JMBG,analiticar.Ime,analiticar.Prezime, analiticar.Datum_Rodjenja, analiticar.Pol, analiticar.Kontakt_Telefon,analiticar.Email, analiticar.AdresaStanovanja, analiticar.Datum_Zaposlenja));
+                        Analiticar analiticar = (Analiticar)zap;
+                        sviZaposleni.Add(new AnaliticarView(analiticar));
                     }
-                    else if(z is Kordinator)
+                    else if(zap is Kordinator)
                     {
-                        Kordinator ko = (Kordinator)z;
-                        sviZaposleni.Add(new KordinatorBasic(ko.JMBG, ko.Ime, ko.Prezime, ko.Datum_Rodjenja, ko.Pol, ko.Kontakt_Telefon, ko.Email, ko.AdresaStanovanja, ko.Datum_Zaposlenja, ko.BrojTimova));
+                        Kordinator ko = (Kordinator)zap;
+                        sviZaposleni.Add(new KordinatorView(ko));
                     }
-                    else if(z is OperativniRadnik)
+                    else if(zap is OperativniRadnik)
                     {
-                        OperativniRadnik op = (OperativniRadnik)z;
-                        sviZaposleni.Add(new OperativniRadnikBasic(op.JMBG, op.Ime, op.Prezime, op.Datum_Rodjenja, op.Pol, op.Kontakt_Telefon, op.Email, op.AdresaStanovanja, op.Datum_Zaposlenja, op.Broj_Sati, op.Fizicka_Spremnost, op.InterventnaJedinica.Jedinstveni_Broj));
+                        OperativniRadnik op = (OperativniRadnik)zap;
+                        sviZaposleni.Add(new OperativniRadnikView(op));
                     }
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviZaposleni;
         }
@@ -1052,88 +1284,116 @@ namespace ProjekatVandredneSituacije
 
         #region SanitetskaVozila
 
-        public static void DodajSanitetskaVozilo(SanitetskaBasic v)
+        public static async Task DodajSanitetskaVozilo(SanitetskaView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Vozilo vozilo = new Vozilo();
-                vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
-                vozilo.Proizvodjac = v.Proizvodjac;
-                vozilo.Status = v.Status;
-                vozilo.Lokacija = v.Lokacija;
-                s.Save(vozilo);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void ObrisiSanitetskoVozilo(string RegOznaka)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Vozilo z = s.Load<Sanitetska>(RegOznaka);
-                s.Delete(z);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void IzmeniSanitetskoVozilo(SanitetskaBasic v)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Sanitetska vozilo = s.Load<Sanitetska>(v.Registarska_Oznaka);
-                vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
-                vozilo.Proizvodjac = v.Proizvodjac;
-                vozilo.Status = v.Status;
-                vozilo.Lokacija = v.Lokacija;
-                s.Update(vozilo);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-        public static IList<SanitetskaBasic> VratiSanitetskaVozila()
-        {
-            List<SanitetskaBasic> svaVozila = new List<SanitetskaBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Sanitetska> v = from o in s.Query<Sanitetska>()
-                                                     select o;
-                foreach (Sanitetska vo in v)
+                if (s == null)
                 {
-                    svaVozila.Add(new SanitetskaBasic(vo.Registarska_Oznaka, vo.Proizvodjac, vo.Status, vo.Lokacija));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Sanitetska vozilo = new Sanitetska();
+                vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
+                vozilo.Proizvodjac = v.Proizvodjac;
+                vozilo.Status = v.Status;
+                vozilo.Lokacija = v.Lokacija;
+                await s.SaveAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task   ObrisiSanitetskoVozilo(string RegOznaka)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                Vozilo z = await s.LoadAsync<Sanitetska>(RegOznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                if(z==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji vozilo sa ovom registracijom!");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task  IzmeniSanitetskoVozilo(SanitetskaView v)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sanitetska vozilo = await s.LoadAsync<Sanitetska>(v.Registarska_Oznaka);
+                if (vozilo == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji vozilo sa ovom registracijom!");
+                }
+                vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
+                vozilo.Proizvodjac = v.Proizvodjac;
+                vozilo.Status = v.Status;
+                vozilo.Lokacija = v.Lokacija;
+                await s.UpdateAsync(vozilo);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task<IList<SanitetskaView>> VratiSanitetskaVozila()
+        {
+            List<SanitetskaView> svaVozila = new List<SanitetskaView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                
+                    svaVozila = await s.Query<Sanitetska>()
+                            .Select(s => new SanitetskaView(s))
+                            .ToListAsync();
+                
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaVozila;
         }
 
-        public static SanitetskaBasic VratiSanitetkoVozilo(string RegOznaka)
+        public static async Task<SanitetskaView> VratiSanitetkoVozilo(string RegOznaka)
         {
-            SanitetskaBasic vozilo = new SanitetskaBasic();
+            SanitetskaView vozilo = new SanitetskaView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Sanitetska v = s.Load<Sanitetska>(RegOznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sanitetska v = await s.LoadAsync<Sanitetska>(RegOznaka);
+                if(v== null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji sanitetsko vozilo sa ovom registracijom");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
@@ -1141,8 +1401,9 @@ namespace ProjekatVandredneSituacije
                 s.Close();
 
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return vozilo;
         }
@@ -1152,91 +1413,123 @@ namespace ProjekatVandredneSituacije
 
         #region Specijalna
 
-        public static void DodajSpecijalnoVozilo(SpecijalnaVozilaBasic v)
+        public static async Task   DodajSpecijalnoVozilo(SpecijalnaVozilaView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 SpecijalnaVozila vozilo = new SpecijalnaVozila();
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
                 vozilo.Lokacija = v.Lokacija;
                 vozilo.Namena = v.Namena;
-                s.Save(vozilo);
-                s.Flush();
+                await s.SaveAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public void ObrisiSpecijalnoVozilo(string RegOznaka)
+        public static async Task  ObrisiSpecijalnoVozilo(string RegOznaka)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                SpecijalnaVozila z = s.Load<SpecijalnaVozila>(RegOznaka);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+
+                SpecijalnaVozila z = await s.LoadAsync<SpecijalnaVozila>(RegOznaka);
+                if(z==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji Specijalno vozilo sa ovom registracijom");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniSpecijalnaVozila(SpecijalnaVozilaBasic v)
+        public static async Task IzmeniSpecijalnaVozila(SpecijalnaVozilaView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                SpecijalnaVozila vozilo = s.Load<SpecijalnaVozila>(v.Registarska_Oznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                SpecijalnaVozila vozilo = await s.LoadAsync<SpecijalnaVozila>(v.Registarska_Oznaka);
+                if(vozilo==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je doslo je do greske ne postoji vozilo sa ovom registraskom oznakom");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
                 vozilo.Lokacija = v.Lokacija;
                 vozilo.Namena = v.Namena;
 
-                s.Update(vozilo);
-                s.Flush();
+                await s.UpdateAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<SpecijalnaVozilaBasic> VratiSpecijalnaVozila()
+        public static async Task<IList<SpecijalnaVozilaView>> VratiSpecijalnaVozila()
         {
-            List<SpecijalnaVozilaBasic> svaVozila = new List<SpecijalnaVozilaBasic>();
+            List<SpecijalnaVozilaView> svaVozila = new List<SpecijalnaVozilaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.SpecijalnaVozila> v = from o in s.Query<SpecijalnaVozila>()
-                                                           select o;
-                foreach (SpecijalnaVozila vo in v)
+                if (s == null)
                 {
-                    svaVozila.Add(new SpecijalnaVozilaBasic(vo.Registarska_Oznaka, vo.Proizvodjac, vo.Status, vo.Lokacija, vo.Namena));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaVozila = await s.Query<SpecijalnaVozila>()
+                           .Select(s => new SpecijalnaVozilaView(s))
+                           .ToListAsync();
+               
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaVozila;
         }
 
-        public static SpecijalnaVozilaBasic VratiSpecijalnoVozilo(string RegOznaka)
+        public static async Task<SpecijalnaVozilaView> VratiSpecijalnoVozilo(string RegOznaka)
         {
-            SpecijalnaVozilaBasic v = new SpecijalnaVozilaBasic();
+            SpecijalnaVozilaView v = new SpecijalnaVozilaView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                SpecijalnaVozila vozilo = s.Load<SpecijalnaVozila>(RegOznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                SpecijalnaVozila vozilo = await s.LoadAsync<SpecijalnaVozila>(RegOznaka);
+                if(vozilo==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji vozilo sa ovom regitracijom");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
@@ -1245,8 +1538,9 @@ namespace ProjekatVandredneSituacije
                 s.Close();
 
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return v;
         }
@@ -1254,89 +1548,120 @@ namespace ProjekatVandredneSituacije
         #endregion
 
         #region Dzipovi
-        public static void DodajDzip(DzipoviBasic v)
+        public static async Task   DodajDzip(DzipoviView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Dzipovi vozilo = new Dzipovi();
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
                 vozilo.Lokacija = v.Lokacija;
 
-                s.Save(vozilo);
-                s.Flush();
+                await s.SaveAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiDzip(string RegOznaka)
+        public static async Task   ObrisiDzip(string RegOznaka)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Dzipovi z = s.Load<Dzipovi>(RegOznaka);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Dzipovi z = await s.LoadAsync<Dzipovi>(RegOznaka);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do ne postoji dzip sa ovom registracijom");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniDzip(DzipoviBasic v)
+        public static async Task   IzmeniDzip(DzipoviView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Dzipovi vozilo = s.Load<Dzipovi>(v.Registarska_Oznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Dzipovi vozilo = await s.LoadAsync<Dzipovi>(v.Registarska_Oznaka);
+                if (vozilo == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji dzip sa ovom registracijom");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
                 vozilo.Lokacija = v.Lokacija;
-                s.Update(vozilo);
-                s.Flush();
+                await s.UpdateAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<DzipoviBasic> VratiDzipove()
+        public static async Task<IList<DzipoviView>> VratiDzipove()
         {
-            List<DzipoviBasic> svaVozila = new List<DzipoviBasic>();
+            List<DzipoviView> svaVozila = new List<DzipoviView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Dzipovi> v = from o in s.Query<Dzipovi>()
-                                                  select o;
-                foreach (Dzipovi vo in v)
+                if (s == null)
                 {
-                    svaVozila.Add(new DzipoviBasic(vo.Registarska_Oznaka, vo.Proizvodjac, vo.Status, vo.Lokacija));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaVozila =await s.Query<Dzipovi>()
+                        .Select(dz => new DzipoviView(dz))
+                        .ToListAsync();
+               
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaVozila;
         }
 
-        public static DzipoviBasic VratiDzipove(string RegOznaka)
+        public static async Task<DzipoviView> VratiDzipove(string RegOznaka)
         {
-            DzipoviBasic vozilo = new DzipoviBasic();
+            DzipoviView vozilo = new DzipoviView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Dzipovi v = s.Load<Dzipovi>(RegOznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Dzipovi v = await s.LoadAsync<Dzipovi>(RegOznaka);
+                if (v == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji dzip sa ovom reg. oznakom!");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
@@ -1344,8 +1669,9 @@ namespace ProjekatVandredneSituacije
                 s.Close();
 
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return vozilo;
         }
@@ -1353,88 +1679,118 @@ namespace ProjekatVandredneSituacije
         #endregion
 
         #region Kamioni
-        public static void DodajKamion(KamioniBasic v)
+        public static async Task DodajKamion(KamioniView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Kamioni vozilo = new Kamioni();
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
                 vozilo.Lokacija = v.Lokacija;
-                s.Save(vozilo);
-                s.Flush();
+                await s.SaveAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiKamion(string RegOznaka)
+        public static async Task   ObrisiKamion(string RegOznaka)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Kamioni z = s.Load<Kamioni>(RegOznaka);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Kamioni z = await s.LoadAsync<Kamioni>(RegOznaka);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji kamion sa ovom reg. oznakom!");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniKamion(KamioniBasic v)
+        public static async Task  IzmeniKamion(KamioniView v)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Kamioni vozilo = s.Load<Kamioni>(v.Registarska_Oznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Kamioni vozilo = await s.LoadAsync<Kamioni>(v.Registarska_Oznaka);
+                if (vozilo == null)
+                {
+                    throw new SessionException("Doslo je do greske ne postoji vozilo sa ovom reg. oznakom!");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
                 vozilo.Lokacija = v.Lokacija;
-                s.Update(vozilo);
-                s.Flush();
+                await s.UpdateAsync(vozilo);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<KamioniBasic> VratiKamione()
+        public static async Task<IList<KamioniView>> VratiKamione()
         {
-            List<KamioniBasic> svaVozila = new List<KamioniBasic>();
+            List<KamioniView> svaVozila = new List<KamioniView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Kamioni> v = from o in s.Query<Kamioni>()
-                                                  select o;
-                foreach (Kamioni vo in v)
+                if (s == null)
                 {
-                    svaVozila.Add(new KamioniBasic(vo.Registarska_Oznaka, vo.Proizvodjac, vo.Status, vo.Lokacija));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaVozila = await s.Query<Kamioni>()
+                            .Select(k => new KamioniView(k))
+                            .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaVozila;
         }
 
-        public static KamioniBasic VratiKamion(string RegOznaka)
+        public static async Task<KamioniView> VratiKamion(string RegOznaka)
         {
-            KamioniBasic vozilo = new KamioniBasic();
+            KamioniView vozilo = new KamioniView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Kamioni v = s.Load<Kamioni>(RegOznaka);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Kamioni v = await s.LoadAsync<Kamioni>(RegOznaka);
+                if (s == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji dzip sa ovom reg. oznakom!");
+                }
                 vozilo.Registarska_Oznaka = v.Registarska_Oznaka;
                 vozilo.Proizvodjac = v.Proizvodjac;
                 vozilo.Status = v.Status;
@@ -1442,65 +1798,79 @@ namespace ProjekatVandredneSituacije
                 s.Close();
 
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return vozilo;
         }
         #endregion
 
         #region Vozilo
-        public static IList<VoziloBasic> VratiSvaVozila()
+        public static async Task<IList<VoziloView>> VratiSvaVozila()
         {
-            List<VoziloBasic> svaVozila = new List<VoziloBasic>();
+            List<VoziloView> svaVozila = new List<VoziloView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Vozilo> z = from o in s.Query<Vozilo>()
-                                                 select o;
-                foreach (Vozilo vo in z)
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var SvaVozilaQuery = await s.Query<Vozilo>()
+                                    .ToListAsync();
+                foreach (Vozilo vozilo in SvaVozilaQuery)
                 {
 
-                    if (z is Sanitetska)
+                    if (vozilo is Sanitetska)
                     {
-                        Sanitetska san = (Sanitetska)z;
-                        svaVozila.Add(new SanitetskaBasic(san.Registarska_Oznaka, san.Proizvodjac, san.Status, san.Lokacija));
+                        Sanitetska san = (Sanitetska)vozilo;
+                        svaVozila.Add(new SanitetskaView(san));
                     }
-                    else if (z is Kamioni)
+                    else if (vozilo is Kamioni)
                     {
-                        Kamioni ka = (Kamioni)z;
-                        svaVozila.Add(new KamioniBasic(ka.Registarska_Oznaka, ka.Proizvodjac, ka.Status, ka.Lokacija));
+                        Kamioni ka = (Kamioni)vozilo;
+                        svaVozila.Add(new KamioniView(ka));
                     }
-                    else if (z is Dzipovi)
+                    else if (vozilo is Dzipovi)
                     {
-                        Dzipovi dzipovi = (Dzipovi)z;
-                        svaVozila.Add(new DzipoviBasic(dzipovi.Registarska_Oznaka, dzipovi.Proizvodjac, dzipovi.Status, dzipovi.Lokacija));
+                        Dzipovi dzipovi = (Dzipovi)vozilo;
+                        svaVozila.Add(new DzipoviView(dzipovi));
                     }
-                    else if (z is SpecijalnaVozila)
+                    else if (vozilo is SpecijalnaVozila)
                     {
-                        SpecijalnaVozila spec = (SpecijalnaVozila)z;
-                        svaVozila.Add(new SpecijalnaVozilaBasic(spec.Registarska_Oznaka, spec.Proizvodjac, spec.Status, spec.Lokacija, spec.Namena));
+                        SpecijalnaVozila spec = (SpecijalnaVozila)vozilo;
+                        svaVozila.Add(new SpecijalnaVozilaView(spec));
 
                     }
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
-                return svaVozila;
+            return svaVozila;
         }
 
         #endregion
         #region Sertifikat
-        public static void DodajSertifikat(SertifikatBasic s)
+        public static async Task   DodajSertifikat(SertifikatView s)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 SertifikatId id = new SertifikatId();
                 Sertifikat sertifikat1 = new Sertifikat();
-                id.OperativniRadnik= sess.Load<OperativniRadnik>(s.Id.OperativniRadnik.JMBG);
+                id.OperativniRadnik= await sess.LoadAsync<OperativniRadnik>(s.Id.OperativniRadnik.JMBG);
+                if (id.OperativniRadnik == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji Operativni radnik");
+                }
                 id.Naziv = s.Id.Naziv;
                 id.Institucija=s.Id.Institucija;
 
@@ -1508,140 +1878,150 @@ namespace ProjekatVandredneSituacije
                 sertifikat1.DatumIzdavanja = s.DatumIzdavanja;
                 sertifikat1.DatumVazenja = s.DatumVazenja;
 
+                await sess.SaveOrUpdateAsync(sertifikat1);
 
-
-
-
-                sess.SaveOrUpdate(sertifikat1);
-
-                sess.Flush();
+                await sess.FlushAsync();
 
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiSertifikat(SertifikatBasic se)
+        public static async Task   ObrisiSertifikat(SertifikatView se)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Sertifikat z = s.Load<Sertifikat>(se.Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sertifikat z = await s.LoadAsync<Sertifikat>(se.Id);
+                if (z == null)
+                {
+                    throw new SessionException("Doslo je do greske ne postoji sertifikat sa ovim Id-em!");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniSertifikat(SertifikatPregled sert)
+        public static async Task   IzmeniSertifikat(SertifikatView sert)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 SertifikatId id = new SertifikatId();
-                id.OperativniRadnik = s.Load<OperativniRadnik>(sert.Id.OperativniRadnik.JMBG);
+                id.OperativniRadnik = await s.LoadAsync<OperativniRadnik>(sert.Id.OperativniRadnik.JMBG);
+                
                 id.Naziv = sert.Id.Naziv;
                 id.Institucija = sert.Id.Naziv;
-                Sertifikat sertifikat = s.Load<Sertifikat>(id);
+                Sertifikat sertifikat = await s.LoadAsync<Sertifikat>(id);
+                if (sertifikat == null)
+                {
+                    throw new SessionException("Doslo je do greske ne postoji sertifikat sa ovim Id-em!");
+                }
                 sertifikat.DatumIzdavanja = sert.DatumIzdavanja;
                 sertifikat.DatumVazenja = sert.DatumVazenja;
+                await  s.SaveOrUpdateAsync(sertifikat);
 
+                await s.FlushAsync();
+
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task<IList<SertifikatView>> VratiSertifikate()
+        {
+            List<SertifikatView> sviSertifikati = new List<SertifikatView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                sviSertifikati =  s.Query<Sertifikat>()
+                                .Fetch(s => s.Id.OperativniRadnik)
+                                .ToList()
+                                .Select(s => new SertifikatView(s))
+                                .ToList();
 
                 
 
-                s.SaveOrUpdate(sertifikat);
-
-                s.Flush();
-
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
-            }
-        }
-        public static IList<SertifikatBasic> VratiSertifikate()
-        {
-            List<SertifikatBasic> sviSertifikati = new List<SertifikatBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-
-                IEnumerable<Sertifikat> sert = from o in s.Query<Sertifikat>()
-                                               
-
-                                               select o;
-
-                foreach (Sertifikat se in sert)
-                {
-                    SertifikatIdBasic id = new SertifikatIdBasic();
-                    id.OperativniRadnik = DTOMAnager.VratiOperativnogRadnika(se.Id.OperativniRadnik.JMBG);
-                    id.Naziv = se.Id.Naziv;
-                    id.Institucija = se.Id.Institucija;
-                    sviSertifikati.Add(new SertifikatBasic(id, se.DatumIzdavanja, se.DatumVazenja));
-                }
-
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
             return sviSertifikati;
         }
-        public static IList<SertifikatBasic> VratiSertifikate(string JMBGZaposlenog)
+        public static async Task<IList<SertifikatView>> VratiSertifikateZaposlenog(string JMBGZaposlenog)
         {
-            List<SertifikatBasic> sviSertifikati = new List<SertifikatBasic>();
+            List<SertifikatView> sviSertifikati = new List<SertifikatView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-
-                IEnumerable<Sertifikat> sert = from o in s.Query<Sertifikat>()
-                                         where o.Id.OperativniRadnik.JMBG == JMBGZaposlenog
-                                         
-                                         select o;
-
-                foreach (Sertifikat se in sert)
+                if (s == null)
                 {
-                    SertifikatIdBasic id = new SertifikatIdBasic();
-                    id.OperativniRadnik = DTOMAnager.VratiOperativnogRadnika(se.Id.OperativniRadnik.JMBG);
-                    id.Naziv = se.Id.Naziv;
-                    id.Institucija = se.Id.Institucija;
-                    sviSertifikati.Add(new SertifikatBasic(id, se.DatumIzdavanja, se.DatumVazenja));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviSertifikati = s.Query<Sertifikat>()
+                                .Fetch(s => s.Id.OperativniRadnik)
+                                .Where(s => s.Id.OperativniRadnik.JMBG==JMBGZaposlenog)
+                                .ToList()
+                                .Select(s => new SertifikatView(s))
+                                .ToList();
 
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
             return sviSertifikati;
         }
 
-        public static SertifikatPregled VratiSertifikat(OperativniRadnikBasic op, string Naziv)
+        public static async Task<SertifikatView> VratiSertifikat(int Id)
         {
-            SertifikatPregled sertifikat = new SertifikatPregled();
+            SertifikatView sertifikat = new SertifikatView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Sertifikat s = sess.Load<Sertifikat>(op);
-                
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sertifikat s = await sess.LoadAsync<Sertifikat>(Id);
+                if(s==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je Sertifikat sa ovim Id-em ne postoji");
+                }
                 sertifikat.DatumIzdavanja = s.DatumIzdavanja;
                 sertifikat.DatumVazenja = s.DatumVazenja;
                 sess.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sertifikat;
         }
@@ -1652,93 +2032,156 @@ namespace ProjekatVandredneSituacije
 
         #region Ekspertiza
 
-        public static void DodajEkspertizu(EkspertizaPregled e)
+        public static async Task   DodajEkspertizu(EkspertizaChangeView e)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Ekspertiza ekspertiza = new Ekspertiza();
                 ekspertiza.Id = e.Id;
-                ekspertiza.Analiticar = sess.Load<Analiticar>(e.Analiticar);
+                ekspertiza.Analiticar = await sess.LoadAsync<Analiticar>(e.JMBGAnaliticara);
+                if (sess == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji Analiticar(obavezno polje)");
+                }
                 ekspertiza.Oblast = e.Oblast;
-                sess.Save(ekspertiza);
-                sess.Flush();
+                await sess.SaveAsync(ekspertiza);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void ObrisiEkspertizu(int Id)
+        public static async Task   ObrisiEkspertizu(int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Ekspertiza z = s.Load<Ekspertiza>(Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ekspertiza z = await s.LoadAsync<Ekspertiza>(Id);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji ekspertiza sa voim Id-em");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniEkspertizu(EkspertizaPregled e)
+        public static async Task   IzmeniEkspertizu(EkspertizaChangeView e, int Id)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Ekspertiza ekspertiza = sess.Load<Ekspertiza>(e.Analiticar);
-                ekspertiza.Id= e.Id;
-                ekspertiza.Analiticar = sess.Load<Analiticar>(e.Analiticar);
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ekspertiza ekspertiza = await sess.LoadAsync<Ekspertiza>(Id);
+                if(ekspertiza==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ekspertiza sa ovim Id ne postoji");
+                }
+                ekspertiza.Analiticar = await sess.LoadAsync<Analiticar>(e.JMBGAnaliticara);
+                if(ekspertiza.Analiticar==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji analiticar(oBavezno polje)");
+                }
                 ekspertiza.Oblast = e.Oblast;
-                sess.Update(ekspertiza);
-                sess.Flush();
+                await sess.UpdateAsync(ekspertiza);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<EkspertizaPregled> VratiEkspertize()
+        public static async Task<IList<EkspertizaView>> VratiEkspertize()
         {
-            List<EkspertizaPregled> sveEkspertize = new List<EkspertizaPregled>();
+            List<EkspertizaView> sveEkspertize = new List<EkspertizaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ekspertiza> z = from o in s.Query<Ekspertiza>()
-                                                     select o;
-                foreach (Ekspertiza ekspertiza in z)
+                if (s == null)
                 {
-                    sveEkspertize.Add(new EkspertizaPregled(ekspertiza.Id, ekspertiza.Analiticar.JMBG, ekspertiza.Oblast));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sveEkspertize = await s.Query<Ekspertiza>()
+                               .Fetch(e => e.Analiticar)
+                               .Select(e => new EkspertizaView(e))
+                               .ToListAsync();
+                
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sveEkspertize;
         }
-        public static EkspertizaPregled VratiEkspertizu(Analiticar a, string Oblast)
+
+        public static async Task<IList<EkspertizaView>> VratiEkspertizeAnaliticara(string JMBG)
         {
-            EkspertizaPregled ekspertiza = new EkspertizaPregled();
+            List<EkspertizaView> sveEkspertize = new List<EkspertizaView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+               
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                sveEkspertize =await s.Query<Ekspertiza>()
+                               .Fetch(e => e.Analiticar)
+                               .Where(e=> e.Analiticar.JMBG==JMBG)
+                               .Select(e => new EkspertizaView(e))
+                               .ToListAsync();
+
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return sveEkspertize;
+        }
+        public static async Task<EkspertizaView> VratiEkspertizu(int Id)
+        {
+            EkspertizaView ekspertiza = new EkspertizaView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Ekspertiza e = sess.Load<Ekspertiza>(a);
-                ekspertiza.Id = e.Id;
-                ekspertiza.Analiticar = e.Analiticar.JMBG;
-                ekspertiza.Oblast = e.Oblast;
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ekspertiza e = await sess.LoadAsync<Ekspertiza>(Id);
+                if (e == null)
+                {
+                    throw new KeyNotFoundException("Doslo je do greske ne postoji ekspertiza sa ovim Id-em");
+                }
+                ekspertiza = new EkspertizaView(e);
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ekspertiza;
         }
@@ -1746,221 +2189,271 @@ namespace ProjekatVandredneSituacije
 
         #region Specijalizacija
 
-        public static void DodajSpecijalizaciju(SpecijalizacijaPregled sp)
+        public static async Task   DodajSpecijalizaciju(SpecijalizacijaAddView sp)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Specijalizacija specijalizacija = new Specijalizacija();
                 specijalizacija.Id= sp.Id;
-                specijalizacija.Kordinator = sess.Load<Kordinator>(sp.Kordinator);
+                specijalizacija.Kordinator = await sess.LoadAsync<Kordinator>(sp.JMBG_Kordinator);
+                if (specijalizacija.Kordinator == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji kordinator(obavezno polje)");
+                }
                 specijalizacija.Tip = sp.Tip;
-                sess.Save(specijalizacija);
-                sess.Flush();
+                await sess.SaveAsync(specijalizacija);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiSpecijalizaciju(int Id)
+        public static async Task   ObrisiSpecijalizaciju(int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Specijalizacija z = s.Load<Specijalizacija>(Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Specijalizacija z = await s.LoadAsync<Specijalizacija>(Id);
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniSpecijalizaciju(SpecijalizacijaBasic sp)
+        public static async Task IzmeniSpecijalizaciju(SpecijalizacijaAddView sp)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Specijalizacija specijalizacija = sess.Load<Specijalizacija>(sp.Kordinator);
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Specijalizacija specijalizacija = await sess.LoadAsync<Specijalizacija>(sp.Id);
                 specijalizacija.Id = sp.Id;
-                specijalizacija.Kordinator = sess.Load<Kordinator>(sp.Kordinator);
+                specijalizacija.Kordinator = await sess.LoadAsync<Kordinator>(sp.JMBG_Kordinator);
+                if(specijalizacija.Kordinator==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji kordinator sa ovim id-em");
+                }
                 specijalizacija.Tip = sp.Tip;
-                sess.Update(specijalizacija);
-                sess.Flush();
+                await sess.UpdateAsync(specijalizacija);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
         }
-        public static IList<SpecijalizacijaPregled> VratiSpecijalizacije()
+        public static async Task<IList<SpecijalizacijaView>> VratiSpecijalizacije()
         {
-            List<SpecijalizacijaPregled> sveSpecijalizacije = new List<SpecijalizacijaPregled>();
+            List<SpecijalizacijaView> sveSpecijalizacije = new List<SpecijalizacijaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Specijalizacija> z = from o in s.Query<Specijalizacija>()
-                                                          select o;
-                foreach (Specijalizacija specijalizacija in z)
+                if (s == null)
                 {
-                    sveSpecijalizacije.Add(new SpecijalizacijaPregled(specijalizacija.Id, specijalizacija.Kordinator.JMBG, specijalizacija.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                s.Close();
+                sveSpecijalizacije = await s.Query<Specijalizacija>()
+                                    .Fetch(s => s.Kordinator)
+                                    .Select(s => new SpecijalizacijaView(s))
+                                    .ToListAsync();
+                
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sveSpecijalizacije;
         }
 
-        public static SpecijalizacijaPregled VratiSpecijalizaciju(Kordinator k, string Tip)
+        public static async Task<SpecijalizacijaView> VratiSpecijalizaciju(int Id)
         {
-            SpecijalizacijaPregled specijalizacija = new SpecijalizacijaPregled();
+            SpecijalizacijaView specijalizacija = new SpecijalizacijaView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Specijalizacija sp = sess.Load<Specijalizacija>(k);
-                specijalizacija.Id = sp.Id;
-                specijalizacija.Kordinator = sp.Kordinator.JMBG;
-                specijalizacija.Tip = sp.Tip;
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Specijalizacija sp = await sess.LoadAsync<Specijalizacija>(Id);
+                specijalizacija = new SpecijalizacijaView(sp);
                 sess.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return specijalizacija;
         }
         #endregion
 
-
+        #region Oprema
         #region LicnaZastita
-        public static void DodajLicnuZastitu(LicnaZastitaBasic l)
+        public static async Task   DodajLicnuZastitu(LicnaZastitaView l)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 LicnaZastita liz = new LicnaZastita();
                 liz.Serijski_Broj = l.Serijski_Broj;
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = s.Load<InterventnaJedinica>(l.IdJedinica);
-                liz.Tip = l.Licna;
-                s.Save(liz);
-                s.Flush();
+                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.Jedinica);
+                liz.Tip = l.Tip;
+                await s.SaveAsync(liz);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiLicnuZastitu(int SerijskiBroj)
+        public static async Task   ObrisiLicnuZastitu(string SerijskiBroj)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                LicnaZastita z = s.Load<LicnaZastita>(SerijskiBroj);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                LicnaZastita z = await s.LoadAsync<LicnaZastita>(SerijskiBroj);
+                if(z==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji ova licna zastita");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniLicnuZastitu(LicnaZastitaBasic l)
+        public static async Task IzmeniLicnuZastitu(LicnaZastitaView l)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                LicnaZastita liz = s.Load<LicnaZastita>(l.Serijski_Broj);
-                liz.Serijski_Broj = l.Serijski_Broj;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                LicnaZastita liz = await s.LoadAsync<LicnaZastita>(l.Serijski_Broj);
+                liz.Serijski_Broj = l.Serijski_Broj; // stavimo da ne generisemo automatski sifre vec da korisnik moze da upise sifru opreme
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = s.Load<InterventnaJedinica>(l.IdJedinica);
-                liz.Tip = l.Licna;
+                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.Jedinica);
+                liz.Tip = l.Tip;
 
 
-                s.Update(liz);
-                s.Flush();
+                await s.UpdateAsync(liz);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<LicnaZastitaBasic> VratiLicnuZastitu()
+        public static async Task<IList<LicnaZastitaView>> VratiLicnuZastitu()
         {
-            List<LicnaZastitaBasic> svaOprema = new List<LicnaZastitaBasic>();
+            List<LicnaZastitaView> svaOprema = new List<LicnaZastitaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.LicnaZastita> l = from o in s.Query<LicnaZastita>()
-                                                       select o;
-                foreach (LicnaZastita liz in l)
-                {
-                    svaOprema.Add(new LicnaZastitaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
-                }
+                svaOprema = await  s.Query<LicnaZastita>()
+                           .Fetch(s=>s.Jedinica)
+                           .Select(l => new LicnaZastitaView(l))
+                           .ToListAsync();
+              
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
 
-        public static LicnaZastitaBasic VratiLicnuZastitu(string Naziv)
+        public static async Task<LicnaZastitaView> VratiLicnuZastitu(string SerijskiBroj)
         {
-            LicnaZastitaBasic liz = new LicnaZastitaBasic();
+            LicnaZastitaView liz = null ;
             try
             {
                 ISession s = DataLayer.GetSession();
-                LicnaZastita l = s.Load<LicnaZastita>(Naziv);
-                liz.Serijski_Broj = l.Serijski_Broj;
-                liz.Naziv = l.Naziv;
-                liz.Status = l.Status;
-                liz.DatumNabavke = l.DatumNabavke;
-                liz.IdJedinica = l.Jedinica.Jedinstveni_Broj;
-                liz.Licna = l.Tip;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                LicnaZastita l = await s.LoadAsync<LicnaZastita>(SerijskiBroj);
+                if(l==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je licna zastita sa ovim id-em ne postoji");
+                }
+                liz = new LicnaZastitaView(l);
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return liz;
         }
 
-        public static IList<LicnaZastitaBasic> VratiLicnuOpremuJedinice(int idJedinice)
+        public static async Task<IList<LicnaZastitaView>> VratiLicnuOpremuJedinice(int idJedinice)
         {
-            List<LicnaZastitaBasic> svaOprema = new List<LicnaZastitaBasic>();
+            List<LicnaZastitaView> svaOprema = new List<LicnaZastitaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.LicnaZastita> l = from o in s.Query<LicnaZastita>()
-                                                       where o.Jedinica.Jedinstveni_Broj == idJedinice
-                                                       select o;
-                foreach (LicnaZastita liz in l)
+                if (s == null)
                 {
-                    svaOprema.Add(new LicnaZastitaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaOprema = await s.Query<LicnaZastita>()
+                            .Fetch(s => s.Jedinica)
+                            .Where(s => s.Jedinica.Jedinstveni_Broj == idJedinice)
+                            .Select(l => new LicnaZastitaView(l))
+                            .ToListAsync();
+
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
@@ -1968,468 +2461,563 @@ namespace ProjekatVandredneSituacije
 
         #region MedicinskaOprema
 
-        public static void DodajMedicinskuOpremu(MedicinskaOpremaBasic l)
+        public static async Task   DodajMedicinskuOpremu(MedicinskaOpremaAddView l)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 MedicinskaOprema liz = new MedicinskaOprema();
-                liz.Serijski_Broj = l.Serijski_Broj;
+             
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = s.Load<InterventnaJedinica>(l.IdJedinica);
-                liz.Tip = l.Medicinska;
-                s.Save(liz);
-                s.Flush();
+                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                liz.Tip = l.Tip;
+                await s.SaveAsync(liz);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiMedicinskuOpremu(int SerijskiBroj)
+        public static async Task ObrisiMedicinskuOpremu(string SerijskiBroj)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                MedicinskaOprema z = s.Load<MedicinskaOprema>(SerijskiBroj);
-                s.Delete(z);
-                s.Flush();
+                MedicinskaOprema z = await s.LoadAsync<MedicinskaOprema>(SerijskiBroj);
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniMedicinskuOpremu(MedicinskaOpremaBasic l)
+        public static async Task   IzmeniMedicinskuOpremu(string SerijskiBroj, MedicinskaOpremaAddView l)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                MedicinskaOprema liz = s.Load<MedicinskaOprema>(l.Serijski_Broj);
-                liz.Serijski_Broj = l.Serijski_Broj;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                MedicinskaOprema liz = await s.LoadAsync<MedicinskaOprema>(SerijskiBroj);
+                if(liz==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je medicinska oprema sa ovim Id-em ne postoji");
+                }
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = s.Load<InterventnaJedinica>(l.IdJedinica);
-                liz.Tip = l.Medicinska;
+                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                liz.Tip = l.Tip;
 
 
                 s.Update(liz);
-                s.Flush();
+                s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<MedicinskaOpremaBasic> VratiMedicinskuZastitu()
+        public static async Task<IList<MedicinskaOpremaView>> VratiMedicinskuZastitu()
         {
-            List<MedicinskaOpremaBasic> svaOprema = new List<MedicinskaOpremaBasic>();
+            List<MedicinskaOpremaView> svaOprema = new List<MedicinskaOpremaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.MedicinskaOprema> l = from o in s.Query<MedicinskaOprema>()
-                                                           select o;
-                foreach (MedicinskaOprema liz in l)
+                if (s == null)
                 {
-                    svaOprema.Add(new MedicinskaOpremaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaOprema = await s.Query<MedicinskaOprema>()
+                            .Fetch(i => i.Jedinica)
+                            .Select(med => new MedicinskaOpremaView(med))
+                            .ToListAsync();
+                
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
 
-        public static MedicinskaOpremaBasic VratiMedicinskuOpremu(int SerijskiBroj)
+        public static async Task<MedicinskaOpremaView> VratiMedicinskuOpremu(string SerijskiBroj)
         {
-            MedicinskaOpremaBasic liz = new MedicinskaOpremaBasic();
+            MedicinskaOpremaView liz = new MedicinskaOpremaView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                MedicinskaOprema l = s.Load<MedicinskaOprema>(SerijskiBroj);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                MedicinskaOprema l = await s.LoadAsync<MedicinskaOprema>(SerijskiBroj);
+                if(l==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je medicinska oprema sa ovim brojem ne postoji");
+                }
                 liz.Serijski_Broj = l.Serijski_Broj;
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.IdJedinica = l.Jedinica.Jedinstveni_Broj;
-                liz.Medicinska = l.Tip;
+                liz.Jedinica = new InterventnaJedinicaView(l.Jedinica);
+                liz.Tip = l.Tip;
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return liz;
         }
 
-        public static IList<MedicinskaOpremaBasic> VratiMedicinskuOpremuJedinice(int idJedinice)
+        public static async Task<IList<MedicinskaOpremaView>> VratiMedicinskuOpremuJedinice(int idJedinice)
         {
-            List<MedicinskaOpremaBasic> svaOprema = new List<MedicinskaOpremaBasic>();
+            List<MedicinskaOpremaView> svaOprema = new List<MedicinskaOpremaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.MedicinskaOprema> l = from o in s.Query<MedicinskaOprema>()
-                                                           where o.Jedinica.Jedinstveni_Broj == idJedinice
-                                                           select o;
-                foreach (MedicinskaOprema liz in l)
+                if (s == null)
                 {
-                    svaOprema.Add(new MedicinskaOpremaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaOprema =await  s.Query<MedicinskaOprema>()
+                            .Fetch(s => s.Jedinica)
+                            .Where(s => s.Jedinica.Jedinstveni_Broj == idJedinice)
+                            .Select(m => new MedicinskaOpremaView(m))
+                            .ToListAsync();
+                
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
         #endregion
 
         #region TehnickaOprema
-        public static void DodajTehnickuOpremu(TehnickaOpremaBasic l)
+        public static async Task   DodajTehnickuOpremu(TehnickaOpremaAddView l)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                TehnickaOprema liz = new TehnickaOprema();
-                liz.Serijski_Broj = l.Serijski_Broj;
-                liz.Naziv = l.Naziv;
-                liz.Status = l.Status;
-                liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = s.Load<InterventnaJedinica>(l.IdJedinica);
-                liz.Tip = l.Tehnicka;
-                s.Save(liz);
-                s.Flush();
-                s.Close();
-
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-        public static void ObrisiTehnickuOpremu(int SerijskiBroj)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                TehnickaOprema z = s.Load<TehnickaOprema>(SerijskiBroj);
-                s.Delete(z);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void IzmeniTehnickuOpremu(TehnickaOpremaBasic l)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                TehnickaOprema liz = s.Load<TehnickaOprema>(l.Serijski_Broj);
-                liz.Serijski_Broj = l.Serijski_Broj;
-                liz.Naziv = l.Naziv;
-                liz.Status = l.Status;
-                liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = s.Load<InterventnaJedinica>(l.IdJedinica);
-                liz.Tip = l.Tehnicka;
-                s.Update(liz);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static IList<TehnickaOpremaBasic> VratiTehnickuZastitu()
-        {
-            List<TehnickaOpremaBasic> svaOprema = new List<TehnickaOpremaBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.TehnickaOprema> l = from o in s.Query<TehnickaOprema>()
-                                                         select o;
-                foreach (TehnickaOprema liz in l)
+                if (s == null)
                 {
-                    svaOprema.Add(new TehnickaOpremaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                TehnickaOprema liz = new TehnickaOprema();
+                liz.Naziv = l.Naziv;
+                liz.Status = l.Status;
+                liz.DatumNabavke = l.DatumNabavke;
+                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                liz.Tip = l.Tip;
+                await s.SaveAsync(liz);
+                await s.FlushAsync();
+                s.Close();
+
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task   ObrisiTehnickuOpremu(string SerijskiBroj)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                TehnickaOprema z = await s.LoadAsync<TehnickaOprema>(SerijskiBroj);
+                if(z==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji tehnicka oprema sa ovim serijskim brojem");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task   IzmeniTehnickuOpremu(TehnickaOpremaAddView l, string Serijski_Broj)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                TehnickaOprema liz = await s.LoadAsync<TehnickaOprema>(Serijski_Broj);
+                if (liz == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji tehnicka oprema sa ovim serijskim brojem");
+                }
+                liz.Naziv = l.Naziv;
+                liz.Status = l.Status;
+                liz.DatumNabavke = l.DatumNabavke;
+                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                liz.Tip = l.Tip;
+                s.Update(liz);
+                s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task<IList<TehnickaOpremaView>> VratiTehnickuZastitu()
+        {
+            List<TehnickaOpremaView> svaOprema = new List<TehnickaOpremaView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                svaOprema = await s.Query<TehnickaOprema>()
+                           .Fetch(s => s.Jedinica)
+                           .Select(l => new TehnickaOpremaView(l))
+                           .ToListAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
 
-        public static TehnickaOpremaBasic VratiTehnickuOpremu(int SerijskiBroj)
+        public static async Task<TehnickaOpremaView> VratiTehnickuOpremu(string SerijskiBroj)
         {
-            TehnickaOpremaBasic liz = new TehnickaOpremaBasic();
+            TehnickaOpremaView liz = null;
             try
             {
                 ISession s = DataLayer.GetSession();
-                TehnickaOprema l = s.Load<TehnickaOprema>(SerijskiBroj);
-                liz.Serijski_Broj = l.Serijski_Broj;
-                liz.Naziv = l.Naziv;
-                liz.Status = l.Status;
-                liz.DatumNabavke = l.DatumNabavke;
-                liz.IdJedinica = l.Jedinica.Jedinstveni_Broj;
-                liz.Tehnicka = l.Tip;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                TehnickaOprema l = await s.LoadAsync<TehnickaOprema>(SerijskiBroj);
+
+                liz = new TehnickaOpremaView(l);
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return liz;
         }
 
-        public static IList<TehnickaOpremaBasic> VratiTehnickuOpremuJedinice(int idJedinice)
+        public static async Task<IList<TehnickaOpremaView>> VratiTehnickuOpremuJedinice(int idJedinice)
         {
-            List<TehnickaOpremaBasic> svaOprema = new List<TehnickaOpremaBasic>();
+            List<TehnickaOpremaView> svaOprema = new List<TehnickaOpremaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.TehnickaOprema> l = from o in s.Query<TehnickaOprema>()
-                                                         where o.Jedinica.Jedinstveni_Broj == idJedinice
-                                                         select o;
-                foreach (TehnickaOprema liz in l)
-                {
-                    svaOprema.Add(new TehnickaOpremaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
-                }
+                svaOprema =await s.Query<TehnickaOprema>()
+                           .Fetch(s => s.Jedinica)
+                           .Where(s => s.Jedinica.Jedinstveni_Broj == idJedinice)
+                           .Select(t => new TehnickaOpremaView(t))
+                           .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
         #endregion
 
         #region Zalihe
-        public static void DodajZalihe(ZaliheBasic z)
+        public static async Task DodajZalihe(ZaliheAddView z)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Zalihe zalihe = new Zalihe();
-                zalihe.Serijski_Broj = z.Serijski_Broj;
-                zalihe.Naziv = z.Naziv;
-                zalihe.Status = z.Status;
-                zalihe.DatumNabavke = z.DatumNabavke;
-                zalihe.Jedinica = s.Load<InterventnaJedinica>(z.IdJedinica);
-                zalihe.Kolicina = z.Kolicina;
-                zalihe.Tip = z.Zalihe;
-                s.Save(zalihe);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void ObrisiZalihe(int SerijskiBroj)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Zalihe z = s.Load<Zalihe>(SerijskiBroj);
-                s.Delete(z);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void IzmeniZalihe(ZaliheBasic z)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Zalihe zalihe = s.Load<Zalihe>(z.Serijski_Broj);
-                zalihe.Serijski_Broj = z.Serijski_Broj;
-                zalihe.Naziv = z.Naziv;
-                zalihe.Status = z.Status;
-                zalihe.DatumNabavke = z.DatumNabavke;
-                zalihe.Jedinica = s.Load<InterventnaJedinica>(z.IdJedinica);
-                zalihe.Kolicina = z.Kolicina;
-                zalihe.Tip = z.Zalihe;
-                s.Update(zalihe);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static IList<ZaliheBasic> VratiZalihe()
-        {
-            List<ZaliheBasic> svaOprema = new List<ZaliheBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Zalihe> l = from o in s.Query<Zalihe>()
-                                                 select o;
-                foreach (Zalihe liz in l)
+                if (s == null)
                 {
-                    svaOprema.Add(new ZaliheBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Kolicina, liz.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Zalihe zalihe = new Zalihe();
+                zalihe.Naziv = z.Naziv;
+                zalihe.Status = z.Status;
+                zalihe.DatumNabavke = z.DatumNabavke;
+                zalihe.Jedinica = await s.LoadAsync<InterventnaJedinica>(z.JedinicaID);
+                if(zalihe.Jedinica==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji jedinica sa ovim Id-em");
+                }
+                zalihe.Kolicina = z.Kolicina;
+                zalihe.Tip = z.Tip;
+                await s.SaveAsync(zalihe);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task   ObrisiZalihe(string SerijskiBroj)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Zalihe z = await s.LoadAsync<Zalihe>(SerijskiBroj);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao na je ne postoji zaliha sa ovim serijskim brojem");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task  IzmeniZalihe(ZaliheAddView z, string Serijski_Broj)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Zalihe zalihe = await s.LoadAsync<Zalihe>(Serijski_Broj);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao na je ne postoji zaliha sa ovim serijskim brojem");
+                }
+                zalihe.Naziv = z.Naziv;
+                zalihe.Status = z.Status;
+                zalihe.DatumNabavke = z.DatumNabavke;
+                zalihe.Jedinica = await s.LoadAsync<InterventnaJedinica>(z.JedinicaID);
+                if(zalihe.Jedinica==null)
+                {
+                    throw new KeyNotFoundException("Zao na je ne postoji jedinica id");
+                }
+                zalihe.Kolicina = z.Kolicina;
+                zalihe.Tip = z.Tip;
+                await s.UpdateAsync(zalihe);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task<IList<ZaliheView>> VratiZalihe()
+        {
+            List<ZaliheView> svaOprema = new List<ZaliheView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                svaOprema =await  s.Query<Zalihe>()
+                           .Fetch(s => s.Jedinica)
+                            .Select(z => new ZaliheView(z))
+                           .ToListAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
-        public static ZaliheBasic VratiZalihe(int SerijskiBroj)
+        public static async Task<ZaliheView> VratiZalihe(string SerijskiBroj)
         {
-            ZaliheBasic liz = new ZaliheBasic();
+            ZaliheView liz=null;
             try
             {
                 ISession s = DataLayer.GetSession();
-                Zalihe z = s.Load<Zalihe>(SerijskiBroj);
-                liz.Serijski_Broj = z.Serijski_Broj;
-                liz.Naziv = z.Naziv;
-                liz.Status = z.Status;
-                liz.DatumNabavke = z.DatumNabavke;
-                liz.IdJedinica = z.Jedinica.Jedinstveni_Broj;
-                liz.Kolicina = z.Kolicina;
-                liz.Zalihe = z.Tip;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Zalihe z = await s.LoadAsync<Zalihe>(SerijskiBroj);
+                liz = new ZaliheView(z);
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return liz;
         }
 
-        public static IList<ZaliheBasic> VratiZaliheJedinice(int idJedinice)
+        public static async Task<IList<ZaliheView>> VratiZaliheJedinice(int idJedinice)
         {
-            List<ZaliheBasic> svaOprema = new List<ZaliheBasic>();
+            List<ZaliheView> svaOprema = new List<ZaliheView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Zalihe> l = from o in s.Query<Zalihe>()
-                                                 where o.Jedinica.Jedinstveni_Broj == idJedinice
-                                                 select o;
-                foreach (Zalihe liz in l)
+                if (s == null)
                 {
-                    svaOprema.Add(new ZaliheBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Kolicina, liz.Tip));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                svaOprema =await s.Query<Zalihe>()
+                            .Fetch(s => s.Jedinica)
+                            .Where(s => s.Jedinica.Jedinstveni_Broj == idJedinice)
+
+                            .Select(z => new ZaliheView(z))
+                            .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
         #endregion
 
-        #region Oprema
-        public static IList<OpremaBasic> VratiSvuOpremu()
+        
+        public static async Task<IList<OpremaView>> VratiSvuOpremu()
         {
-            List<OpremaBasic> svaOprema = new List<OpremaBasic>();
+            List<OpremaView> svaOprema = new List<OpremaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Oprema> l = from o in s.Query<Oprema>()
-                                                 select o;
-                foreach (Oprema o in l)
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var svaOpremaQuery =await s.Query<Oprema>()
+                           .Fetch(s => s.Jedinica)
+                           .ToListAsync();
+
+                foreach (Oprema o in svaOpremaQuery)
                 {
                     if (o is LicnaZastita)
                     {
                         LicnaZastita liz = (LicnaZastita)o;
-                        svaOprema.Add(new LicnaZastitaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
+                        svaOprema.Add(new LicnaZastitaView(liz));
                     }
                     else if (o is MedicinskaOprema)
                     {
                         MedicinskaOprema med = (MedicinskaOprema)o;
-                        svaOprema.Add(new MedicinskaOpremaBasic(med.Serijski_Broj, med.Naziv, med.Status, med.DatumNabavke, med.Jedinica.Jedinstveni_Broj, med.Tip));
+                        svaOprema.Add(new MedicinskaOpremaView(med));
                     }
                     else if (o is TehnickaOprema)
                     {
                         TehnickaOprema tech = (TehnickaOprema)o;
-                        svaOprema.Add(new TehnickaOpremaBasic(tech.Serijski_Broj, tech.Naziv, tech.Status, tech.DatumNabavke, tech.Jedinica.Jedinstveni_Broj, tech.Tip));
+                        svaOprema.Add(new TehnickaOpremaView(tech));
                     }
                     else if (o is Zalihe)
                     {
                         Zalihe zalihe = (Zalihe)o;
-                        svaOprema.Add(new ZaliheBasic(zalihe.Serijski_Broj, zalihe.Naziv, zalihe.Status, zalihe.DatumNabavke, zalihe.Jedinica.Jedinstveni_Broj, zalihe.Kolicina, zalihe.Tip));
+                        svaOprema.Add(new ZaliheView(zalihe));
                     }
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
 
-        public static IList<OpremaBasic> VratiSvuOpremuJedinice(int IdJed)
+        public static async Task<IList<OpremaView>> VratiSvuOpremuJedinice(int IdJed)
         {
-            List<OpremaBasic> svaOprema = new List<OpremaBasic>();
+            List<OpremaView> svaOprema = new List<OpremaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Oprema> l = from o in s.Query<Oprema>()
-                                                 where o.Jedinica.Jedinstveni_Broj==IdJed
-                                                 select o;
-                foreach (Oprema o in l)
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var svaOpremaQuery =await  s.Query<Oprema>()
+                           .Fetch(s => s.Jedinica)
+                           .Where(s => s.Jedinica.Jedinstveni_Broj == IdJed)
+                           .ToListAsync();
+                foreach (Oprema o in svaOpremaQuery)
                 {
                     if (o is LicnaZastita)
                     {
                         LicnaZastita liz = (LicnaZastita)o;
-                        svaOprema.Add(new LicnaZastitaBasic(liz.Serijski_Broj, liz.Naziv, liz.Status, liz.DatumNabavke, liz.Jedinica.Jedinstveni_Broj, liz.Tip));
+                        svaOprema.Add(new LicnaZastitaView(liz));
                     }
                     else if (o is MedicinskaOprema)
                     {
                         MedicinskaOprema med = (MedicinskaOprema)o;
-                        svaOprema.Add(new MedicinskaOpremaBasic(med.Serijski_Broj, med.Naziv, med.Status, med.DatumNabavke, med.Jedinica.Jedinstveni_Broj, med.Tip));
+                        svaOprema.Add(new MedicinskaOpremaView(med));
                     }
                     else if (o is TehnickaOprema)
                     {
                         TehnickaOprema tech = (TehnickaOprema)o;
-                        svaOprema.Add(new TehnickaOpremaBasic(tech.Serijski_Broj, tech.Naziv, tech.Status, tech.DatumNabavke, tech.Jedinica.Jedinstveni_Broj, tech.Tip));
+                        svaOprema.Add(new TehnickaOpremaView(tech));
                     }
                     else if (o is Zalihe)
                     {
                         Zalihe zalihe = (Zalihe)o;
-                        svaOprema.Add(new ZaliheBasic(zalihe.Serijski_Broj, zalihe.Naziv, zalihe.Status, zalihe.DatumNabavke, zalihe.Jedinica.Jedinstveni_Broj, zalihe.Kolicina, zalihe.Tip));
+                        svaOprema.Add(new ZaliheView(zalihe));
                     }
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return svaOprema;
         }
-        #endregion
+        #endregion Oprema
+
         #region Predstavnik
 
-        public static void DodajPredstavnika(PredstavnikBasic p)
+        public static async Task   DodajPredstavnika(PredstavnikView p)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Predstavnik predstavnik = new Predstavnik();
                 predstavnik.JMBG = p.JMBG;
                 predstavnik.Ime = p.Ime;
@@ -2437,1009 +3025,1401 @@ namespace ProjekatVandredneSituacije
                 predstavnik.Pozicija = p.Pozicija;
                 predstavnik.Telefon = p.Telefon;
                 predstavnik.Email = p.Email;
-                predstavnik.Sluzba = s.Load<Sluzba>(p.IdSektor);
-                s.Save(predstavnik);
-                s.Flush();
+                predstavnik.Sluzba = await s.LoadAsync<Sluzba>(p.Sluzba.Id_Sektora);
+                if (predstavnik.Sluzba== null)
+                {
+                    throw new KeyNotFoundException("Zao na je ne postoji sluzba sa ovim id-em");
+                }
+                await s.SaveAsync(predstavnik);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiPredstavnika(string JMBG)
+        public static async Task   ObrisiPredstavnika(string JMBG)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Predstavnik z = s.Load<Predstavnik>(JMBG);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Predstavnik z = await s.LoadAsync<Predstavnik>(JMBG);
+                await s.DeleteAsync(z);
+               await  s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniPredstavnika(PredstavnikBasic p)
+        public static async Task   IzmeniPredstavnika(PredstavnikView p)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Predstavnik predstavnik = s.Load<Predstavnik>(p.JMBG);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Predstavnik predstavnik = await s.LoadAsync<Predstavnik>(p.JMBG);
+                if(predstavnik==null)
+                {
+                    throw new Exception("Zao nam je ne postoji predstavnik sa ovim JMBG");
+                }
                 predstavnik.JMBG = p.JMBG;
                 predstavnik.Ime = p.Ime;
                 predstavnik.Prezime = p.Prezime;
                 predstavnik.Pozicija = p.Pozicija;
                 predstavnik.Telefon = p.Telefon;
                 predstavnik.Email = p.Email;
-                predstavnik.Sluzba = s.Load<Sluzba>(p.IdSektor);
-                s.Update(predstavnik);
-                s.Flush();
+                predstavnik.Sluzba = await s.LoadAsync<Sluzba>(p.Id_Sektora);
+                await s.UpdateAsync(predstavnik);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<PredstavnikBasic> VratiPredstavnike()
+        public static async Task<IList<PredstavnikView>> VratiPredstavnike()
         {
-            List<PredstavnikBasic> sviPredstavnici = new List<PredstavnikBasic>();
+            List<PredstavnikView> sviPredstavnici = new List<PredstavnikView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Predstavnik> z = from o in s.Query<Predstavnik>()
-                                                      select o;
-                foreach (Predstavnik predstavnik in z)
+                if (s == null)
                 {
-                    sviPredstavnici.Add(new PredstavnikBasic(predstavnik.JMBG, predstavnik.Ime, predstavnik.Prezime,
-                        predstavnik.Pozicija, predstavnik.Telefon, predstavnik.Email, predstavnik.Sluzba.TipSektora, predstavnik.Sluzba.Id_Sektora));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviPredstavnici =await s.Query<Predstavnik>()
+                                .Select(s => new PredstavnikView(s))
+                                .ToListAsync();
+
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviPredstavnici;
         }
 
-        public static PredstavnikPregled VratiPredstavnika(string JMBG)
+        public static  async Task<PredstavnikView> VratiPredstavnika(string JMBG)
         {
-            PredstavnikPregled predstavnik = new PredstavnikPregled();
+            PredstavnikView predstavnik = new PredstavnikView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Predstavnik p = s.Load<Predstavnik>(JMBG);
-                predstavnik.JMBG = p.JMBG;
-                predstavnik.Ime = p.Ime;
-                predstavnik.Prezime = p.Prezime;
-                predstavnik.Pozicija = p.Pozicija;
-                predstavnik.Telefon = p.Telefon;
-                predstavnik.Email = p.Email;
-                predstavnik.IdSektor = p.Sluzba.Id_Sektora;
-                predstavnik.ImeSektora = p.Sluzba.TipSektora;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Predstavnik p = await s.LoadAsync<Predstavnik>(JMBG);
+                predstavnik = new PredstavnikView(p);
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return predstavnik;
         }
 
-
-        #endregion
-
-     
-
-        #region Servisi
-        public static void DodajServis(ServisiBasic s)
+        public static  async Task<PredstavnikView> VratiPredstacnikaJedinice(int IdSluzbe)
         {
-            try
-            {
-                ISession sess = DataLayer.GetSession();
-                Servisi servis = new Servisi();
-                servis.Id = s.Id;
-                servis.Vozilo = sess.Load<Vozilo>(s.RegistracijaVozilo);
-                servis.TipServisa = s.TipServisa;
-                servis.Datum = s.Datum;
-                sess.Save(servis);
-                sess.Flush();
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-
-        public static void ObrisiServis(int Id)
-        {
+            PredstavnikView predstavnik = new PredstavnikView();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Servisi z = s.Load<Servisi>(Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sluzba sluzba = await s.LoadAsync<Sluzba>(IdSluzbe);
+                
+                if (sluzba != null)
+                {
+                    Predstavnik p = sluzba.Predstavnik;
+                    predstavnik = await DTOManager.VratiPredstavnika(p.JMBG);
+                }
+   
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return predstavnik;
+        }
+
+        #endregion
+
+
+
+        #region Servisi
+        public static async Task   DodajServis(ServisiAddView s)
+        {
+            try
+            {
+                ISession sess = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Servisi servis = new Servisi();
+                servis.Id = s.Id;
+                servis.Vozilo = await sess.LoadAsync<Vozilo>(s.RegistarskaOznakaVozila);
+                if(servis.Vozilo== null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji vozila sa ovom registracijom");
+                }
+                servis.TipServisa = s.TipServisa;
+                servis.Datum = s.Datum;
+                await sess.SaveAsync(servis);
+                await sess.FlushAsync();
+                sess.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniServis(ServisiBasic s)
+
+        public static async Task   ObrisiServis(int Id)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+               
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Servisi z = await s.LoadAsync<Servisi>(Id);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji servis sa ovim Id");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task   IzmeniServis(ServisiAddView s)
         {
             try
             {
                 ISession session = DataLayer.GetSession();
-                Servisi Servis = session.Load<Servisi>(s.RegistracijaVozilo);
-                Servis.Id=s.Id;
-                Servis.Vozilo = session.Load<Vozilo>(s.RegistracijaVozilo);
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Servisi Servis = session.Load<Servisi>(s.Id);
+                if (Servis == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji servis sa ovim Id");
+                }
+                Servis.Vozilo = session.Load<Vozilo>(s.RegistarskaOznakaVozila);
                 Servis.TipServisa = s.TipServisa;
                 Servis.Datum = s.Datum;
-                session.Update(Servis);
-                session.Flush();
+                await session.UpdateAsync(Servis);
+                await session.FlushAsync();
                 session.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
         }
 
-        public static IList<ServisiBasic> VratiServise()
+        public static async Task<IList<ServisiView>> VratiServise()
         {
-            List<ServisiBasic> sviServisi = new List<ServisiBasic>();
+            List<ServisiView> sviServisi = new List<ServisiView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Servisi> z = from o in s.Query<Servisi>()
-                                                  select o;
-                foreach (Servisi servis in z)
+                
+                if (s == null)
                 {
-                    sviServisi.Add(new ServisiBasic(servis.Id, servis.Vozilo.Registarska_Oznaka, servis.TipServisa, servis.Datum));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                sviServisi = await s.Query<Servisi>()
+                            .Fetch(v=> v.Vozilo)
+                            .Select(s => new ServisiView(s))
+                            .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviServisi;
         }
 
-        public static ServisiBasic VratiServis(string RegistracijaVozilo0)
-        {
-            ServisiBasic servis = new ServisiBasic();
-            try
-            {
-                ISession sess = DataLayer.GetSession();
-                Servisi s = sess.Load<Servisi>(RegistracijaVozilo0);
-                servis.Id=s.Id;
-                servis.RegistracijaVozilo = s.Vozilo.Registarska_Oznaka;
-                servis.TipServisa = s.TipServisa;
-                servis.Datum = s.Datum;
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-            return servis;
-        }
+       
 
-        public static IList<ServisiBasic> VratiServiseVozila(string RegistracijaVozilo)
+        public static async Task<IList<ServisiView>> VratiServiseVozila(string RegistracijaVozilo)
         {
-            List<ServisiBasic> sviServisi = new List<ServisiBasic>();
+            List<ServisiView> sviServisi = new List<ServisiView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Servisi> z = from o in s.Query<Servisi>()
-                                                  where o.Vozilo.Registarska_Oznaka == RegistracijaVozilo
-                                                  select o;
-                foreach (Servisi servis in z)
-                {
-                    sviServisi.Add(new ServisiBasic(servis.Id, servis.Vozilo.Registarska_Oznaka, servis.TipServisa, servis.Datum));
-                }
+                sviServisi =await s.Query<Servisi>()
+                           .Fetch(v => v.Vozilo)
+                           .Where(s => s.Vozilo.Registarska_Oznaka == RegistracijaVozilo)
+                           .Select(s => new ServisiView(s))
+                           .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sviServisi;
         }
         #endregion
 
         #region IstorijaUlogaZaposlenih
-        public static void DodajIstorijuUloga(Istorija_Uloga_ZaposlenihBasic i)
+        public static async Task   DodajIstorijuUloga(Istorija_Uloga_ZaposlenihAddView i)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Istorija_Uloga_Zaposlenih istorija = new Istorija_Uloga_Zaposlenih();
-                istorija.Id = i.Id;
-                istorija.Zaposleni = sess.Load<Zaposlen>(i.JMBGZaposleni);
+                istorija.Zaposleni = await sess.LoadAsync<Zaposlen>(i.JMBGZaposlenog);
+                if(istorija.Zaposleni==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji radnik sa ovim JMBG");
+                }
                 istorija.Uloga = i.Uloga;
                 istorija.Datum_Od = i.Datum_Od;
                 istorija.Datum_Do = i.Datum_Do;
-                sess.Save(istorija);
-                sess.Flush();
+                await sess.SaveAsync(istorija);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void ObrisiIstorijuUloga(int Id)
+        public static async Task   ObrisiIstorijuUloga(int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Istorija_Uloga_Zaposlenih z = s.Load<Istorija_Uloga_Zaposlenih>(Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Istorija_Uloga_Zaposlenih z = await s.LoadAsync<Istorija_Uloga_Zaposlenih>(Id);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji istorija radnika sa ovim Id-em");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniIstorijuUloga(Istorija_Uloga_ZaposlenihBasic i)
+        public static async Task  ObrisiCeluIstorijuKorisnika(string JMBG)
+        {
+            List<Istorija_Uloga_Zaposlenih> istorija = new List<Istorija_Uloga_Zaposlenih>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                istorija =await  s.Query<Istorija_Uloga_Zaposlenih>()
+                            .Fetch(s => s.Zaposleni)
+                            .Where(s => s.Zaposleni.JMBG == JMBG)
+                            .ToListAsync();
+
+                foreach(Istorija_Uloga_Zaposlenih i in istorija)
+                {
+                    await s.DeleteAsync(i);
+                }
+                await s.FlushAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task   IzmeniIstorijuUloga(Istorija_Uloga_ZaposlenihAddView i, int Id)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Istorija_Uloga_Zaposlenih istorija = sess.Load<Istorija_Uloga_Zaposlenih>(i.JMBGZaposleni);
-                istorija.Id = i.Id;
-                istorija.Zaposleni = sess.Load<Zaposlen>(i.JMBGZaposleni);
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Istorija_Uloga_Zaposlenih istorija = await sess.LoadAsync<Istorija_Uloga_Zaposlenih>(Id);
+                if(istorija==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji istorija sa ovim ID-em");
+                }
+                istorija.Zaposleni = await sess.LoadAsync<Zaposlen>(i.JMBGZaposlenog);
+                if(istorija.Zaposleni==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji Zaposleni sa ovim JMBG-om");
+                }
                 istorija.Uloga = i.Uloga;
                 istorija.Datum_Od = i.Datum_Od;
                 istorija.Datum_Do = i.Datum_Do;
-                sess.Update(istorija);
-                sess.Flush();
+                await sess.UpdateAsync(istorija);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<Istorija_Uloga_ZaposlenihBasic> VratiIstoriju()
+        public static async Task<IList<Istorija_Uloga_ZaposlenihView>> VratiIstoriju()
         {
-            List<Istorija_Uloga_ZaposlenihBasic> Istorija = new List<Istorija_Uloga_ZaposlenihBasic>();
+            List<Istorija_Uloga_ZaposlenihView> Istorija = new List<Istorija_Uloga_ZaposlenihView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Istorija_Uloga_Zaposlenih> i = from o in s.Query<Istorija_Uloga_Zaposlenih>()
-                                                                    select o;
-                foreach (Istorija_Uloga_Zaposlenih ist in i)
+                if (s == null)
                 {
-                Istorija.Add(new Istorija_Uloga_ZaposlenihBasic(ist.Id, ist.Zaposleni.JMBG, ist.Uloga, ist.Datum_Od, ist.Datum_Do));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                    s.Close();
-                }
-                catch (Exception e)
-                {
-                }
-            return Istorija;
-            }
-
-        
-        public static Istorija_Uloga_ZaposlenihBasic VratiIstorijuU(string JMBGZaposleni)
-        {
-            Istorija_Uloga_ZaposlenihBasic istorija = new Istorija_Uloga_ZaposlenihBasic();
-            try
-            {
-                ISession sess = DataLayer.GetSession();
-                Istorija_Uloga_Zaposlenih i = sess.Load<Istorija_Uloga_Zaposlenih>(JMBGZaposleni);
-                istorija.JMBGZaposleni =i.Zaposleni.JMBG;
-                istorija.Uloga = i.Uloga;
-                istorija.Datum_Od = i.Datum_Od;
-                istorija.Datum_Do = i.Datum_Do;
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-            return istorija;
-        }
-
-        public static IList<Istorija_Uloga_ZaposlenihBasic> VratiIstorijuUZaposlenog(string JMBGZaposleni)
-        {
-            List<Istorija_Uloga_ZaposlenihBasic> Istorija = new List<Istorija_Uloga_ZaposlenihBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Istorija_Uloga_Zaposlenih> i = from o in s.Query<Istorija_Uloga_Zaposlenih>()
-                                                                    where o.Zaposleni.JMBG == JMBGZaposleni
-                                                                    select o;
-                foreach (Istorija_Uloga_Zaposlenih ist in i)
-                {
-                    Istorija.Add(new Istorija_Uloga_ZaposlenihBasic(ist.Id , ist.Zaposleni.JMBG, ist.Uloga, ist.Datum_Od, ist.Datum_Do));
-                }
+                Istorija = await s.Query<Istorija_Uloga_Zaposlenih>()
+                                .Select(s => new Istorija_Uloga_ZaposlenihView(s))
+                                .ToListAsync();
                 s.Close();
             }
             catch (Exception e)
             {
+            }
+            return Istorija;
+        }
+
+        
+        public static async Task<Istorija_Uloga_ZaposlenihView> VratiIstorijuU(int Id) 
+        {
+            Istorija_Uloga_ZaposlenihView istorija=null;
+            try
+            {
+                ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Istorija_Uloga_Zaposlenih ist = await sess.LoadAsync<Istorija_Uloga_Zaposlenih>(Id);
+                istorija = new Istorija_Uloga_ZaposlenihView(ist);
+                sess.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return istorija;
+        }
+
+        public static async Task<IList<Istorija_Uloga_ZaposlenihView>> VratiIstorijuUZaposlenog(string JMBGZaposleni)
+        {
+            List<Istorija_Uloga_ZaposlenihView> Istorija = new List<Istorija_Uloga_ZaposlenihView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Istorija = await s.Query<Istorija_Uloga_Zaposlenih>()
+                                 .Fetch(s=>s.Zaposleni)
+                                 .Where(s=> s.Zaposleni.JMBG== JMBGZaposleni)
+                                .Select(s => new Istorija_Uloga_ZaposlenihView(s))
+                                .ToListAsync();
+                
+                s.Close();
+            }
+            
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Istorija;
         }
         #endregion
 
         #region DodeljujeSe
-        public static void DodajDodeljivanje(DodeljujeSeBasic d)
+        public static async Task DodajDodeljivanje(DodeljujeSeAddView d)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 DodeljujeSe dodeljivanje = new DodeljujeSe();
-                dodeljivanje.Vozilo = sess.Load<Vozilo>(d.RegVozilo);
-                dodeljivanje.Radnik = sess.Load<OperativniRadnik>(d.JMBGPojedinac);
-                dodeljivanje.Jedinica = sess.Load<InterventnaJedinica>(d.idJedinica);
-                sess.Save(dodeljivanje);
-                sess.Flush();
+                var vozilo = await sess.LoadAsync<Vozilo>(d.RegVozilo);
+                dodeljivanje.Vozilo = vozilo;
+
+                var Jedinica = await sess.LoadAsync<InterventnaJedinica>(d.IdJedinica);
+                var Radnik = await sess.LoadAsync<OperativniRadnik>(d.JMBGRadnik);
+                if (vozilo is Dzipovi && d.IdJedinica.HasValue)
+                {
+                    throw new Exception("Zao nam je nije moguce dodeliti ovaj tip vozila jedinici");
+                }
+                else if (d.IdJedinica.HasValue && d.JMBGRadnik.IsNotEmpty())
+                {
+                    throw new Exception("Nije moguce da radnik i jedinica imaju vrednosti u ovoj tabeli");
+                }
+                dodeljivanje.Radnik = Radnik;
+                dodeljivanje.Jedinica = Jedinica;
+                dodeljivanje.DatumOd = d.DatumOd;
+                dodeljivanje.DatumDo = d.DatumDo;
+
+                await sess.SaveAsync(dodeljivanje);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiDodeljivanje(int Id)
+        public static async Task   ObrisiDodeljivanje(int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                DodeljujeSe z = s.Load<DodeljujeSe>(Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                DodeljujeSe z = await s.LoadAsync<DodeljujeSe>(Id);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji dodeljivanje vozila sa ovim id-em");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<DodeljujeSeBasic> VratiSvaDodeljivanja()
+        public static async Task<IList<DodeljujeSeView>> VratiSvaDodeljivanja()
         {
-            List<DodeljujeSeBasic> Dodeljivanja = new List<DodeljujeSeBasic>();
+            List<DodeljujeSeView> Dodeljivanja = new List<DodeljujeSeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.DodeljujeSe> i = from o in s.Query<DodeljujeSe>()
-                                                      select o;
-                foreach (DodeljujeSe dodeljivanje in i)
+                if (s == null)
                 {
-                    Dodeljivanja.Add(new DodeljujeSeBasic(dodeljivanje.Id ,dodeljivanje.Vozilo.Registarska_Oznaka, dodeljivanje.Radnik.JMBG, dodeljivanje.Jedinica.Jedinstveni_Broj, dodeljivanje.DatumOd, dodeljivanje.DatumDo));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Dodeljivanja =await  s.Query<DodeljujeSe>()
+                              .Fetch(s => s.Radnik)
+                              .Fetch(s => s.Jedinica)
+                              .Select(s=> new DodeljujeSeView(s))
+                              .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Dodeljivanja;
         }
-        public static IList<DodeljujeSeBasic> VratiDodeljivanjaVozila(string RegVozilo)
+        public static async Task<IList<DodeljujeSeView>> VratiDodeljivanjaVozila(string RegVozilo)
         {
-            List<DodeljujeSeBasic> Dodeljivanja = new List<DodeljujeSeBasic>();
+            List<DodeljujeSeView> Dodeljivanja = new List<DodeljujeSeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.DodeljujeSe> i = from o in s.Query<DodeljujeSe>()
-                                                      where o.Vozilo.Registarska_Oznaka == RegVozilo
-                                                      select o;
-                foreach (DodeljujeSe dodeljivanje in i)
+                if (s == null)
                 {
-                    Dodeljivanja.Add(new DodeljujeSeBasic(dodeljivanje.Id, dodeljivanje.Vozilo.Registarska_Oznaka, dodeljivanje.Radnik.JMBG, dodeljivanje.Jedinica.Jedinstveni_Broj, dodeljivanje.DatumOd, dodeljivanje.DatumDo));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Dodeljivanja =await s.Query<DodeljujeSe>()
+                             .Fetch(s => s.Radnik)
+                             .Fetch(s => s.Jedinica)
+                             .Where(s=> s.Vozilo.Registarska_Oznaka==RegVozilo)
+                             .Select(s => new DodeljujeSeView(s))
+                             .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
-            }
-            return Dodeljivanja;
-        }
-
-        public static IList<DodeljujeSeBasic> VratiDodeljivanjaRadnika(string JMBGPojedinac)
-        {
-            List<DodeljujeSeBasic> Dodeljivanja = new List<DodeljujeSeBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.DodeljujeSe> i = from o in s.Query<DodeljujeSe>()
-                                                      where o.Radnik.JMBG == JMBGPojedinac
-                                                      select o;
-                foreach (DodeljujeSe dodeljivanje in i)
-                {
-                    Dodeljivanja.Add(new DodeljujeSeBasic(dodeljivanje.Id, dodeljivanje.Vozilo.Registarska_Oznaka, dodeljivanje.Radnik.JMBG, dodeljivanje.Jedinica.Jedinstveni_Broj, dodeljivanje.DatumOd, dodeljivanje.DatumDo));
-                }
-                s.Close();
-            }
-            catch (Exception e)
-            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Dodeljivanja;
         }
 
+        public static async Task  <IList<VoziloView>> VratiDodeljenaVozilaRadniku(string JMBGPojedinac)
+        {
+            List<VoziloView> Vozila = new List<VoziloView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var DodeljujeSe =await s.Query<DodeljujeSe>()
+                                .Where(s => s.Radnik.JMBG == JMBGPojedinac)
+                                .Fetch(s => s.Vozilo)
+                                .ToListAsync();
+                foreach (var dodeljena in DodeljujeSe)
+                {
+                    Vozila.Add(new VoziloView(dodeljena.Vozilo));
+                }
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return Vozila;
+        }
+
+        public static async Task<IList<VoziloView>> VratiDodeljivanjaJedinic(int IdJedinica)
+        {
+            List<VoziloView> Vozila = new List<VoziloView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var DodeljujeSe =await s.Query<DodeljujeSe>()
+                                .Where(s => s.Jedinica.Jedinstveni_Broj == IdJedinica)
+                                .Fetch(s => s.Vozilo)
+                                .ToListAsync();
+                foreach (var dodeljena in DodeljujeSe)
+                {
+                    Vozila.Add(new VoziloView(dodeljena.Vozilo));
+                }
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return Vozila;
+        }
         #endregion
 
         #region Saradjuje
-        public static void DodajSaradnju(SaradjujeBasic s)
+        public static async Task   DodajSaradnju(SaradjujeAddView s)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Saradjuje saradnja = new Saradjuje();
-                saradnja.Id=s.Id;
-                saradnja.Uloga= s.Uloga;
-                saradnja.Sektor = sess.Load<Sluzba>(s.IdSektor);
-                saradnja.VandrednaSituacija = sess.Load<VanrednaSituacija>(s.IdVandrednaSituacija);
-
-                sess.Save(saradnja);
-                sess.Flush();
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void ObrisiSaradnju(int Id)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Saradjuje z = s.Load<Saradjuje>(Id);
-                s.Delete(z);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void IzmeniSaradnju(SaradjujeBasic s)
-        {
-            try
-            {
-                ISession sess = DataLayer.GetSession();
-                Saradjuje saradnja = sess.Load<Saradjuje>(s.Id);
-                saradnja.Id = s.Id;
-                saradnja.Uloga = s.Uloga;
-                saradnja.Sektor = sess.Load<Sluzba>(s.IdSektor);
-                saradnja.VandrednaSituacija = sess.Load<VanrednaSituacija>(s.IdVandrednaSituacija);
-                sess.Update(saradnja);
-                sess.Flush();
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-        public static IList<SaradjujeBasic> VratiSaradnje()
-        {
-            List<SaradjujeBasic> Saradnje = new List<SaradjujeBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Saradjuje> i = from o in s.Query<Saradjuje>()
-                                                   select o;
-                foreach (Saradjuje saradnja in i)
+                if (sess == null)
                 {
-                    Saradnje.Add(new SaradjujeBasic(saradnja.Id, saradnja.Uloga, saradnja.Sektor.Id_Sektora, saradnja.VandrednaSituacija.Id));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Saradjuje saradnja = new Saradjuje();
+                saradnja.Uloga= s.Uloga;
+                saradnja.Sektor = await sess.LoadAsync<Sluzba>(s.SektorID);
+                saradnja.VandrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
+                if(saradnja.Sektor==null || saradnja.VandrednaSituacija ==null)
+                {
+                    throw new KeyNotFoundException("zao nam je jedno od obaveznih polja je neispravno");
+                }
+                await sess.SaveAsync(saradnja);
+                await sess.FlushAsync();
+                sess.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task   ObrisiSaradnju(int Id)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Saradjuje z = await s.LoadAsync<Saradjuje>(Id);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je saradnja sa ovim id-em ne postoji");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task   IzmeniSaradnju(SaradjujeAddView s)
+        {
+            try
+            {
+                ISession sess = DataLayer.GetSession();
+                Saradjuje saradnja = await sess.LoadAsync<Saradjuje>(s.Id);
+                if (saradnja==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je saradnja sa ovim id-em ne postoji");
+                }
+                saradnja.Uloga = s.Uloga;
+                saradnja.Sektor = await sess.LoadAsync<Sluzba>(s.SektorID);
+                saradnja.VandrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
+                if (saradnja.Sektor == null ||  saradnja.VandrednaSituacija == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je neki od podataka nisu tacni");
+                }
+                await sess.UpdateAsync(saradnja);
+                await sess.FlushAsync();
+                sess.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task<IList<SaradjujeView>> VratiSaradnje()
+        {
+            List<SaradjujeView> Saradnje = new List<SaradjujeView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                Saradnje =await  s.Query<Saradjuje>()
+                         .Fetch(s => s.VandrednaSituacija)
+                         .Fetch(s => s.Sektor)
+                         .Select(s => new SaradjujeView(s))
+                         .ToListAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Saradnje;
         }
 
-        public static SaradjujeBasic VratiSaradnju(int Id)
+        public static async Task<SaradjujeView> VratiSaradnju(int Id)
         {
-            SaradjujeBasic saradnja = new SaradjujeBasic();
+            SaradjujeView saradnja = new SaradjujeView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Saradjuje s = sess.Load<Saradjuje>(Id);
-                saradnja.Id = s.Id;
-                saradnja.Uloga = s.Uloga;
-                saradnja.IdSektor = s.Sektor.Id_Sektora;
-                saradnja.IdVandrednaSituacija = s.VandrednaSituacija.Id;
+                Saradjuje s = await sess.LoadAsync<Saradjuje>(Id);
+                if (s == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je saradnje sa ovim id-em ne postoji");
+                }
+                saradnja = new SaradjujeView(s);
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return saradnja;
         }
-        public static IList<SaradjujePregled> VratiSveSaradnjeSektora(int IdSektor)
+        public static async Task<IList<SluzbaView>> VratiSveSluzbeUVandrednojSituaciji(int IdVS)
         { 
-                List<SaradjujePregled> Saradnje = new List<SaradjujePregled>();
+                List<SluzbaView> Sluzba = new List<SluzbaView>();
                 try
                 {
                     ISession s = DataLayer.GetSession();
 
-                    IEnumerable<Saradjuje> sek = from o in s.Query<Saradjuje>()
-                                                 where o.Sektor.Id_Sektora == IdSektor
-                                                 select o;
+                var Saradnja = await s.Query<Saradjuje>()
+                               .Where(s => s.VandrednaSituacija.Id == IdVS)
+                               .Fetch(s => s.Sektor)
+                               .ToListAsync();
 
-                    foreach (Saradjuje sa in sek)
+                    foreach (var S in Saradnja)
                     {
-                        SluzbaPregled sluzba = DTOMAnager.VratiSluzbu(sa.Sektor.Id_Sektora);
-                        VandrednaSituacijaPregled vs = DTOMAnager.VratiVandrednuSituaciju(sa.VandrednaSituacija.Id);
-                        Saradnje.Add(new SaradjujePregled(sa.Id, sa.Uloga, sluzba, vs));
+                        Sluzba.Add(new SluzbaView(S.Sektor));
                     }
 
-                    ;
+                    
 
                 }
-                catch (Exception ec)
-                {
-                    //handle exceptions
-                }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
 
-                return Saradnje;
+            return Sluzba;
            
+        }
+
+        public static async Task<IList<VanrednaSituacijaView>> VratiSveUVanredneSituacijeUKojojJeUcestvovalaSluzba(int IdSluzbe)
+        {
+            List<VanrednaSituacijaView> VSituacije = new List<VanrednaSituacijaView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                var Saradnja =await  s.Query<Saradjuje>()
+                               .Where(s => s.Sektor.Id_Sektora == IdSluzbe)
+                               .Fetch(s => s.VandrednaSituacija)
+                               .ToListAsync();
+
+                foreach (var S in Saradnja)
+                {
+                    VSituacije.Add(new VanrednaSituacijaView(S.VandrednaSituacija));
+                }
+
+
+
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+
+            return VSituacije;
+
         }
         #endregion
 
         #region Ucestvovalo
-        public static void DodajUcestvovanje(UcestvovaloBasic u)
+        public static async Task   DodajUcestvovanje(UcestvovaloAddView u)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
                 Ucestvovalo ucestvovanje = new Ucestvovalo();
-                ucestvovanje.ID = u.ID;
-                ucestvovanje.Vozilo = sess.Load<Vozilo>(u.RegVozilo);
-                ucestvovanje.Jedinica = sess.Load<InterventnaJedinica>(u.IdJedinica);
-                sess.Save(ucestvovanje);
-                sess.Flush();
+                ucestvovanje.Vozilo = await sess.LoadAsync<Vozilo>(u.VoziloReg);
+                ucestvovanje.Intervencija = await sess.LoadAsync<Intervencija>(u.IntervencijaID);
+                if (ucestvovanje.Vozilo == null || ucestvovanje.Intervencija == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je neki od podataka nisu tacni");
+                }
+                ucestvovanje.Datum_Od = u.Datum_Od;
+                ucestvovanje.Datum_Do = u.Datum_Do;
+                await sess.SaveAsync(ucestvovanje);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void ObrisiUcestvovanje(int Id)
+        public static async Task   ObrisiUcestvovanje(int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Ucestvovalo z = s.Load<Ucestvovalo>(Id);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ucestvovalo ucestvovanje = await s.LoadAsync<Ucestvovalo>(Id);
+                if (ucestvovanje == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji ucestvovanje sa ovim id-em");
+                }
+                await s.DeleteAsync(ucestvovanje);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniUcestvovanje(UcestvovaloBasic u)
+        public static async Task IzmeniUcestvovanje(UcestvovaloAddView u)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Ucestvovalo ucestvovanje = sess.Load<Ucestvovalo>(u.ID);
-                ucestvovanje.ID = u.ID;
-                ucestvovanje.Vozilo = sess.Load<Vozilo>(u.RegVozilo);
-                ucestvovanje.Jedinica = sess.Load<InterventnaJedinica>(u.IdJedinica);
-                sess.Update(ucestvovanje);
-                sess.Flush();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ucestvovalo ucestvovanje = await sess.LoadAsync<Ucestvovalo>(u.ID);
+                if (ucestvovanje == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji ucestvovanje sa ovim id-em");
+                }
+                ucestvovanje.Vozilo = await sess.LoadAsync<Vozilo>(u.VoziloReg);
+                ucestvovanje.Intervencija = await sess.LoadAsync<Intervencija>(u.IntervencijaID);
+                if (ucestvovanje.Vozilo == null|| ucestvovanje.Intervencija==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je neki od podataka nisu tacni");
+                }
+                ucestvovanje.Datum_Od = u.Datum_Od;
+                ucestvovanje.Datum_Do = u.Datum_Do;
+                await sess.UpdateAsync(ucestvovanje);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static IList<UcestvovaloBasic> VratiUcestvovanja()
+        public static async Task<IList<UcestvovaloView>> VratiUcestvovanja()
         {
-            List<UcestvovaloBasic> ucestvovalo = new List<UcestvovaloBasic>();
+            List<UcestvovaloView> ucestvovalo = new List<UcestvovaloView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvovalo> i = from o in s.Query<Ucestvovalo>()
-                                                 select o;
-                foreach (Ucestvovalo u in i)
+                if (s == null)
                 {
-                    
-                    ucestvovalo.Add(new UcestvovaloBasic(u.ID, u.Vozilo.Registarska_Oznaka, u.Jedinica.Jedinstveni_Broj));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                ucestvovalo =await s.Query<Ucestvovalo>()
+                            .Fetch(v => v.Vozilo)
+                            .Fetch(i => i.Intervencija)
+                            .Select(s => new UcestvovaloView(s))
+                            .ToListAsync();
+              
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
-        
+
             return ucestvovalo;
         }
-        public static UcestvovaloBasic VratiUcestvovanje(int Id)
+        public static async Task<UcestvovaloView> VratiUcestvovanje(int Id)
         {
-            UcestvovaloBasic ucestv = new UcestvovaloBasic();
+            UcestvovaloView ucestv = new UcestvovaloView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Ucestvovalo u = sess.Load<Ucestvovalo>(Id);
-                ucestv.ID = u.ID;
-                ucestv.RegVozilo = u.Vozilo.Registarska_Oznaka;
-                ucestv.IdJedinica = u.Jedinica.Jedinstveni_Broj;
+                Ucestvovalo u = await sess.LoadAsync<Ucestvovalo>(Id);
+                if (u == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji ucestvovanje sa ovim id-em");
+                }
+                ucestv = new UcestvovaloView(u);
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ucestv;
         }
-        public static IList<UcestvovaloBasic> VratiUcestvovanjaVozila(string RegVozilo)
+
+        public static async Task<IList<UcestvovaloView>> VratiUcestvovanjaVozilaU(int IntervencijaId)
         {
-            List<UcestvovaloBasic> ucestvovalo = new List<UcestvovaloBasic>();
+            List<UcestvovaloView> ucestvovalo = new List<UcestvovaloView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvovalo> i = from o in s.Query<Ucestvovalo>()
-                                                     where o.Vozilo.Registarska_Oznaka == RegVozilo
-                                                 select o;
-                foreach (Ucestvovalo u in i)
+
+                var Ucestvovalo = await s.Query<Ucestvovalo>()
+                                .Fetch(s => s.Vozilo)
+                                .Where(s => s.Intervencija.Id == IntervencijaId)
+                                .ToListAsync();
+                foreach (var v in Ucestvovalo)
                 {
-                    ucestvovalo.Add(new UcestvovaloBasic(u.ID, u.Vozilo.Registarska_Oznaka, u.Jedinica.Jedinstveni_Broj));
+                    ucestvovalo.Add(new UcestvovaloView(v));
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
-            }
-            return ucestvovalo;
-        }
-        public static IList<UcestvovaloBasic> VratiUcestvovanjauIntervenciji(int IdIntervencije)
-        {
-            List<UcestvovaloBasic> ucestvovalo = new List<UcestvovaloBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvovalo> i = from o in s.Query<Ucestvovalo>()
-                                                      where o.Jedinica.Jedinstveni_Broj == IdIntervencije
-                                                      select o;
-                foreach (Ucestvovalo u in i)
-                {
-                    ucestvovalo.Add(new UcestvovaloBasic(u.ID, u.Vozilo.Registarska_Oznaka, u.Jedinica.Jedinstveni_Broj));
-                }
-                s.Close();
-            }
-            catch (Exception e)
-            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ucestvovalo;
         }
 
+
+        public static async Task<IList<VoziloView>> VratiUcestvovanjaVozilaUIntervencijama(int IntervencijaId)
+        {
+            List<VoziloView> vozila = new List<VoziloView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                var Ucestvovalo =await s.Query<Ucestvovalo>()
+                                .Fetch(s => s.Vozilo)
+                                .Where(s => s.Intervencija.Id == IntervencijaId)
+                                .ToListAsync();
+                foreach (var v in Ucestvovalo)
+                {
+                    vozila.Add(new VoziloView(v.Vozilo));
+                }
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return vozila;
+        }
+        public static async Task<IList<IntervencijaView>> VratiIntervencijeUKojimajeUcestvovaloVozilo(string RegOznaka)
+        {
+            List<IntervencijaView> Intervencije = new List<IntervencijaView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                var Ucestvovalo =await s.Query<Ucestvovalo>()
+                                .Fetch(s => s.Intervencija)
+                                .Where(s => s.Vozilo.Registarska_Oznaka == RegOznaka)
+                                .ToListAsync();
+                foreach (var v in Ucestvovalo)
+                {
+                    Intervencije.Add(new IntervencijaView(v.Intervencija));
+                }
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return Intervencije;
+        }
+
+        public static async Task<IList<UcestvovaloView>> VratiUcestvovanjeVozilaUKojimajeUcestvovalo(string RegOznaka)
+        {
+            List<UcestvovaloView> ucestvovalo = new List<UcestvovaloView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+
+                var Ucestvovalo = await s.Query<Ucestvovalo>()
+                                .Fetch(s => s.Intervencija)
+                                .Where(s => s.Vozilo.Registarska_Oznaka == RegOznaka)
+                                .ToListAsync();
+                foreach (var v in Ucestvovalo)
+                {
+                    ucestvovalo.Add(new UcestvovaloView(v));
+                }
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+            return ucestvovalo;
+        }
         #endregion
 
         #region Ucestvuje
-        public static void DodajUcestvuje(UcestvujeBasic u)
+        public static async Task DodajUcestvuje(UcestvujeView u)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
                 Ucestvuje ucestvovanje = new Ucestvuje();
-                ucestvovanje.Id=u.Id;
-                ucestvovanje.IdInterventneJed = sess.Load<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = sess.Load<VanrednaSituacija>(u.IdVandredneSituacije);
-                ucestvovanje.IdIntervencije = sess.Load<Intervencija>(u.IdIntervencije);
-                sess.Save(ucestvovanje);
-                sess.Flush();
+                ucestvovanje.IdInterventneJed = await sess.LoadAsync<InterventnaJedinica>(u.IdInterventneJed);
+                ucestvovanje.IdVandredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVandredneSituacije);
+                ucestvovanje.IdIntervencije = await sess.LoadAsync<Intervencija>(u.IdIntervencije);
+                if (ucestvovanje.IdInterventneJed == null || ucestvovanje.IdVandredneSituacije == null || ucestvovanje.IdIntervencije == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je nemate obavezne stavke");
+                }
+                await sess.SaveAsync(ucestvovanje);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void ObrisiUcestvuje(int Id)
+        public static async Task   ObrisiUcestvuje(int Id)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Ucestvuje z = s.Load<Ucestvuje>(Id);
-                s.Delete(z);
-                s.Flush();
+                Ucestvuje z = await s.LoadAsync<Ucestvuje>(Id);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji ucestvovanje sa ovim id-em");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void IzmeniUcestvuje(UcestvujeBasic u)
+        public static async Task   IzmeniUcestvuje(UcestvujeAddView u)
         {
             try
             {
-                ISession sess = DataLayer.GetSession();
-                Ucestvuje ucestvovanje = sess.Load<Ucestvuje>(u.Id);
+                ISession sess = DataLayer.GetSession(); 
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ucestvuje ucestvovanje = await sess.LoadAsync<Ucestvuje>(u.Id);
+                if(ucestvovanje==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji ucestvovanje sa ovim Id-em");
+                }
                 ucestvovanje.Id = u.Id;
-                ucestvovanje.IdInterventneJed = sess.Load<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = sess.Load<VanrednaSituacija>(u.IdVandredneSituacije);
-                ucestvovanje.IdIntervencije = sess.Load<Intervencija>(u.IdIntervencije);
-                sess.Update(ucestvovanje);
-                sess.Flush();
+                ucestvovanje.IdInterventneJed = await sess.LoadAsync<InterventnaJedinica>(u.IdInterventneJed);
+                ucestvovanje.IdVandredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVandredneSituacije);
+                ucestvovanje.IdIntervencije = await sess.LoadAsync<Intervencija>(u.IdIntervencije);
+                if(ucestvovanje.IdInterventneJed==null || ucestvovanje.IdVandredneSituacije==null|| ucestvovanje.IdIntervencije==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je nemate obavezne stavke"); 
+                }
+                await sess.UpdateAsync(ucestvovanje);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
         
-        public static IList<UcestvujeBasic> VratiSvaUcestvovanja()
+        public static async Task<IList<UcestvujeView>> VratiSvaUcestvovanja()
         {
-            List<UcestvujeBasic> ucestvuj = new List<UcestvujeBasic>();
+            List<UcestvujeView> ucestvuj = new List<UcestvujeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvuje> i = from o in s.Query<Ucestvuje>()
-                                                      select o;
-                foreach (Ucestvuje u in i)
+                if (s == null)
                 {
-
-                    ucestvuj.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                ucestvuj = await s.Query<Ucestvuje>()
+                          .Select(s=> new UcestvujeView(s))
+                          .ToListAsync();
+                
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
 
             return ucestvuj;
         }
-        public static UcestvujeBasic VratiUcestvuje(int Id)
+        public static async Task<UcestvujeView>VratiUcestvuje(int Id)
         {
-            UcestvujeBasic ucestv = new UcestvujeBasic();
+            UcestvujeView ucestv = new UcestvujeView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Ucestvuje u = sess.Load<Ucestvuje>(Id);
-                ucestv.Id = u.Id;
-                ucestv.IdVandredneSituacije = u.IdVandredneSituacije.Id;
-                ucestv.IdInterventneJed = u.IdInterventneJed.Jedinstveni_Broj;
-                ucestv.IdIntervencije = u.IdIntervencije.Id;
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Ucestvuje u = await sess.LoadAsync<Ucestvuje>(Id);
+                if(u==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ali ucestvovanje sa ovim Id ne postoji");
+                }
+                ucestv = new UcestvujeView(u);
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ucestv;
         }
 
-        public static IList<UcestvujeBasic> VratiSvaUcestvovanjaUVandrednojSituaciji(int IdVS)
+        public static async Task<IList<UcestvujeView>> VratiSvaUcestvovanjaUVanrednojSituaciji(int IdVS)
         {
-            List<UcestvujeBasic> ucestvovalo = new List<UcestvujeBasic>();
+            List<UcestvujeView> ucestvovalo = new List<UcestvujeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvuje> i = from o in s.Query<Ucestvuje>()
-                                                      where o.IdVandredneSituacije.Id == IdVS
-                                                      select o;
-                foreach (Ucestvuje u in i)
+                if (s == null)
                 {
-                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var Ucestvovalo =await s.Query<Ucestvuje>()
+                                 .Fetch(s => s.IdInterventneJed)
+                                 .Where(s => s.IdVandredneSituacije.Id == IdVS)
+                                 .ToListAsync();
+                foreach (var v in Ucestvovalo)
+                {
+                    ucestvovalo.Add(new UcestvujeView(v));
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ucestvovalo;
 
         }
 
-        public static IList<UcestvujeBasic> VratiSvaUcestvovanjaUIntervenciji(int IdInt)
+        public static async Task<IList<UcestvujeView>> VratiSvaUcestvovanjaUIntervenciji(int IdIntervencije)
         {
-            List<UcestvujeBasic> ucestvovalo = new List<UcestvujeBasic>();
+            List<UcestvujeView> ucestvovalo = new List<UcestvujeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvuje> i = from o in s.Query<Ucestvuje>()
-                                                    where o.IdIntervencije.Id == IdInt
-                                                    select o;
-                foreach (Ucestvuje u in i)
+                if (s == null)
                 {
-                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var Ucestvovalo = await s.Query<Ucestvuje>()
+                                 .Fetch(s => s.IdInterventneJed)
+                                 .Where(s => s.IdIntervencije.Id == IdIntervencije)
+                                 .ToListAsync();
+                foreach (var v in Ucestvovalo)
+                {
+                    ucestvovalo.Add(new UcestvujeView(v));
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ucestvovalo;
 
         }
 
-        public static IList<UcestvujeBasic> VratiSvaUcestvovanjaJedinice(int IdJed)
+        public static async Task<IList<UcestvujeView>> VratiSvaUcestvovanjaJedinice(int IdJed)
         {
-            List<UcestvujeBasic> ucestvovalo = new List<UcestvujeBasic>();
+            List<UcestvujeView> ucestvovalo = new List<UcestvujeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Ucestvuje> i = from o in s.Query<Ucestvuje>()
-                                                    where o.IdInterventneJed.Jedinstveni_Broj == IdJed
-                                                    select o;
-                foreach (Ucestvuje u in i)
+                if (s == null)
                 {
-                    ucestvovalo.Add(new UcestvujeBasic(u.Id, u.IdInterventneJed.Jedinstveni_Broj, u.IdVandredneSituacije.Id, u.IdIntervencije.Id));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                var Ucestvovalo = await s.Query<Ucestvuje>()
+                                 .Fetch(s => s.IdInterventneJed)
+                                 .Where(s => s.IdInterventneJed.Jedinstveni_Broj == IdJed)
+                                 .ToListAsync();
+                foreach (var v in Ucestvovalo)
+                {
+                    ucestvovalo.Add(new UcestvujeView(v));
                 }
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return ucestvovalo;
 
         }
         #endregion
+
         #region Sluzba
-        public static void DodajSluzbu(SluzbaBasic s) 
+        public static async Task   DodajSluzbu(SluzbaView s) 
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
                 Sluzba sluzba = new Sluzba();
                 sluzba.Id_Sektora = s.Id_Sektora;
                 sluzba.TipSektora = s.TipSektora;
-                sluzba.Predstavnik= sess.Load<Predstavnik>(s.Predstavnik);
-                sess.Save(sluzba);
-                sess.Flush();
+                sluzba.Predstavnik= await sess.LoadAsync<Predstavnik>(s.Predstavnik);
+                await sess.SaveAsync(sluzba);
+                await sess.FlushAsync();
                 sess.Close();
-
-
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static void ObrisiSluzbu(int IdSektor)
+        public static async Task  ObrisiSluzbu(int IdSektor)
         {
             try
             {
                 ISession s = DataLayer.GetSession();
-                Sluzba z = s.Load<Sluzba>(IdSektor);
-                s.Delete(z);
-                s.Flush();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sluzba z = await s.LoadAsync<Sluzba>(IdSektor);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je sluzba sa ovim Id-em ne postoji");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
 
-        public static void IzmeniSluzbu(SluzbaBasic s)
+        public static async Task   IzmeniSluzbu(SluzbaView s)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Sluzba sluzba = sess.Load<Sluzba>(s.Id_Sektora);
-                sluzba.Id_Sektora = s.Id_Sektora;
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sluzba sluzba = await sess.LoadAsync<Sluzba>(s.Id_Sektora);
+                if(sluzba==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je sluzba sa ovim Id-em ne postoji");
+                }
                 sluzba.TipSektora = s.TipSektora;
-                sluzba.Predstavnik = sess.Load<Predstavnik>(s.Predstavnik);
-                sess.Update(sluzba);
-                sess.Flush();
+                sluzba.Predstavnik = await sess.LoadAsync<Predstavnik>(s.Predstavnik);
+                await sess.UpdateAsync(sluzba);
+                await sess.FlushAsync();
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
         }
-        public static IList<SluzbaPregled> VratiSluzbe()
+        public static async Task<IList<SluzbaView>> VratiSluzbe()
         {
-            List<SluzbaPregled> Sluzbe = new List<SluzbaPregled>();
+            List<SluzbaView> Sluzbe = new List<SluzbaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Sluzba> i = from o in s.Query<Sluzba>()
-                                                 select o;
-                foreach (Sluzba sluzba in i)
+                if (s == null)
                 {
-                    PredstavnikPregled p= DTOMAnager.VratiPredstavnika(sluzba.Predstavnik.JMBG);
-                    Sluzbe.Add(new SluzbaPregled(sluzba.Id_Sektora, sluzba.TipSektora, p));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Sluzbe =await s.Query<Sluzba>()
+                       .Fetch(s => s.Predstavnik)
+                       .Select(s => new SluzbaView(s))
+                       .ToListAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Sluzbe;
         }
-        public static SluzbaPregled VratiSluzbu(int IdSektora)
+        public static  async Task<SluzbaView> VratiSluzbu(int IdSektora)
         {
-            SluzbaPregled sluzba = new SluzbaPregled();
+            SluzbaView sluzba = new SluzbaView();
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Sluzba s = sess.Load<Sluzba>(IdSektora);
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Sluzba s = await sess.LoadAsync<Sluzba>(IdSektora);
+                if(s==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji sluzba sa ovim Id-em");
+                }
                 sluzba.Id_Sektora = s.Id_Sektora;
                 sluzba.TipSektora = s.TipSektora;
-                PredstavnikPregled p = DTOMAnager.VratiPredstavnika(s.Predstavnik.JMBG);
+                PredstavnikView p = new PredstavnikView();
+                p = await DTOManager.VratiPredstavnika(s.Predstavnik.JMBG);
                 sluzba.Predstavnik = p;
                 sess.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return sluzba;
         }
 
-        public static IList<SaradjujePregled> VratiSveVandredneUKojimaSaradjujeSektor(int IdSektor)
+        public static async Task<IList<VanrednaSituacijaView>> VratiSveVanredneUKojimaSaradjujeSektor(int IdSektor)
         {
-            List<SaradjujePregled> Vandredne = new List<SaradjujePregled>();
+            List<VanrednaSituacijaView> Vanredne = new List<VanrednaSituacijaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Saradjuje> i = from o in s.Query<Saradjuje>()
-                                                   where o.Sektor.Id_Sektora == IdSektor
-                                                   select o;
-                foreach (Saradjuje saradnja in i)
+                if (s == null)
                 {
-
-                    VandrednaSituacijaPregled v= DTOMAnager.VratiVandrednuSituaciju(saradnja.VandrednaSituacija.Id);
-                    SluzbaPregled sluzba= DTOMAnager.VratiSluzbu(saradnja.Sektor.Id_Sektora);
-                    Vandredne.Add(new SaradjujePregled(saradnja.Id, saradnja.Uloga,sluzba, v ));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                var Query =  s.Query<Saradjuje>()
+                             .Where(o => o.Sektor.Id_Sektora == IdSektor)
+                             .Fetch(o => o.Sektor)
+                             .ToList();
+                Vanredne =  Query.Select(o => new VanrednaSituacijaView(o.VandrednaSituacija))
+                                            .Distinct()
+                                            .ToList();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
-            return Vandredne;
+            return Vanredne;
         }
-        public static IList<SaradjujePregled> VratiSveSluzbeKojeSaradjujuSaVS(int IdVS)
+        public static  async Task<IList<SluzbaView>> VratiSveSluzbeKojeSaradjujuSaVS(int IdVS)
         {
-            List<SaradjujePregled> Sluzbe = new List<SaradjujePregled>();
+            List<SluzbaView> Sluzbe = new List<SluzbaView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Saradjuje> i = from o in s.Query<Saradjuje>()
-                                                    where o.VandrednaSituacija.Id == IdVS
-                                                    select o;
-                foreach (Saradjuje saradnja in i)
+                if (s == null)
                 {
-
-                    VandrednaSituacijaPregled v = DTOMAnager.VratiVandrednuSituaciju(saradnja.VandrednaSituacija.Id);
-                    SluzbaPregled sluzba = DTOMAnager.VratiSluzbu(saradnja.Sektor.Id_Sektora);
-                    Sluzbe.Add(new SaradjujePregled(saradnja.Id, saradnja.Uloga, sluzba, v));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                var izvuciSluzbe = s.Query<Saradjuje>()
+                             .Where(o => o.VandrednaSituacija.Id == IdVS)
+                             .Fetch(o => o.VandrednaSituacija)
+                             .ToList();
+                Sluzbe =  izvuciSluzbe.Select(o => new SluzbaView(o.Sektor))
+                                            .Distinct()
+                                            .ToList();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Sluzbe;
         }
@@ -3449,112 +4429,130 @@ namespace ProjekatVandredneSituacije
         #endregion
 
         #region Softver
-        public static void DodajSoftver(SoftverBasic s)
+        public static async Task  DodajSoftver(SoftverAddView s)
         {
             try
             {
                 ISession sess = DataLayer.GetSession();
-                Softver softver = new Softver();
-                softver.Analiticar = sess.Load<Analiticar>(s.AnaliticarJMBG);
-                softver.Naziv = s.Naziv;
-                sess.Save(softver);
-                sess.Flush();
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void ObrisiSoftver(int IdSoftver)
-        {
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                Softver z = s.Load<Softver>(IdSoftver);
-                s.Delete(z);
-                s.Flush();
-                s.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-
-        public static void IzmeniSoftver(SoftverBasic s)
-        {
-            try
-            {
-                ISession sess = DataLayer.GetSession();
-                Softver softver = sess.Load<Softver>(s.AnaliticarJMBG);
-                softver.Analiticar = sess.Load<Analiticar>(s.AnaliticarJMBG);
-                softver.Naziv = s.Naziv;
-                sess.Update(softver);
-                sess.Flush();
-                sess.Close();
-            }
-            catch (Exception ec)
-            {
-                //handle exceptions
-            }
-        }
-        public static IList<SoftverBasic> VratiSoftvere()
-        {
-            List<SoftverBasic> Softveri = new List<SoftverBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Softver> i = from o in s.Query<Softver>()
-                                                  select o;
-                foreach (Softver softver in i)
+                if (sess == null)
                 {
-                    Softveri.Add(new SoftverBasic(softver.Analiticar.JMBG, softver.Naziv));
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                Softver softver = new Softver();
+                softver.Analiticar = await sess.LoadAsync<Analiticar>(s.JMBG_Analiticar);
+                if(softver.Analiticar==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji analititcar sa ovim JMBG-om");
+                }
+                softver.Naziv = s.Naziv;
+                await sess.SaveAsync(softver);
+                await sess.FlushAsync();
+                sess.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task ObrisiSoftver(int IdSoftver)
+        {
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Softver z = await s.LoadAsync<Softver>(IdSoftver);
+                if (z == null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji softver sa vim Id-em");
+                }
+                await s.DeleteAsync(z);
+                await s.FlushAsync();
                 s.Close();
             }
-            catch (Exception e)
+            catch (Exception ec)
             {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+
+        public static async Task IzmeniSoftver(SoftverAddView s, int Id)
+        {
+            try
+            {
+                ISession sess = DataLayer.GetSession();
+                if (sess == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Softver softver = await sess.LoadAsync<Softver>(s.JMBG_Analiticar);
+                if(softver==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji softver sa vim Id-em");
+                }
+                softver.Analiticar = await sess.LoadAsync<Analiticar>(s.JMBG_Analiticar);
+                if(softver.Analiticar==null)
+                {
+                    throw new KeyNotFoundException("Zao nam je ne postoji analititcar sa ovim JMBG-om");
+                }
+                softver.Naziv = s.Naziv;
+                await sess.UpdateAsync(softver);
+                await sess.FlushAsync();
+                sess.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
+            }
+        }
+        public static async Task<IList<SoftverView>> VratiSoftvere()
+        {
+            List<SoftverView> Softveri = new List<SoftverView>();
+            try
+            {
+                ISession s = DataLayer.GetSession();
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Softveri =await s.Query<Softver>()
+                          .Fetch(s => s.Analiticar)
+                          .Select(s => new SoftverView(s))
+                          .ToListAsync();
+                s.Close();
+            }
+            catch (Exception ec)
+            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Softveri;
         }
 
-        public static SoftverBasic VratiSoftver(string JMBGAnaliticara)
+       
+
+        public static async Task<IList<SoftverView>> VratiSoftvereAnaliticara(string JMBGAnaliticara)
         {
-            SoftverBasic softver = new SoftverBasic();
+            List<SoftverView> Softveri = new List<SoftverView>();
             try
             {
                 ISession s = DataLayer.GetSession();
-                Softver so = s.Load<Softver>(JMBGAnaliticara);
-                softver.AnaliticarJMBG= so.Analiticar.JMBG;
-                softver.Naziv = so.Naziv;
+                if (s == null)
+                {
+                    throw new SessionException("Doslo je do greske pri pravljenju sesije");
+                }
+                Softveri =await  s.Query<Softver>()
+                            .Fetch(s => s.Analiticar)
+                            .Where(s => s.Analiticar.JMBG == JMBGAnaliticara)
+                            .Select(s => new SoftverView(s))
+                            .ToListAsync();
                 s.Close();
             }
             catch (Exception ec)
             {
-                //handle exceptions
-            }
-            return softver;
-        }
-
-        public static IList<SoftverBasic> VratiSoftvereAnaliticara(string JMBGAnaliticara)
-        {
-            List<SoftverBasic> Softveri = new List<SoftverBasic>();
-            try
-            {
-                ISession s = DataLayer.GetSession();
-                IEnumerable<Entiteti.Softver> i = from o in s.Query<Softver>()
-                                                  where o.Analiticar.JMBG == JMBGAnaliticara
-                                                  select o;
-                foreach (Softver softver in i)
-                {
-                    Softveri.Add(new SoftverBasic(softver.Analiticar.JMBG, softver.Naziv));
-                }
-                s.Close();
-            }
-            catch (Exception e)
-            {
+                throw new Exception("Zao nam je doslo je do greske!", ec);
             }
             return Softveri;
         }

@@ -15,7 +15,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("Zaposlen");
 
-            Id(x => x.JMBG, "JMBG").GeneratedBy.TriggerIdentity();
+            Id(x => x.JMBG, "JMBG").GeneratedBy.Assigned();
 
             Map(x => x.Ime).Column("Ime");
             Map(x => x.Prezime).Column("Prezime");
@@ -25,7 +25,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Email).Column("Email");
             Map(x => x.AdresaStanovanja).Column("AdresaStanovanja");
             Map(x => x.Datum_Zaposlenja).Column("Datum_Zaposlenja");
-
+            HasMany(x => x.Istorija)
+               .Cascade.All()
+               .Inverse()
+               .KeyColumn("JMBG");
         }
     }
 }

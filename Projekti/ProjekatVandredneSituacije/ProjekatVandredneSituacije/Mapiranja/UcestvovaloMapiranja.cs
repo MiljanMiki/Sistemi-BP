@@ -15,11 +15,15 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Ucestvovalo");
             Id(x => x.ID, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.Vozilo)
-                .Column("Registarska_Oznaka")
+                .Column("Registarska_Oznaka_Vozila")
                 .Not.Nullable();
-            References(x => x.Jedinica)
-                .Column("Jedinstveni_Broj")
+            References(x => x.Intervencija)
+                .Column("IdIntervencije")
                 .Not.Nullable();
+
+            Map(x => x.Datum_Od, "Datum_Od");
+            Map(x => x.Datum_Do, "Datum_Do");
+
         }
     }
 }

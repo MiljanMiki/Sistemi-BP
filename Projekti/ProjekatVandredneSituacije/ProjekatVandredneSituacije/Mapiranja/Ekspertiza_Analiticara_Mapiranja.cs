@@ -16,7 +16,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Ekspertize");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Analiticar, "Analiticar");
+            References(x => x.Analiticar, "JMBG");
             Map(x => x.Oblast, "Oblast");
         }
     }

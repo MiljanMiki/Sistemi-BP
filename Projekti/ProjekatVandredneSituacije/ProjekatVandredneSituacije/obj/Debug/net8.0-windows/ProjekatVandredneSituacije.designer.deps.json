@@ -19,7 +19,7 @@
       },
       "FluentNHibernate/3.3.0": {
         "dependencies": {
-          "NHibernate": "5.5.1"
+          "NHibernate": "5.5.2"
         },
         "runtime": {
           "lib/netcoreapp2.0/FluentNHibernate.dll": {
@@ -97,7 +97,7 @@
           "System.Xml.XDocument": "4.3.0"
         }
       },
-      "NHibernate/5.5.1": {
+      "NHibernate/5.5.2": {
         "dependencies": {
           "Antlr3.Runtime": "3.5.1",
           "Iesi.Collections": "4.0.4",
@@ -108,7 +108,7 @@
         "runtime": {
           "lib/net6.0/NHibernate.dll": {
             "assemblyVersion": "5.5.0.0",
-            "fileVersion": "5.5.1.0"
+            "fileVersion": "5.5.2.0"
           }
         }
       },
@@ -1345,12 +1345,12 @@
       "path": "netstandard.library/1.6.1",
       "hashPath": "netstandard.library.1.6.1.nupkg.sha512"
     },
-    "NHibernate/5.5.1": {
+    "NHibernate/5.5.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-UBZ3qi19RIg+fpDUHNNuvzVBwpzGvvU7k0wdZfBaxkjvLrNmB7y2kbD0FbZXmqOD5noTENB/3etTmmPwDGA/QA==",
-      "path": "nhibernate/5.5.1",
-      "hashPath": "nhibernate.5.5.1.nupkg.sha512"
+      "sha512": "sha512-qTFlQDp7eDW96u2vNwpaa28uWz5eSKT/73P7RfUob3Aj2Zop7xnMZyAm7wlJmf5eX3DVn8W7SwM5QrXfkvVR/w==",
+      "path": "nhibernate/5.5.2",
+      "hashPath": "nhibernate.5.5.2.nupkg.sha512"
     },
     "Oracle.ManagedDataAccess.Core/23.4.0": {
       "type": "package",
