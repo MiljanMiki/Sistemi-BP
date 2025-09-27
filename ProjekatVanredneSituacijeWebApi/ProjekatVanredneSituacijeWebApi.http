@@ -1,0 +1,6 @@
+@ProjekatVanredneSituacijeWebApi_HostAddress = http://localhost:5033
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
