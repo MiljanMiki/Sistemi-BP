@@ -1,0 +1,558 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\ProjekatVanredneSituacijeWebApi\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\mapiranja\\kamionimapiranja.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:2:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\ucestvujeview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:1:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\ucestvujeview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\vanrednasituacijaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\ucestvovaloview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dataprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\servisiview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\sertifikatidview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\voziloview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\terenskaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\entiteti\\terenska.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\sluzbaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\saradjujeview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\softverview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\entiteti\\intervencija.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\entiteti\\interventnajedinica.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\licnazastitaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\entiteti\\ucestvovalo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\dodeljujeseview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\predstavnikview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\zaliheview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\tehnickaopremaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\opremaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\entiteti\\oprema.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\medicinskaopremaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\interventnajedinicaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\prijavaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\specijalizacijaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\ekspertizaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\operativniradnikview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\specijalnaintervetnajedinicaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\opstainterventnaview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\istorija_uloga_zaposlenihview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\dtos\\kordinatorview.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C60CE530-FD6E-4367-AE65-7C793D332B6C}|..\\VanrednaSituacijaLibrary\\VanrednaSituacijaLibrary.csproj|c:\\users\\srdja\\sistemi-bp\\projekti\\projekatvandrednesituacijewebapi\\vanrednasituacijalibrary\\entiteti\\vanrednasituacija.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 400,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "KamioniMapiranja.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Mapiranja\\KamioniMapiranja.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Mapiranja\\KamioniMapiranja.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Mapiranja\\KamioniMapiranja.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Mapiranja\\KamioniMapiranja.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T13:13:32.455Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UcestvujeView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-21T12:22:35.11Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "VoziloView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\VoziloView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\VoziloView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\VoziloView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\VoziloView.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwBcAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T16:10:45.342Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "TerenskaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\TerenskaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\TerenskaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\TerenskaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\TerenskaView.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T16:09:46.474Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Terenska.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Terenska.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Entiteti\\Terenska.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Terenska.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Entiteti\\Terenska.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAoAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T16:06:52.572Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "UcestvujeView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\UcestvujeView.cs",
+              "ViewState": "AgIAABoAAAAAAAAAAAAswB8AAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T11:43:48.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "SaradjujeView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SaradjujeView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\SaradjujeView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SaradjujeView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\SaradjujeView.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAkwBYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:28:22.798Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "VanrednaSituacijaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\VanrednaSituacijaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\VanrednaSituacijaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\VanrednaSituacijaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\VanrednaSituacijaView.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAcwDAAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:34:15.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "SertifikatIdView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SertifikatIdView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\SertifikatIdView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SertifikatIdView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\SertifikatIdView.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAA6wDIAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:38:53.405Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "PredstavnikView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\PredstavnikView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\PredstavnikView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\PredstavnikView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\PredstavnikView.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAB4AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T10:41:08.452Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "SluzbaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SluzbaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\SluzbaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SluzbaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\SluzbaView.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA0AAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:37:09.613Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UcestvovaloView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\UcestvovaloView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\UcestvovaloView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\UcestvovaloView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\UcestvovaloView.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAiwDEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:27:36.817Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Ucestvovalo.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Ucestvovalo.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Entiteti\\Ucestvovalo.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Ucestvovalo.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Entiteti\\Ucestvovalo.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T19:41:37.044Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SoftverView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SoftverView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\SoftverView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SoftverView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\SoftverView.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAQwCsAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:36:32.018Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "DodeljujeSeView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\DodeljujeSeView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\DodeljujeSeView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\DodeljujeSeView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\DodeljujeSeView.cs",
+              "ViewState": "AgIAADgAAAAAAAAAAADwvzkAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T11:02:23.68Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ZaliheView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\ZaliheView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\ZaliheView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\ZaliheView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\ZaliheView.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAgwBwAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T10:28:22.376Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "TehnickaOpremaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\TehnickaOpremaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\TehnickaOpremaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\TehnickaOpremaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\TehnickaOpremaView.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAADwvx4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T20:35:26.235Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Oprema.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Oprema.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Entiteti\\Oprema.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Oprema.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Entiteti\\Oprema.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAYwB0AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T10:20:36.944Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "MedicinskaOpremaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\MedicinskaOpremaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\MedicinskaOpremaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\MedicinskaOpremaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\MedicinskaOpremaView.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAowBcAAAACAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T20:14:10.235Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "OpremaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\OpremaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\OpremaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\OpremaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\OpremaView.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAqwDMAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:28:55.452Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "InterventnaJedinicaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\InterventnaJedinicaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\InterventnaJedinicaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\InterventnaJedinicaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\InterventnaJedinicaView.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAwwGsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T11:53:41.654Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "OpstaInterventnaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\OpstaInterventnaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\OpstaInterventnaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\OpstaInterventnaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\OpstaInterventnaView.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T11:53:36.028Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "OperativniRadnikView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\OperativniRadnikView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\OperativniRadnikView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\OperativniRadnikView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\OperativniRadnikView.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAkwB4AAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T08:10:55.099Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "PrijavaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\PrijavaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\PrijavaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\PrijavaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\PrijavaView.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAUwGQAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:28:36.699Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "EkspertizaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\EkspertizaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\EkspertizaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\EkspertizaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\EkspertizaView.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAowB0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T15:04:55.38Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "SpecijalnaIntervetnaJedinicaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SpecijalnaIntervetnaJedinicaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\SpecijalnaIntervetnaJedinicaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SpecijalnaIntervetnaJedinicaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\SpecijalnaIntervetnaJedinicaView.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-17T12:15:33.517Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "Istorija_Uloga_ZaposlenihView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\Istorija_Uloga_ZaposlenihView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\Istorija_Uloga_ZaposlenihView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\Istorija_Uloga_ZaposlenihView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\Istorija_Uloga_ZaposlenihView.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:43:25.32Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ServisiView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\ServisiView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\ServisiView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\ServisiView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\ServisiView.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAwwBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:38:12.779Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "KordinatorView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\KordinatorView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\KordinatorView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\KordinatorView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\KordinatorView.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAowCYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:30:30.148Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "SpecijalizacijaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SpecijalizacijaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\SpecijalizacijaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\SpecijalizacijaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\SpecijalizacijaView.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAAABwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:35:50.439Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "VanrednaSituacija.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\VanrednaSituacija.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Entiteti\\VanrednaSituacija.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\VanrednaSituacija.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Entiteti\\VanrednaSituacija.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAACEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:34:00.032Z"
+            }
+          ]
+        },
+        {
+          "DockedHeight": 58,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Intervencija.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Intervencija.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Entiteti\\Intervencija.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\Intervencija.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Entiteti\\Intervencija.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAwwB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T11:40:57.635Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "InterventnaJedinica.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\InterventnaJedinica.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\Entiteti\\InterventnaJedinica.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\Entiteti\\InterventnaJedinica.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\Entiteti\\InterventnaJedinica.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAowBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-19T11:40:47.653Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "LicnaZastitaView.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\LicnaZastitaView.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DTOs\\LicnaZastitaView.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\LicnaZastitaView.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DTOs\\LicnaZastitaView.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAAABYAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-18T10:31:08.478Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DataProvider.cs",
+              "DocumentMoniker": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DataProvider.cs",
+              "RelativeDocumentMoniker": "..\\VanrednaSituacijaLibrary\\DataProvider.cs",
+              "ToolTip": "C:\\Users\\srdja\\Sistemi-BP\\Projekti\\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DataProvider.cs",
+              "RelativeToolTip": "..\\VanrednaSituacijaLibrary\\DataProvider.cs",
+              "ViewState": "AgIAAPIOAAAAAAAAAAASwE8PAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-16T18:33:03.051Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
