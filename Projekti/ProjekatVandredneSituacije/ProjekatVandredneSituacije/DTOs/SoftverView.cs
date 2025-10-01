@@ -1,17 +1,15 @@
-﻿using ProjekatVanredneSituacije.Entiteti;
+﻿using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    public class SoftverView
+    public  class SoftverView
     {
         public virtual int Id { get; set; }
-        public AnaliticarView Analiticar { get; set; }
-
         public virtual string ImeAnaliticara { get; set; }
 
         public virtual string PrezimeAnaliticara { get; set; }
@@ -30,16 +28,17 @@ namespace ProjekatVanredneSituacije.DTOs
             ImeAnaliticara = s.Analiticar.Ime;
             PrezimeAnaliticara = s.Analiticar.Prezime;
             JMBGAnaliticara = s.Analiticar.JMBG;
-            Analiticar = new AnaliticarView(s.Analiticar);
+
             
         }
     }
 
-    internal class SoftverAddView
+    public  class SoftverAddView
     {
         public virtual string JMBG_Analiticar { get; set; }
         public virtual string Naziv { get; set; }
-        public SoftverAddView() { }
+
+        public SoftverAddView() {}
         public SoftverAddView(Softver s)
         {
             JMBG_Analiticar = s.Analiticar.JMBG;

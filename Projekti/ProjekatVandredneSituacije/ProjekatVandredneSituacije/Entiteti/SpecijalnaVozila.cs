@@ -4,21 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Entiteti
+namespace VanrednaSituacijaLibrary.Entiteti
 {
 
     public enum Namena{
-        Voda,
-        Sator,
-        Hemija,
-        Mobilna_Laboratorija
+        Za_vodu,
+        Za_hemiju,
+        Za_sator,
+        Mobilna_laboratorija
     }
-    internal class SpecijalnaVozila:Vozilo
+    public  class SpecijalnaVozila:Vozilo
     {
 
-        public virtual Namena Namena { get; set; }
-
-      
+        public virtual   Namena Namena { get; set; }
     }
 
 }   

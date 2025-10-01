@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class UcestvovaloView
+    public  class UcestvovaloView
     {
         public virtual int ID { get; set; }
         public virtual VoziloView Vozilo { get; set; }
@@ -28,15 +28,15 @@ namespace ProjekatVanredneSituacije.DTOs
         }
     }
 
-    internal class UcestvovaloAddView
+    public  class UcestvovaloAddView
     {
-        public virtual int ID { get; set; }
+
         public virtual string VoziloReg { get; set; }
         public virtual int IntervencijaID { get; set; }
 
         public virtual DateTime Datum_Od { get; set; }
 
-        public virtual DateTime Datum_Do { get; set; }
+        public virtual DateTime? Datum_Do { get; set; }
 
         public UcestvovaloAddView() { }
         public UcestvovaloAddView(Ucestvovalo u)

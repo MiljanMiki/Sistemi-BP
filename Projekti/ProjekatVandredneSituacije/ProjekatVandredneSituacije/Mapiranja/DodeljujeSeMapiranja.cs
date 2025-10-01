@@ -1,15 +1,15 @@
 ﻿using FluentNHibernate.Mapping;
 using NHibernate.Proxy;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
-    internal class DodeljujeSeMapiranja:ClassMap<DodeljujeSe>
+    public  class DodeljujeSeMapiranja:ClassMap<DodeljujeSe>
     {
         public DodeljujeSeMapiranja() {
             Table("DodeljujeSe");

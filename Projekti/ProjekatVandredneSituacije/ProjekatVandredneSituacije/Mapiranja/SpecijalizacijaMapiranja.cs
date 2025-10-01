@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
      class SpecijalizacijaMapiranja:ClassMap<Specijalizacija>
     {
@@ -17,7 +17,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.Kordinator, "JMBG_Kordinatora");
-            References(x => x.Tip, "Oblast");
+            Map(x => x.Tip, "Oblast");
 
         }
     }

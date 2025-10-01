@@ -4,14 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Entiteti
+namespace VanrednaSituacijaLibrary.Entiteti
 {
+    class Terensko : Vozilo
+    {
+        public Terensko() { }
+    }
     
-    class Kamioni : Vozilo 
+    class Kamioni : Terensko
     {
         public Kamioni() { }
     }
-    class Dzipovi : Vozilo
+    class Dzipovi : Terensko
     {
         public Dzipovi() { }
 

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
 using System.Text.RegularExpressions;
-using ProjekatVanredneSituacije.DTOs;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniAnaliticaraDialog : Form
 {

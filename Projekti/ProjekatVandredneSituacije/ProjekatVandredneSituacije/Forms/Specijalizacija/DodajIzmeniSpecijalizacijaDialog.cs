@@ -1,10 +1,10 @@
 ﻿using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniSpecijalizacijaDialog : Form
 {
@@ -14,10 +14,10 @@ public class DodajIzmeniSpecijalizacijaDialog : Form
     private Button btnSacuvaj, btnOdustani;
     private TableLayoutPanel tlpMain;
 
-    public SpecijalizacijaBasic SpecijalizacijaBasic { get; private set; }
+    public SpecijalizacijaAddView SpecijalizacijaBasic { get; private set; }
     private int _specijalizacijaIdToUpdate;
 
-    public DodajIzmeniSpecijalizacijaDialog(SpecijalizacijaPregled? specijalizacijaPregled = null)
+    public DodajIzmeniSpecijalizacijaDialog(SpecijalizacijaAddView? specijalizacijaPregled = null)
     {
         InitializeComponent();
          
@@ -39,7 +39,7 @@ public class DodajIzmeniSpecijalizacijaDialog : Form
     {
         try
         { 
-            IList<KordinatorView> kordinatori = await DTOManager.VratiKordinatora();
+            IList<KordinatorView> kordinatori = await DataProvider.VratiKordinatora();
             cmbKordinator.DataSource = kordinatori;
             cmbKordinator.DisplayMember = "Ime"; 
             cmbKordinator.ValueMember = "JMBG"; 
@@ -50,7 +50,7 @@ public class DodajIzmeniSpecijalizacijaDialog : Form
         }
     }
 
-    private void PopulateFields(SpecijalizacijaPregled specijalizacija)
+    private void PopulateFields(SpecijalizacijaAddView specijalizacija)
     {
         txtTip.Text = specijalizacija.Tip;
         if (!string.IsNullOrEmpty(specijalizacija.Kordinator))
@@ -115,7 +115,7 @@ public class DodajIzmeniSpecijalizacijaDialog : Form
         {
             Id = _specijalizacijaIdToUpdate,
             Tip = txtTip.Text,
-            Kordinator = new KordinatorBasic { JMBG = cmbKordinator.SelectedValue.ToString() }
+            Kordinator = new KoordinatorBasic { JMBG = cmbKordinator.SelectedValue.ToString() }
         };
 
         this.DialogResult = DialogResult.OK;

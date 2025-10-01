@@ -1,19 +1,19 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
     class Ekspertiza_Analiticara_Mapiranja : ClassMap<Ekspertiza>
     {
         public Ekspertiza_Analiticara_Mapiranja()
         {
 
-            Table("Ekspertize");
+            Table("Ekspertiza");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.Analiticar, "JMBG");

@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
-namespace ProjekatVanredneSituacije.Mapiranja
+using VanrednaSituacijaLibrary.Entiteti;
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
     class KordinatorMapiranje : SubclassMap<Kordinator>
     {
         public KordinatorMapiranje()
         {
-            Table("Kordinator");
+            Table("Koordinator");
 
             KeyColumn("JMBG");
 
-            Map(x => x.BrojTimova).Column("BrojTimova");
+            Map(x => x.BrojTimova).Column("Broj_Timova");
             HasMany(x => x.Specijalizacija)
                 .KeyColumn("JMBG_Kordinatora")
                 .Inverse()

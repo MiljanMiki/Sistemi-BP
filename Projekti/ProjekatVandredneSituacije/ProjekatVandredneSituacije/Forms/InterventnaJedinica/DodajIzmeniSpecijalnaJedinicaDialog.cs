@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniSpecijalnaJedinicaDialog : Form
 {
@@ -9,16 +10,16 @@ public class DodajIzmeniSpecijalnaJedinicaDialog : Form
     private NumericUpDown numBrojClanova;
     private Button btnSacuvaj, btnOdustani;
 
-    public SpecijalnaInterventnaJedinicaBasic Jedinica { get; private set; }
+    public SpecijalnaIntervetnaJedinicaBasicView Jedinica { get; private set; }
      
     public DodajIzmeniSpecijalnaJedinicaDialog()
     {
-        Jedinica = new SpecijalnaInterventnaJedinicaBasic();
+        Jedinica = new SpecijalnaIntervetnaJedinicaBasicView();
         InitializeComponent();
         this.Text = "Dodaj Specijalnu Interventnu Jedinicu";
     }
      
-    public DodajIzmeniSpecijalnaJedinicaDialog(SpecijalnaInterventnaJedinicaBasic jedinica)
+    public DodajIzmeniSpecijalnaJedinicaDialog(SpecijalnaIntervetnaJedinicaBasicView jedinica)
     {
         Jedinica = jedinica;
         InitializeComponent();

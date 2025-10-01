@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class UcestvujeView
+    public  class UcestvujeView
     {
         public virtual int Id { get; set; }
-
-        public virtual InterventnaJedinicaBasicView IdInterventneJed { get; set; }
+        public virtual  InterventnaJedinicaGetView IdInterventneJed { get; set; }
         
-        public virtual VanrednaSituacijaMiniView IdVanredneSituacije { get; set; }
+        public virtual  VanrednaSituacijaMiniView IdVandredneSituacije { get; set; }
 
-        public virtual IntervencijaBasicView IdIntervencije { get; set; }
+        public virtual  IntervencijaView IdIntervencije { get; set; }
 
         public UcestvujeView()
         {
@@ -23,20 +22,16 @@ namespace ProjekatVanredneSituacije.DTOs
 
         public UcestvujeView(Ucestvuje u)
         {
-            Id = u.Id;
-            if (u.IdInterventneJed != null)
-                IdInterventneJed = new InterventnaJedinicaBasicView(u.IdInterventneJed);
-            if (u.IdVanredneSituacije != null)
-                IdVanredneSituacije = new VanrednaSituacijaMiniView(u.IdVanredneSituacije);
-            if (u.IdIntervencije != null)
-                IdIntervencije = new IntervencijaBasicView(u.IdIntervencije);
+            Id=u.Id;
+            IdInterventneJed = new InterventnaJedinicaGetView(u.IdInterventneJed);
+            IdVandredneSituacije = new VanrednaSituacijaMiniView(u.IdVandredneSituacije);
+            IdIntervencije = new IntervencijaView(u.IdIntervencije);
         }
 
     }
 
-    internal class UcestvujeAddView
+    public  class UcestvujeAddView
     {
-        public virtual int Id { get; set; }
         public virtual int IdInterventneJed { get; set; }
         public virtual int IdVanredneSituacije { get; set; }
         public virtual int IdIntervencije { get; set; }
@@ -47,11 +42,11 @@ namespace ProjekatVanredneSituacije.DTOs
 
         public UcestvujeAddView(Ucestvuje u)
         {
-            Id = u.Id;
+   
             if (u.IdInterventneJed != null)
                 IdInterventneJed = u.IdInterventneJed.Jedinstveni_Broj;
-            if (u.IdVanredneSituacije != null)
-                IdVanredneSituacije = u.IdVanredneSituacije.Id;
+            if (u.IdVandredneSituacije != null)
+                IdVanredneSituacije = u.IdVandredneSituacije.Id;
             if (u.IdIntervencije != null)
                 IdIntervencije = u.IdIntervencije.Id;
         }

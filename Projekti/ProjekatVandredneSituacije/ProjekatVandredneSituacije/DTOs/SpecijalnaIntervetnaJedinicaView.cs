@@ -3,23 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class SpecijalnaIntervetnaJedinicaView:InterventnaJedinicaView
+    public  class SpecijalnaIntervetnaJedinicaView:InterventnaJedinicaView
     {
         public virtual string TipSpecijalneJedinice { get; set; }
 
+        public SpecijalnaIntervetnaJedinicaView() { }
         public SpecijalnaIntervetnaJedinicaView(SpecijalnaInterventna s):base(s)
         {
             TipSpecijalneJedinice = s.TipSpecijalneJedinice;
         }
     }
 
-    internal class SpecijalnaIntervetnaGetView : InterventnaJedinicaGetView
+    public class SpecijalnaIntervetnaJedinicaBasicView : InterventnaJedinicaBasicView
     {
         public virtual string TipSpecijalneJedinice { get; set; }
+
+        public SpecijalnaIntervetnaJedinicaBasicView() { }
+        public SpecijalnaIntervetnaJedinicaBasicView(SpecijalnaInterventna s) : base(s)
+        {
+            TipSpecijalneJedinice = s.TipSpecijalneJedinice;
+        }
+    }
+
+    public  class SpecijalnaIntervetnaGetView : InterventnaJedinicaGetView
+    {
+
+        public virtual string TipSpecijalneJedinice { get; set; }
+
+        public SpecijalnaIntervetnaGetView()
+        { 
+        }
         public SpecijalnaIntervetnaGetView(InterventnaJedinica i) : base(i) {
 
             this.TipSpecijalneJedinice = TipSpecijalneJedinice;

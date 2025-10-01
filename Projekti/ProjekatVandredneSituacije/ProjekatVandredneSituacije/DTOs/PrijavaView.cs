@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class PrijavaView
+    public  class PrijavaView
     {
         public virtual int Id { get; set; }
 
@@ -22,9 +22,9 @@ namespace ProjekatVanredneSituacije.DTOs
         public virtual string Opis { get; set; }
         public virtual string JMBG_Dispecer { get; set; }
 
-        public virtual int Prioritet { get; set; }
+        public virtual int? Prioritet { get; set; }
 
-        public virtual VanrednaSituacijaView? Id_VanrednaSituacija { get; set; }
+
 
         public PrijavaView()
         {
@@ -41,14 +41,11 @@ namespace ProjekatVanredneSituacije.DTOs
             Opis = p.Opis;
             JMBG_Dispecer = p.JMBG_Dispecer;
             Prioritet = p.Prioritet;
-            if (p.Id_VanrednaSituacija != null)
-            Id_VanrednaSituacija = new VanrednaSituacijaView(p.Id_VanrednaSituacija);
         }
     }
 
-    public class PrijavaAddView
+    public  class PrijavaAddView
     {
-        public virtual int Id { get; set; }
 
         public virtual DateTime Datum_I_Vreme { get; set; }
 
@@ -59,9 +56,8 @@ namespace ProjekatVanredneSituacije.DTOs
         public virtual string Opis { get; set; }
         public virtual string JMBG_Dispecer { get; set; }
 
-        public virtual int Prioritet { get; set; }
+        public virtual int? Prioritet { get; set; }
 
-        public virtual int Id_VanrednaSituacija { get; set; }
 
         public PrijavaAddView()
         {
@@ -69,7 +65,7 @@ namespace ProjekatVanredneSituacije.DTOs
 
         public PrijavaAddView(Prijava p)
         {
-            Id = p.Id;
+
             Datum_I_Vreme = p.Datum_I_Vreme;
             Tip = p.Tip;
             Ime_Prijavioca = p.Ime_Prijavioca;
@@ -78,12 +74,11 @@ namespace ProjekatVanredneSituacije.DTOs
             Opis = p.Opis;
             JMBG_Dispecer = p.JMBG_Dispecer;
             Prioritet = p.Prioritet;
-            if (p.Id_VanrednaSituacija != null)
-                Id_VanrednaSituacija = p.Id_VanrednaSituacija.Id;
+
         }
     }
 
-    internal class PrijavaMiniView
+    public  class PrijavaMiniView
     {
         public virtual int Id { get; set; }
         public virtual DateTime Datum_I_Vreme { get; set; }
@@ -91,7 +86,7 @@ namespace ProjekatVanredneSituacije.DTOs
         public virtual string Ime_Prijavioca { get; set; }
         public virtual string Kontakt { get; set; }
         public virtual string Lokacija { get; set; }
-        public virtual int Prioritet { get; set; }
+        public virtual int? Prioritet { get; set; }
 
         public virtual string Opis { get; set; }
         public PrijavaMiniView() { }

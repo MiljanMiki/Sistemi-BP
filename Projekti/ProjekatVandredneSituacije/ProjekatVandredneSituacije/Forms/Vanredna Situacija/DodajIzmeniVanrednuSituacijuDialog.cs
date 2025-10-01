@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
 using System.Collections.Generic;
-using ProjekatVanredneSituacije.DTOs;
+using VanrednaSituacijaLibrary.DTOs;
+using VanrednaSituacijaLibrary.Entiteti;
 
 public class DodajIzmeniVanrednuSituacijuDialog : Form
 {
@@ -19,7 +19,7 @@ public class DodajIzmeniVanrednuSituacijuDialog : Form
     private int _situacijaIdToUpdate;
     private int _idPrijava;
 
-    public DodajIzmeniVanrednuSituacijuDialog(VanrednaSituacijaPregled? situacijaPregled = null)
+    public DodajIzmeniVanrednuSituacijuDialog(VanrednaSituacijaAddView? situacijaPregled = null)
     {
         InitializeComponent();
         this.Text = situacijaPregled != null ? "Izmeni vanrednu situaciju" : "Dodaj novu vanrednu situaciju";
@@ -38,7 +38,7 @@ public class DodajIzmeniVanrednuSituacijuDialog : Form
         chbZavrsena.CheckedChanged += ChbZavrsena_CheckedChanged;
     }
 
-    private void PopulateFields(VanrednaSituacijaPregled situacija)
+    private void PopulateFields(VanrednaSituacijaAddView situacija)
     {
         dtpDatumOd.Value = situacija.Datum_Od;
 

@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class ListaSluzbaForm : Form
 {
@@ -71,7 +72,7 @@ public class ListaSluzbaForm : Form
         try
         {
             dgvSluzbe.DataSource = null; 
-            dgvSluzbe.DataSource = DTOManager.VratiSluzbe();
+            dgvSluzbe.DataSource = DataProvider.VratiSluzbe();
             dgvSluzbe.Refresh();
         }
         catch (Exception ex)
@@ -86,8 +87,8 @@ public class ListaSluzbaForm : Form
         if (dialog.ShowDialog() == DialogResult.OK)
         {
             try
-            { 
-                DTOManager.DodajSluzbu(dialog.SluzbaBasic);
+            {
+                DataProvider.DodajSluzbu(dialog.SluzbaBasic);
                 RefreshDataGrid();
                 MessageBox.Show("Služba je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -98,17 +99,17 @@ public class ListaSluzbaForm : Form
         }
     }
 
-    private void BtnIzmeni_Click(object? sender, EventArgs e)
+    private async void BtnIzmeni_Click(object? sender, EventArgs e)
     {
         if (dgvSluzbe.SelectedRows.Count > 0)
         { 
-            var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as SluzbaPregled;
+            var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as SluzbaAddView;
             var dialog = new DodajIzmeniSluzbuDialog(selectedSluzba);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 { 
-                    DTOManager.IzmeniSluzbu(dialog.SluzbaBasic);
+                    await DataProvider.IzmeniSluzbu(dialog.SluzbaBasic);
                     RefreshDataGrid();
                     MessageBox.Show("Služba je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -131,10 +132,10 @@ public class ListaSluzbaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabranu službu?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             { 
-                var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as SluzbaPregled;
+                var selectedSluzba = dgvSluzbe.SelectedRows[0].DataBoundItem as SluzbaAddView;
                 try
                 { 
-                    DTOManager.ObrisiSluzbu(selectedSluzba.Id_Sektora);
+                    DataProvider.ObrisiSluzbu(selectedSluzba.Id_Sektora);
                     RefreshDataGrid();
                     MessageBox.Show("Služba je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

@@ -4,21 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Entiteti
+namespace VanrednaSituacijaLibrary.Entiteti
 {
     public class Sluzba
     {
-        public virtual int Id_Sektora {  get; set; }
-        public virtual string TipSektora { get; set; }
+        public virtual  int Id_Sektora {  get; set; }
+        public virtual  string TipSektora { get; set; }
        
         
 
-        public IList<Saradjuje> VanredneSituacije {  get; set; }
-        public Predstavnik? Predstavnik { get; set;}
+        public virtual IList<Saradjuje> VandredneSituacije {  get; set; }
+        public virtual Predstavnik? Predstavnik { get; set;}
 
         public Sluzba()
         {
-            VanredneSituacije = new List<Saradjuje>();
+            VandredneSituacije = new List<Saradjuje>();
         }
     }
 }

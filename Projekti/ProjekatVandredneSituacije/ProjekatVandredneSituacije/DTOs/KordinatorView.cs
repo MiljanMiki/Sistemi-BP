@@ -4,17 +4,16 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class KordinatorView:ZaposleniView
+    public  class KordinatorView:ZaposleniView
     {
-        public IList<SpecijalizacijaView> Specijalizacije { get; set; }
+
         public virtual int BrojTimova { get; set; }
         public KordinatorView()
         {
-               Specijalizacije = new List<SpecijalizacijaView>();
         }
 
 
@@ -24,7 +23,7 @@ namespace ProjekatVanredneSituacije.DTOs
         }
     }
 
-    internal class KordinatorMinView
+    public  class KordinatorMinView
     {
         public virtual string JMBG { get; set; }    
         public virtual string Ime { get; set; }
@@ -36,6 +35,22 @@ namespace ProjekatVanredneSituacije.DTOs
             JMBG = k.JMBG;
             Ime = k.Ime;
             Prezime = k.Prezime;
+        }
+    }
+
+
+    public class KordinatorChangeView : ZaposleniChangeView
+    {
+
+        public virtual int BrojTimova { get; set; }
+        public KordinatorChangeView()
+        {
+        }
+
+
+        public KordinatorChangeView(Kordinator k) : base(k)
+        {
+            BrojTimova = k.BrojTimova;
         }
     }
 }

@@ -3,29 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    public class AnaliticarView: ZaposleniView
+    public  class AnaliticarView: ZaposleniView
     {
-        public IList<EkspertizaView> Ekspertize { get; set; }
-        public IList<SoftverView> Softveri { get; set; }
+
         public AnaliticarView()
         {
-            Ekspertize = new List<EkspertizaView>();
-            Softveri = new List<SoftverView>();
+ 
         }
         public AnaliticarView(Analiticar a): base(a)
         {
         }
     }
 
-    internal class AnaliticarMinView
+    public class AnaliticarChangeView : ZaposleniChangeView
     {
-        public virtual string JMBG { get; set; }
-        public virtual string Ime { get; set; }
-        public virtual string Prezime { get; set; }
+
+        public AnaliticarChangeView()
+        {
+
+        }
+        public AnaliticarChangeView(Analiticar a) : base(a)
+        {
+        }
+    }
+
+    public  class AnaliticarMinView
+    {
+        public virtual  string JMBG { get; set; }
+        public virtual  string Ime { get; set; }
+        public virtual  string Prezime { get; set; }
         public AnaliticarMinView() { }
         public AnaliticarMinView(Analiticar a)
         {

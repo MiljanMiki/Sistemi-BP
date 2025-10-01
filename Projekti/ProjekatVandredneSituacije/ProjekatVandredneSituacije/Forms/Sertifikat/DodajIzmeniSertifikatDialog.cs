@@ -1,17 +1,16 @@
 ﻿using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
-using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniSertifikatDialog : Form
 {
     private SertifikatView _selectedSertifikat;
-    private OperativniRadnikBasic _operativniRadnik;
+    private OperativniRadnikView _operativniRadnik;
 
     private Label lblDatumIzdavanja, lblDatumVazenja, lblNaziv, lblInstitucija;
     private DateTimePicker dtpDatumIzdavanja, dtpDatumVazenja;
@@ -22,7 +21,7 @@ public class DodajIzmeniSertifikatDialog : Form
     private Panel pnlButtons;
     private IList<SertifikatView> _listaSertifikata;
 
-    public DodajIzmeniSertifikatDialog(OperativniRadnikBasic operativniRadnik)
+    public DodajIzmeniSertifikatDialog(OperativniRadnikView operativniRadnik)
     {
         _operativniRadnik = operativniRadnik;
         InitializeComponent();
@@ -108,7 +107,7 @@ public class DodajIzmeniSertifikatDialog : Form
     {
         try
         {
-            _listaSertifikata = await DTOManager.VratiSertifikateZaposlenog(_operativniRadnik.JMBG);
+            _listaSertifikata = await DataProvider.VratiSertifikateZaposlenog(_operativniRadnik.JMBG);
             dgvSertifikati.DataSource = _listaSertifikata;
         }
         catch (Exception ex)
@@ -117,7 +116,7 @@ public class DodajIzmeniSertifikatDialog : Form
         }
     }
 
-    private void BtnDodajIzmeni_Click(object sender, EventArgs e)
+    private async void BtnDodajIzmeni_Click(object sender, EventArgs e)
     {
         if (ValidateInput())
         {
@@ -127,22 +126,22 @@ public class DodajIzmeniSertifikatDialog : Form
                 _selectedSertifikat.DatumVazenja = dtpDatumVazenja.Value;
                 _selectedSertifikat.Id.Naziv = txtNaziv.Text;
                 _selectedSertifikat.Id.Institucija = txtInstitucija.Text;
-                DTOManager.IzmeniSertifikat(_selectedSertifikat);
+                await DataProvider.IzmeniSertifikat(_selectedSertifikat);
                 MessageBox.Show("Sertifikat uspešno izmenjen.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             { 
                 var noviSertifikat = new SertifikatView();
-                var id = new SertifikatIdBasic();
-                id.OperativniRadnik = _operativniRadnik;
+                var id = new SertifikatIdAddView();
+                id.JMBGRadnika = _operativniRadnik.JMBG;
                 id.Naziv = txtNaziv.Text;
                 id.Institucija = txtInstitucija.Text;
 
-                noviSertifikat.Id = new SertifikatIdView { id };
+                noviSertifikat.Id = id;
                 noviSertifikat.DatumIzdavanja = dtpDatumIzdavanja.Value;
                 noviSertifikat.DatumVazenja = dtpDatumVazenja.Value;
 
-                DTOManager.DodajSertifikat(noviSertifikat);
+                await DataProvider.DodajSertifikat(noviSertifikat);
                 MessageBox.Show("Sertifikat uspešno dodat.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             ClearFields();
@@ -150,7 +149,7 @@ public class DodajIzmeniSertifikatDialog : Form
         }
     }
 
-    private void BtnObrisi_Click(object sender, EventArgs e)
+    private async void BtnObrisi_Click(object sender, EventArgs e)
     {
         if (dgvSertifikati.SelectedRows.Count > 0)
         {
@@ -160,7 +159,7 @@ public class DodajIzmeniSertifikatDialog : Form
                 var selectedSertifikat = dgvSertifikati.SelectedRows[0].DataBoundItem as SertifikatView;
                 if (selectedSertifikat != null)
                 {
-                    DTOManager.ObrisiSertifikat(selectedSertifikat);
+                    await DataProvider.ObrisiSertifikat(selectedSertifikat);
                     MessageBox.Show("Sertifikat uspešno obrisan.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     RefreshDataGrid();
                     ClearFields();

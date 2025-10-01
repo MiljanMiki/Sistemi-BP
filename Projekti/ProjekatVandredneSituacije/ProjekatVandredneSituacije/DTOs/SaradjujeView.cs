@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class SaradjujeView
+    public  class SaradjujeView
     {
         public virtual int Id { get; set; }
         public string Uloga { get; set; }
         public virtual SluzbaView Sektor { get; set; }
 
-        public virtual VanrednaSituacijaView VanrednaSituacija { get; set; }
+        public virtual VanrednaSituacijaView VandrednaSituacija { get; set; }
 
         public SaradjujeView()
         {
@@ -24,23 +24,22 @@ namespace ProjekatVanredneSituacije.DTOs
             Id = s.Id;
             Uloga = s.Uloga;
             Sektor = new SluzbaView(s.Sektor);
-            VanrednaSituacija = new VanrednaSituacijaView(s.VanrednaSituacija);
+            VandrednaSituacija = new VanrednaSituacijaView(s.VandrednaSituacija);
         }
 
     }
 
-    internal class SaradjujeAddView
+    public  class SaradjujeAddView
     {
-        public virtual int Id { get; set; }
         public virtual int SektorID { get; set; }
         public virtual int VanrednaSituacijaID { get; set; }
         public string Uloga { get; set; }
         public SaradjujeAddView() { }
-        public SaradjujeAddView(int Id, int sektorID, int vanrednaSituacijaID, string uloga)
+        public SaradjujeAddView(Saradjuje s)
         {
-            SektorID = sektorID;
-            VanrednaSituacijaID = vanrednaSituacijaID;
-            Uloga = uloga;
+            SektorID = s.Sektor.Id_Sektora;
+            VanrednaSituacijaID = s.VandrednaSituacija.Id;
+            Uloga = s.Uloga;
         }
     }
 }

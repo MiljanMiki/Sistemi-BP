@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class OpremaView
+    public  class OpremaView
     {
 
         public virtual string Serijski_Broj { get; set; }
@@ -30,15 +30,15 @@ namespace ProjekatVanredneSituacije.DTOs
         {
             Serijski_Broj = o.Serijski_Broj;
             Naziv = o.Naziv;
-            Status = o.Status.ToString();
+            Status = o.Status;
             DatumNabavke = o.DatumNabavke;
             Jedinica = new InterventnaJedinicaView(o.Jedinica);
         }
     }
 
-    internal class OpremaAddView
+    public  class OpremaAddView
     {
-        public virtual string? Serijski_Broj { get; set; }
+        public virtual string Serijski_Broj { get; set; }
         public virtual string Naziv { get; set; }
         public virtual string Status { get; set; }
         public virtual DateTime DatumNabavke { get; set; }
@@ -55,4 +55,39 @@ namespace ProjekatVanredneSituacije.DTOs
         }
     }
 
+    public class OpremaChangeView
+    {
+
+        public virtual string Naziv { get; set; }
+        public virtual string Status { get; set; }
+        public virtual DateTime DatumNabavke { get; set; }
+        public virtual int JedinicaID { get; set; }
+
+        public OpremaChangeView() { }
+        public OpremaChangeView(Oprema o)
+        {
+            Naziv = o.Naziv;
+            Status = o.Status;
+            DatumNabavke = o.DatumNabavke;
+            JedinicaID = o.Jedinica.Jedinstveni_Broj;
+        }
+    }
+
+    public class OpremaMiniView//samo za vracanje opreme jedinicama
+    {
+        public virtual string Serijski_Broj { get; set; }
+        public virtual string Naziv { get; set; }
+        public virtual string Status { get; set; }
+        public virtual DateTime DatumNabavke { get; set; }
+
+
+        public OpremaMiniView() { }
+        public OpremaMiniView(Oprema o)
+        {
+            Naziv = o.Naziv;
+            Status = o.Status;
+            DatumNabavke = o.DatumNabavke;
+
+        }
+    }
 }

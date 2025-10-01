@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
 using System.Text.RegularExpressions;
 using ProjekatVanredneSituacije;
+using VanrednaSituacijaLibrary.Entiteti;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniKoordinatoraDialog : Form
 {
@@ -13,12 +14,12 @@ public class DodajIzmeniKoordinatoraDialog : Form
     private ComboBox cmbPol;
     private Button btnSacuvaj, btnOdustani;
 
-    public KordinatorPregled? Zaposlen { get; private set; }
+    public KordinatorView? Zaposlen { get; private set; }
 
-    public DodajIzmeniKoordinatoraDialog(KordinatorPregled? koordinator = null)
+    public DodajIzmeniKoordinatoraDialog(KordinatorView? koordinator = null)
     {
         InitializeComponent();
-        this.Zaposlen = koordinator ?? new KordinatorPregled();
+        this.Zaposlen = koordinator ?? new KordinatorView();
         this.Text = koordinator != null ? "Izmeni koordinatora" : "Dodaj koordinatora";
         if (koordinator != null)
         { 

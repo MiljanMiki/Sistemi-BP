@@ -5,6 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using ProjekatVanredneSituacije;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
+using VanrednaSituacijaLibrary.Entiteti;
 
 public class ListaPrijavaForm : Form
 {
@@ -68,7 +70,7 @@ public class ListaPrijavaForm : Form
     private void RefreshDataGrid()
     {
         dgvPrijave.DataSource = null;
-        dgvPrijave.DataSource = DTOManager.VratiPrijave();
+        dgvPrijave.DataSource = DataProvider.VratiPrijave();
     }
 
     private void BtnOsvezi_Click(object? sender, EventArgs e)
@@ -77,14 +79,14 @@ public class ListaPrijavaForm : Form
         MessageBox.Show("Podaci su osveženi.", "Informacija", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
-    private void BtnDodaj_Click(object? sender, EventArgs e)
+    private async void BtnDodaj_Click(object? sender, EventArgs e)
     {
         var dialog = new DodajIzmeniPrijavuDialog();
         if (dialog.ShowDialog() == DialogResult.OK)
         {
             if (dialog.Prijava != null)
             {
-                DTOManager.DodajPrijavu(dialog.Prijava);
+                await DataProvider.DodajPrijavu(dialog.Prijava);
                 RefreshDataGrid();
                 MessageBox.Show("Prijava je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -95,11 +97,11 @@ public class ListaPrijavaForm : Form
     {
         if (dgvPrijave.SelectedRows.Count > 0)
         {
-            var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as PrijavaBasic;
+            var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as PrijavaAddView;
             var dialog = new DodajIzmeniPrijavuDialog(selectedPrijava!);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                DTOManager.IzmeniPrijavu(dialog.Prijava!);
+                DataProvider.IzmeniPrijavu(dialog.Prijava!);
                 RefreshDataGrid();
                 MessageBox.Show("Prijava je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -117,8 +119,8 @@ public class ListaPrijavaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabranu prijavu?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as PrijavaBasic;
-                DTOManager.ObrisiPrijavu(selectedPrijava!.Id);
+                var selectedPrijava = dgvPrijave.SelectedRows[0].DataBoundItem as PrijavaAddView;
+                DataProvider.ObrisiPrijavu(selectedPrijava!.Id);
                 RefreshDataGrid();
                 MessageBox.Show("Prijava je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }

@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class OpstaInterventnaView:InterventnaJedinicaView
+    public  class OpstaInterventnaView:InterventnaJedinicaView
     {
+        public OpstaInterventnaView() { }
         public OpstaInterventnaView(InterventnaJedinica i):base(i) { }
     }
 
-    internal class OpstaIntervetnaGetView:InterventnaJedinicaGetView
+    public class OpstaInterventnaBasicView : InterventnaJedinicaBasicView
     {
+        public OpstaInterventnaBasicView() { }
+        public OpstaInterventnaBasicView(InterventnaJedinica i) : base(i) { }
+    }
+
+    public  class OpstaIntervetnaGetView:InterventnaJedinicaGetView
+    {
+        public OpstaIntervetnaGetView() { }
         public OpstaIntervetnaGetView(InterventnaJedinica i): base(i) { }
     }
 

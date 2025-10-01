@@ -1,11 +1,10 @@
 ﻿using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
-using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniOpremuDialog : Form
 {
@@ -15,9 +14,9 @@ public class DodajIzmeniOpremuDialog : Form
     private ComboBox cmbJedinica;
     private Button btnOk, btnCancel;
 
-    public OpremaBasic? OpremaBasic { get; private set; }
+    public OpremaView? OpremaBasic { get; private set; }
 
-    public DodajIzmeniOpremuDialog(OpremaBasic? oprema = null)
+    public DodajIzmeniOpremuDialog(OpremaView? oprema = null)
     {
         InitializeComponent();
 
@@ -92,7 +91,7 @@ public class DodajIzmeniOpremuDialog : Form
     {
         try
         {
-            var jedinice = await DTOManager.VratiSveJedinice();
+            var jedinice = await DataProvider.VratiSveJedinice();
             cmbJedinica.DataSource = jedinice;
             cmbJedinica.DisplayMember = "Naziv";
             cmbJedinica.ValueMember = "Jedinstveni_Broj";
@@ -103,7 +102,7 @@ public class DodajIzmeniOpremuDialog : Form
         }
     }
 
-    private void PopuniPolja(OpremaBasic oprema)
+    private void PopuniPolja(OpremaView oprema)
     {
         txtSerijskiBroj.Text = oprema.Serijski_Broj.ToString();
         txtSerijskiBroj.ReadOnly = true;
@@ -112,19 +111,19 @@ public class DodajIzmeniOpremuDialog : Form
         dtpDatumNabavke.Value = oprema.DatumNabavke;
         cmbJedinica.SelectedValue = oprema.IdJedinica;
          
-        if (oprema is LicnaZastitaBasic)
+        if (oprema is LicnaZastitaView)
         {
             cmbTipOpreme.SelectedIndex = 0;
         }
-        else if (oprema is MedicinskaOpremaBasic)
+        else if (oprema is MedicinskaOpremaView)
         {
             cmbTipOpreme.SelectedIndex = 1;
         }
-        else if (oprema is TehnickaOpremaBasic)
+        else if (oprema is TehnickaOpremaView)
         {
             cmbTipOpreme.SelectedIndex = 2;
         }
-        else if (oprema is ZaliheBasic)
+        else if (oprema is ZaliheView)
         {
             cmbTipOpreme.SelectedIndex = 3;
         }
@@ -154,16 +153,16 @@ public class DodajIzmeniOpremuDialog : Form
         switch (cmbTipOpreme.SelectedIndex)
         {
             case 0: 
-                this.OpremaBasic = new LicnaZastitaBasic(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica, TipLicneZastite.Maska);
+                this.OpremaBasic = new LicnaZastitaView(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica, TipLicneZastite.Maska);
                 break;
             case 1:  
-                this.OpremaBasic = new MedicinskaOpremaBasic(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica);
+                this.OpremaBasic = new MedicinskaOpremaAddView(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica);
                 break;
             case 2:  
-                this.OpremaBasic = new TehnickaOpremaBasic(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica);
+                this.OpremaBasic = new TehnickaOpremaAddView(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica);
                 break;
             case 3: 
-                this.OpremaBasic = new ZaliheBasic(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica);
+                this.OpremaBasic = new ZaliheAddView(serijskiBroj, txtNaziv.Text, txtStatus.Text, dtpDatumNabavke.Value, idJedinica);
                 break;
             default:
                 MessageBox.Show("Odaberite tip opreme.", "Upozorenje", MessageBoxButtons.OK, MessageBoxIcon.Warning);

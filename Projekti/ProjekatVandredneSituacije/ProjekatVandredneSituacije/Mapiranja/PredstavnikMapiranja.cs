@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
      class PredstavnikMapiranja:ClassMap<Predstavnik>
     {
@@ -17,7 +17,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Table("Predstavnik_Sluzbe");
 
             
-            Id(x => x.JMBG, "JMBG").GeneratedBy.Identity();
+            Id(x => x.JMBG, "JMBG").GeneratedBy.Assigned();
 
          
 
@@ -27,7 +27,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Map(x => x.Pozicija).Column("Pozicija");
             Map(x => x.Telefon).Column("Telefon");
             Map(x => x.Email).Column("Email");
-            References(x => x.Sluzba, "Id_Sluzbe");
+
         }
     }
 }

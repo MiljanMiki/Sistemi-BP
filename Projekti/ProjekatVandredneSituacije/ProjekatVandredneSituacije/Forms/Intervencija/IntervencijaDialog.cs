@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
-using ProjekatVanredneSituacije.Entiteti;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
+using VanrednaSituacijaLibrary.Entiteti;
 
 public class IntervencijaDialog : Form
 {
-    private IntervencijaBasic _intervencija;
+    private IntervencijaView _intervencija;
     private bool _isUpdate = false;
 
     private Label lblDatumVreme, lblLokacija, lblStatus, lblBrojSpasenih, lblBrojPovredjenih, lblUspesnost;
@@ -23,17 +23,17 @@ public class IntervencijaDialog : Form
     private Button btnSacuvaj, btnOdustani;
     private TableLayoutPanel tlpMain;
 
-    public IntervencijaBasic Intervencija { get; private set; }
+    public IntervencijaView Intervencija { get; private set; }
 
     public IntervencijaDialog()
     {
         InitializeComponent();
         this.Text = "Dodaj novu intervenciju";
-        Intervencija = new IntervencijaBasic();
+        Intervencija = new IntervencijaView();
         LoadComboBoxes();
     }
 
-    public IntervencijaDialog(IntervencijaBasic intervencija)
+    public IntervencijaDialog(IntervencijaView intervencija)
     {
         InitializeComponent();
         this.Text = "Izmeni intervenciju";
@@ -70,7 +70,7 @@ public class IntervencijaDialog : Form
         txtLokacija = new TextBox();
         lblStatus = new Label { Text = "Status:", TextAlign = ContentAlignment.MiddleLeft };
         cmbStatus = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
-        cmbStatus.Items.AddRange(Enum.GetNames(typeof(ProjekatVanredneSituacije.Entiteti.Status)));
+        cmbStatus.Items.AddRange(Enum.GetNames(typeof(Status)));
 
         lblSituacija = new Label { Text = "Vanredna Situacija:", TextAlign = ContentAlignment.MiddleLeft };
         cmbVanrednaSituacija = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList };
@@ -122,12 +122,12 @@ public class IntervencijaDialog : Form
     {
         try
         {
-            var jedinice = await DTOManager.VratiSveJedinice();
+            var jedinice = await DataProvider.VratiSveJedinice();
             cmbInterventnaJedinica.DataSource = jedinice;
             cmbInterventnaJedinica.DisplayMember = "Naziv";
             cmbInterventnaJedinica.ValueMember = "Jedinstveni_Broj";
 
-            var situacije = await DTOManager.VratiVanredneSituacije();
+            var situacije = await DataProvider.VratiVanredneSituacije();
             cmbVanrednaSituacija.DataSource = situacije;
             cmbVanrednaSituacija.DisplayMember = "Naziv";
             cmbVanrednaSituacija.ValueMember = "Id";
@@ -164,31 +164,26 @@ public class IntervencijaDialog : Form
         {
             try
             {
-                // Kreiramo IntervencijaView DTO za slanje na server
-                IntervencijaView novaIntervencija = new IntervencijaView();
+                IntervencijaBasicView novaIntervencija = new IntervencijaBasicView();
                 novaIntervencija.Datum_I_Vreme = dtpDatumVreme.Value;
                 novaIntervencija.Lokacija = txtLokacija.Text;
-                novaIntervencija.Status = (ProjekatVanredneSituacije.Entiteti.Status)Enum.Parse(typeof(ProjekatVanredneSituacije.Entiteti.Status), cmbStatus.SelectedItem!.ToString()!);
+                novaIntervencija.Status = (Status)Enum.Parse(typeof(Status), cmbStatus.SelectedItem!.ToString()!);
                 novaIntervencija.Broj_Spasenih = int.Parse(txtBrojSpasenih.Text);
                 novaIntervencija.Broj_Povredjenih = int.Parse(txtBrojPovredjenih.Text);
                 novaIntervencija.Uspesnost = int.Parse(txtUspesnost.Text);
 
-                // DTOManager metoda DodajIntervenciju mora da bude modifikovana
-                // tako da vrati ID novokreiranog entiteta.
-                int noviIdIntervencije = await DTOManager.DodajIntervenciju(novaIntervencija);
+                await DataProvider.DodajIntervenciju(novaIntervencija);
 
-                // Kreiramo UcestvujeBasic DTO da bismo kreirali vezu
                 if (cmbVanrednaSituacija.SelectedValue != null && cmbInterventnaJedinica.SelectedValue != null)
                 {
-                    UcestvujeView ucestvuje = new UcestvujeView
+                    UcestvujeAddView ucestvuje = new UcestvujeAddView
                     {
                         IdIntervencije = noviIdIntervencije,
                         IdVanredneSituacije = (int)cmbVanrednaSituacija.SelectedValue,
                         IdInterventneJed = (int)cmbInterventnaJedinica.SelectedValue
                     };
 
-                    // Pozivamo DTOManager metodu za dodavanje 'ucestvuje' veze
-                    await DTOManager.DodajUcestvuje(ucestvuje);
+                    await DataProvider.DodajUcestvuje(ucestvuje);
                 }
                 else
                 {

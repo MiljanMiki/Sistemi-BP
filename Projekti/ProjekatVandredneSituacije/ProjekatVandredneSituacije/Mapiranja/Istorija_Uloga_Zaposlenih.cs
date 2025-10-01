@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
      class Istorija_Uloga_ZaposlenihMapiranja:ClassMap<Istorija_Uloga_Zaposlenih>
     {
@@ -15,7 +15,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Table("Istorija_Uloga_Zaposlenih");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Zaposleni, "Zaposleni");
+            References(x => x.Zaposleni, "JMBG");
             Map(x => x.Uloga, "Uloga");
 
 

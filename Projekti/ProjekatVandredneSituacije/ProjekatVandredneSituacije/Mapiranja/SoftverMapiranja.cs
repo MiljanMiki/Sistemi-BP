@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
     class SoftverMapiranja : ClassMap<Entiteti.Softver>
     {
@@ -13,7 +13,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
         {
             Table("SoftverAnaliticara");
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Analiticar, "JMBG_Analiticar");
+            References(x => x.Analiticar, "JMBG_Analiticara");
             Map(x => x.Naziv, "Naziv");
         }
     }

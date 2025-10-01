@@ -1,22 +1,23 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class DodeljujeSeView
+    public  class DodeljujeSeView
     {
         public virtual int Id { get; set; }
-        public virtual VoziloView Vozilo { get; set; }
-        public virtual OperativniRadnikView Radnik { get; set; }
+        public virtual  VoziloView Vozilo { get; set; }
+        public virtual OperativniRadnikView? Radnik { get; set; }
         public virtual InterventnaJedinicaView? Jedinica { get; set; }
 
-        public virtual DateTime DatumOd { get; set; }
+        public virtual  DateTime DatumOd { get; set; }
 
-        public virtual DateTime DatumDo { get; set; }
+        public virtual DateTime? DatumDo { get; set; }
 
         public DodeljujeSeView()
         { 
@@ -36,16 +37,16 @@ namespace ProjekatVanredneSituacije.DTOs
         }
     }
 
-    internal class DodeljujeSeAddView
+    public  class DodeljujeSeAddView
     {
-        public virtual int? Id { get; set; }
+
         public virtual string RegVozilo { get; set; }
         public virtual string? JMBGRadnik { get; set; }
         public virtual int? IdJedinica { get; set; }
 
         public virtual DateTime DatumOd { get; set; }
 
-        public virtual DateTime DatumDo { get; set; }
+        public virtual DateTime? DatumDo { get; set; }
 
         public DodeljujeSeAddView()
         {
@@ -53,10 +54,15 @@ namespace ProjekatVanredneSituacije.DTOs
 
         public DodeljujeSeAddView(DodeljujeSe d)
         {
-            Id = d.Id;
             RegVozilo = d.Vozilo.Registarska_Oznaka;
-            JMBGRadnik = d.Radnik.JMBG;
-            IdJedinica = d.Jedinica.Jedinstveni_Broj;
+            if (d.Radnik!=null)
+            {
+                JMBGRadnik = d.Radnik.JMBG;
+            }
+            if (d.Jedinica != null)
+            {
+                IdJedinica = d.Jedinica.Jedinstveni_Broj;
+            }
             DatumOd = d.DatumOd;
             DatumDo = d.DatumDo;
         }

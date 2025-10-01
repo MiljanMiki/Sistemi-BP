@@ -1,12 +1,12 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
      class SluzbaMapiranja:ClassMap<Sluzba>
     {
@@ -14,18 +14,17 @@ namespace ProjekatVanredneSituacije.Mapiranja
         {
             Table("Sluzba");
 
-            Id(x => x.Id_Sektora, "Id_Sektora").GeneratedBy.TriggerIdentity();
+            Id(x => x.Id_Sektora, "Id").GeneratedBy.TriggerIdentity();
 
             Map(x => x.TipSektora).Column("Tip");
 
-            References(x => x.Predstavnik).Column("JMBG");
+            References(x => x.Predstavnik).Column("JMBGPredstavnika");
 
 
-            HasMany(x => x.VanredneSituacije)
+            HasMany(x => x.VandredneSituacije)
            .Cascade.All()
            .Inverse()
-           .KeyColumn("Id_Sluzbe");
-
+           .KeyColumn("Id_Sluzbe").LazyLoad();
             
         }
     }

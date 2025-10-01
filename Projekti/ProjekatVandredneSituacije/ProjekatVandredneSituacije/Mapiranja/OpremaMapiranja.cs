@@ -1,12 +1,13 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using NHibernate.Type;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
      class OpremaMapiranja:ClassMap<Oprema>
     {
@@ -17,8 +18,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
            
             Id(x => x.Serijski_Broj, "Serijski_Broj").GeneratedBy.Assigned();
 
-            
-            DiscriminateSubClassesOnColumn("Tip");
+           
 
           
             Map(x => x.Naziv).Column("Naziv");
@@ -37,7 +37,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Table("MedicinskaOprema");
 
             KeyColumn("Serijski_Broj");
-                Map(x => x.Tip).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<EnumStringType<TipMedicinske>>();
             
         }
     }
@@ -45,10 +45,10 @@ namespace ProjekatVanredneSituacije.Mapiranja
      class TehnickaOpremaMapiranja : SubclassMap<TehnickaOprema>
     {
         public TehnickaOpremaMapiranja() {
-            Table("TehnickaOprema");
+            Table("Tehnicka");
             
                 KeyColumn("Serijski_Broj");
-                Map(x => x.Tip).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<EnumStringType<TipTehnicke>>();
             
         }
     }
@@ -60,7 +60,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Table("LicnaZastita");
             
                 KeyColumn("Serijski_Broj");
-                Map(x => x.Tip).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<EnumStringType<TipLicneZastite>>();
             
         }
     }
@@ -72,7 +72,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Table("Zalihe");
             
                 KeyColumn("Serijski_Broj");
-                Map(x => x.Tip).Column("Tip").CustomType<string>();
+                Map(x => x.Tip).Column("Tip").CustomType<EnumStringType<TipZalihe>>();
                 Map(x => x.Kolicina, "Kolicina");
             
             

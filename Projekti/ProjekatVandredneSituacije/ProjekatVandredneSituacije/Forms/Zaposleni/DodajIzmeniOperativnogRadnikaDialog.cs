@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
 using System.Text.RegularExpressions;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniOperativnogRadnikaDialog : Form
 {
@@ -12,12 +12,12 @@ public class DodajIzmeniOperativnogRadnikaDialog : Form
     private ComboBox cmbPol;
     private Button btnSacuvaj, btnOdustani;
 
-    public OperativniRadnik? Zaposlen { get; private set; }
+    public OperativniRadnikAddView? Zaposlen { get; private set; }
 
-    public DodajIzmeniOperativnogRadnikaDialog(OperativniRadnik? radnik = null)
+    public DodajIzmeniOperativnogRadnikaDialog(OperativniRadnikAddView? radnik = null)
     {
         InitializeComponent();
-        this.Zaposlen = radnik ?? new OperativniRadnik();
+        this.Zaposlen = radnik ?? new OperativniRadnikAddView();
         this.Text = radnik != null ? "Izmeni operativnog radnika" : "Dodaj operativnog radnika";
         if (radnik != null)
         { 

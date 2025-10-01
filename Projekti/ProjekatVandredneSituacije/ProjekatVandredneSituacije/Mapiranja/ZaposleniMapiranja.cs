@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
-namespace ProjekatVanredneSituacije.Mapiranja
+using VanrednaSituacijaLibrary.Entiteti;
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
     class ZaposleniMapiranja : ClassMap<Zaposlen>
     {
@@ -23,7 +23,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Map(x => x.Pol).Column("Pol");
             Map(x => x.Kontakt_Telefon).Column("Kontakt_Telefon");
             Map(x => x.Email).Column("Email");
-            Map(x => x.AdresaStanovanja).Column("AdresaStanovanja");
+            Map(x => x.AdresaStanovanja).Column("Adresa_Stanovanja");
             Map(x => x.Datum_Zaposlenja).Column("Datum_Zaposlenja");
             HasMany(x => x.Istorija)
                .Cascade.All()

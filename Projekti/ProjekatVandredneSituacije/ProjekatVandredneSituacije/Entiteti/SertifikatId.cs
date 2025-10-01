@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Entiteti
+namespace VanrednaSituacijaLibrary.Entiteti
 {
     public class SertifikatId
     {
-        public virtual OperativniRadnik OperativniRadnik { get; set; }
-        public virtual string Naziv { get; set; }
-        public virtual string Institucija { get; set; }
+        public virtual  OperativniRadnik OperativniRadnik { get; set; }
+        public virtual  string Naziv { get; set; }
+        public virtual  string Institucija { get; set; }
 
         public override bool Equals(object obj)
         {
-            if (Object.ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, obj))
                 return true;
 
             if (obj.GetType() != typeof(SertifikatId))
@@ -22,8 +22,8 @@ namespace ProjekatVanredneSituacije.Entiteti
 
             SertifikatId recievedObject = (SertifikatId)obj;
 
-            if ((OperativniRadnik.JMBG == recievedObject.OperativniRadnik.JMBG) &&
-                ( Naziv==recievedObject.Naziv) && (Institucija== recievedObject.Institucija))
+            if (OperativniRadnik.JMBG == recievedObject.OperativniRadnik.JMBG &&
+                 Naziv==recievedObject.Naziv && Institucija== recievedObject.Institucija)
             {
                 return true;
             }

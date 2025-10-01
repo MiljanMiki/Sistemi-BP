@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniSluzbuDialog : Form
 {
@@ -8,11 +9,11 @@ public class DodajIzmeniSluzbuDialog : Form
     private TextBox txtTipSektora, txtPredstavnikJMBG;
     private Button btnSacuvaj, btnOdustani;
      
-    public SluzbaPregled SluzbaBasic { get; private set; }
+    public SluzbaAddView SluzbaBasic { get; private set; }
      
     private int _idSektoraToUpdate;
 
-    public DodajIzmeniSluzbuDialog(SluzbaPregled? sluzbaPregled = null)
+    public DodajIzmeniSluzbuDialog(SluzbaView? sluzbaPregled = null)
     {
         InitializeComponent();
 
@@ -63,7 +64,7 @@ public class DodajIzmeniSluzbuDialog : Form
         btnSacuvaj.Click += BtnSacuvaj_Click;
     }
 
-    private void PopulateFields(SluzbaPregled sluzba)
+    private void PopulateFields(SluzbaView sluzba)
     {
         txtTipSektora.Text = sluzba.TipSektora;
         if (sluzba.Predstavnik != null)
@@ -81,19 +82,18 @@ public class DodajIzmeniSluzbuDialog : Form
             return;
         }
          
-        this.SluzbaBasic = new SluzbaPregled
+        this.SluzbaBasic = new SluzbaAddView  
         {
-            Id_Sektora = _idSektoraToUpdate, 
             TipSektora = txtTipSektora.Text
         };
 
         if (!string.IsNullOrWhiteSpace(txtPredstavnikJMBG.Text))
         {
-            this.SluzbaBasic.Predstavnik = new PredstavnikPregled { JMBG = txtPredstavnikJMBG.Text };
+            this.SluzbaBasic.JMBG_Predstavnik = txtPredstavnikJMBG.Text;
         }
         else
         {
-            this.SluzbaBasic.Predstavnik = null;
+            MessageBox.Show("JMBG predstavnika sektora ne može biti prazan.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         this.DialogResult = DialogResult.OK;

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.DTOs;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniZaposlenogDialog : Form
 {
@@ -18,21 +17,21 @@ public class DodajIzmeniZaposlenogDialog : Form
         this.Text = "Dodaj novog zaposlenog";
     }
      
-    public DodajIzmeniZaposlenogDialog(Zaposlen zaposlen)
+    public DodajIzmeniZaposlenogDialog(ZaposleniView zaposlen)
     { 
         Form? dialog = null;
 
-        if (zaposlen is Analiticar)
+        if (zaposlen is AnaliticarView)
         {
-            dialog = new DodajIzmeniAnaliticaraDialog(zaposlen as Analiticar);
+            dialog = new DodajIzmeniAnaliticaraDialog(zaposlen as AnaliticarView);
         }
-        else if (zaposlen is Kordinator)
+        else if (zaposlen is KordinatorView)
         {
-            dialog = new DodajIzmeniKoordinatoraDialog(zaposlen as Kordinator);
+            dialog = new DodajIzmeniKoordinatoraDialog(zaposlen as KordinatorView);
         }
-        else if (zaposlen is OperativniRadnik)
+        else if (zaposlen is OperativniRadnikAddView)
         {
-            dialog = new DodajIzmeniOperativnogRadnikaDialog(zaposlen as OperativniRadnik);
+            dialog = new DodajIzmeniOperativnogRadnikaDialog(zaposlen as OperativniRadnikAddView);
         }
 
         HandleSubDialogResult(dialog);

@@ -1,12 +1,11 @@
 ﻿using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
-using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class ListaVanrednihSituacijaForm : Form
 {
@@ -81,12 +80,12 @@ public class ListaVanrednihSituacijaForm : Form
         {
             dgvVanredneSituacije.DataSource = null; 
 
-            IList<VanrednaSituacijaView> VanredneBasic = await DTOManager.VratiVanredneSituacije();
-            List<VanrednaSituacijaPregled> VanrednePregled = new List<VanrednaSituacijaPregled>();
+            IList<VanrednaSituacijaView> VanredneBasic = await DataProvider.VratiVanredneSituacije();
+            List<VanrednaSituacijaAddView> VanrednePregled = new List<VanrednaSituacijaAddView>();
             foreach (var vsb in VanredneBasic)
             {
-                VanrednePregled.Add(new VanrednaSituacijaPregled
-                (vsb.Id, vsb.Datum_Od, vsb.Datum_Do, vsb.Tip, vsb.Broj_Ugrozenih_Osoba, vsb.Nivo_Opasnosti, vsb.Opstina, vsb.Lokacija, vsb.Opis, vsb.Prijava.Id));
+                VanrednePregled.Add(
+                    new VanrednaSituacijaAddView{ vsb.Id, vsb.Datum_Od, vsb.Datum_Do, vsb.Tip, vsb.Broj_Ugrozenih_Osoba, vsb.Nivo_Opasnosti, vsb.Opstina, vsb.Lokacija, vsb.Opis, vsb.Prijava.Id });
             }
             dgvVanredneSituacije.DataSource = VanrednePregled;
         }
@@ -97,7 +96,7 @@ public class ListaVanrednihSituacijaForm : Form
     }
 
 
-    private void BtnDodaj_Click(object? sender, EventArgs e)
+    private async void BtnDodaj_Click(object? sender, EventArgs e)
     {
         var dialog = new DodajIzmeniVanrednuSituacijuDialog();
         if (dialog.ShowDialog() == DialogResult.OK)
@@ -106,7 +105,7 @@ public class ListaVanrednihSituacijaForm : Form
             {
                 try
                 {
-                    DTOManager.DodajVanrednuSituaciju(dialog.SituacijaBasic);
+                    await DataProvider.DodajVanrednuSituaciju(dialog.SituacijaBasic);
                     RefreshDataGrid();
                     MessageBox.Show("Vanredna situacija je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -118,11 +117,11 @@ public class ListaVanrednihSituacijaForm : Form
         }
     }
 
-    private void BtnIzmeni_Click(object? sender, EventArgs e)
+    private async void BtnIzmeni_Click(object? sender, EventArgs e)
     {
         if (dgvVanredneSituacije.SelectedRows.Count > 0)
         {
-            var selectedSituacijaPregled = dgvVanredneSituacije.SelectedRows[0].DataBoundItem as VanrednaSituacijaPregled;
+            var selectedSituacijaPregled = dgvVanredneSituacije.SelectedRows[0].DataBoundItem as VanrednaSituacijaAddView;
             var dialog = new DodajIzmeniVanrednuSituacijuDialog(selectedSituacijaPregled);
             if (dialog.ShowDialog() == DialogResult.OK)
             {
@@ -130,7 +129,7 @@ public class ListaVanrednihSituacijaForm : Form
                 {
                     try
                     {
-                        DTOManager.IzmeniVandrednuSituaciju(dialog.SituacijaBasic);
+                        await DataProvider.IzmeniVanrednuSituaciju(dialog.SituacijaBasic);
                         RefreshDataGrid();
                         MessageBox.Show("Vanredna situacija je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
@@ -157,7 +156,7 @@ public class ListaVanrednihSituacijaForm : Form
                 var selectedSituacija = dgvVanredneSituacije.SelectedRows[0].DataBoundItem as VanrednaSituacijaPregled;
                 try
                 {
-                    DTOManager.obrisiVandrednuSituaciju(selectedSituacija.Id);
+                    DataProvider.obrisiVanrednuSituaciju(selectedSituacija.Id);
                     RefreshDataGrid();
                     MessageBox.Show("Vanredna situacija je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }

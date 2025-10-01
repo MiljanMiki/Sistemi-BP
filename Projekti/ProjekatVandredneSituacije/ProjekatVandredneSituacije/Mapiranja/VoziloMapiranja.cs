@@ -1,13 +1,14 @@
-﻿using System;
+﻿using FluentNHibernate.Mapping;
+using NHibernate.Type;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
     class VoziloMapiranja : ClassMap<Vozilo>
     {
@@ -18,23 +19,35 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Id(x => x.Registarska_Oznaka, "Registarska_Oznaka").GeneratedBy.Assigned();
 
             Map(x => x.Proizvodjac).Column("Proizvodjac");
-            ;
-            Map(x => x.Status).Column("Status");
+            
+            Map(x => x.Status).Column("Status").CustomType<EnumStringType<StatusVozila>>();
             Map(x => x.Lokacija).Column("Lokacija");
 
 
             HasMany(x => x.Servisi)
            .Cascade.All()              
            .Inverse()                  
-           .KeyColumn("Vozilo");  
+           .KeyColumn("Registarska_Oznaka_Vozila");  
 
             HasMany(x => x.Dodeljuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("Vozilo");
+                .KeyColumn("Registarska_Oznaka");
 
             
         }
     }
-    
+
+    class TerenskaMapiranja : SubclassMap<Terensko>
+    {
+
+        public TerenskaMapiranja()
+        {
+            Table("Terensko_Vozilo");
+
+            KeyColumn("Registarska_Oznaka");
+        }
+    }
 }
+    
+

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
 using ProjekatVanredneSituacije;
 using System.Collections.Generic;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniOpstaJedinicaDialog : Form
 {
@@ -12,16 +12,16 @@ public class DodajIzmeniOpstaJedinicaDialog : Form
     private NumericUpDown numBrojClanova;
     private Button btnSacuvaj, btnOdustani;
 
-    public OpstaInterventnaJedPregled Jedinica { get; private set; }
+    public OpstaInterventnaBasicView Jedinica { get; private set; }
      
     public DodajIzmeniOpstaJedinicaDialog()
     {
-        Jedinica = new OpstaInterventnaJedPregled();
+        Jedinica = new OpstaInterventnaBasicView();
         InitializeComponent();
         this.Text = "Dodaj Opštu Interventnu Jedinicu";
     }
      
-    public DodajIzmeniOpstaJedinicaDialog(OpstaInterventnaJedPregled jedinica)
+    public DodajIzmeniOpstaJedinicaDialog(OpstaInterventnaBasicView jedinica)
     {
         Jedinica = jedinica;
         InitializeComponent();

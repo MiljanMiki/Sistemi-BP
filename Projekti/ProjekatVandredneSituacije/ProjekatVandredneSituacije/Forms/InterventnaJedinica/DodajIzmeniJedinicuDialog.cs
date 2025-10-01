@@ -1,12 +1,11 @@
 ﻿using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.Entiteti;
-using ProjekatVanredneSituacije.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniJedinicuDialog : Form
 {
@@ -16,7 +15,7 @@ public class DodajIzmeniJedinicuDialog : Form
     private ComboBox cmbKomandir;
     private Button btnSacuvaj, btnOdustani;
 
-    private InterventnaJedinicaBasic Jedinica;
+    private InterventnaJedinicaBasicView Jedinica;
     private IList<OperativniRadnikView> sviKomandiri;
 
     public DodajIzmeniJedinicuDialog()
@@ -28,7 +27,7 @@ public class DodajIzmeniJedinicuDialog : Form
         UcitajKomandire();
     }
 
-    public DodajIzmeniJedinicuDialog(InterventnaJedinicaBasic jedinica)
+    public DodajIzmeniJedinicuDialog(InterventnaJedinicaBasicView jedinica)
     {
         Jedinica = jedinica;
         InitializeComponent();
@@ -42,7 +41,7 @@ public class DodajIzmeniJedinicuDialog : Form
     {
         try
         {
-            sviKomandiri = await DTOManager.VratiOperativneRadnike();
+            sviKomandiri = await DataProvider.VratiOperativneRadnike();
             cmbKomandir.DataSource = sviKomandiri;
             cmbKomandir.DisplayMember = "Ime";
             cmbKomandir.ValueMember = "JMBG";
@@ -100,12 +99,12 @@ public class DodajIzmeniJedinicuDialog : Form
         btnSacuvaj.Click += BtnSacuvaj_Click;
         this.Load += (sender, e) =>
         {
-            if (Jedinica is OpstaInterventnaJedBasic || Jedinica == null)
+            if (Jedinica is OpstaInterventnaBasicView || Jedinica == null)
             {
                 lblTipSpecijalne.Visible = false;
                 txtTipSpecijalne.Visible = false;
             }
-            else if (Jedinica is SpecijalnaInterventnaJedinicaBasic)
+            else if (Jedinica is SpecijalnaIntervetnaJedinicaBasicView)
             {
                 lblTipSpecijalne.Visible = true;
                 txtTipSpecijalne.Visible = true;
@@ -128,7 +127,7 @@ public class DodajIzmeniJedinicuDialog : Form
             }
         }
 
-        if (Jedinica is SpecijalnaInterventnaJedinicaBasic specijalna)
+        if (Jedinica is SpecijalnaIntervetnaJedinicaBasicView specijalna)
         {
             txtTipSpecijalne.Text = specijalna.TipSpecijalneJed;
         }
@@ -162,24 +161,24 @@ public class DodajIzmeniJedinicuDialog : Form
             else
             {
                 // Logika za izmenu postojeće jedinice
-                if (Jedinica is OpstaInterventnaJedBasic opsta)
+                if (Jedinica is OpstaInterventnaBasicView opsta)
                 {
                     // Kreiramo OpstaInterventnaView DTO za slanje na server
-                    var izmenjenaJedinica = new OpstaInterventnaJedPregled
+                    var izmenjenaJedinica = new OpstaInterventnaBasicView
                     {
                         Naziv = txtNaziv.Text,
                         BrojClanova = (int)numBrojClanova.Value,
                         Baza = txtBaza.Text,
-                        JMBGKomandira = cmbKomandir.SelectedValue?.ToString()
+                        Komandir = cmbKomandir.SelectedValue?.ToString()
                     };
 
                     // Pozivamo DTOManager.izmeniOpstuInterventnuJedinicu sa ID-em
-                    await DTOManager.izmeniOpstuInterventnuJedinicu(izmenjenaJedinica, opsta.Jedinstveni_Broj);
+                    await DataProvider.IzmeniOpstuInterventnuJedinicu(izmenjenaJedinica, opsta);
                 }
-                else if (Jedinica is SpecijalnaInterventnaJedinicaBasic specijalna)
+                else if (Jedinica is SpecijalnaIntervetnaJedinicaBasicView specijalna)
                 {
                     // Kreiramo SpecijalnaInterventnaView DTO za slanje na server
-                    var izmenjenaJedinica = new SpecijalnaInterventnaView
+                    var izmenjenaJedinica = new SpecijalnaIntervetnaJedinicaBasicView
                     {
                         Naziv = txtNaziv.Text,
                         BrojClanova = (int)numBrojClanova.Value,
@@ -189,7 +188,7 @@ public class DodajIzmeniJedinicuDialog : Form
                     };
 
                     // Pretpostavljamo da slična metoda postoji i za specijalne jedinice
-                    await DTOManager.izmeniSpecijalnuInterventnuJedinicu(izmenjenaJedinica, specijalna.Jedinstveni_Broj);
+                    await DataProvider.izmeniSpecijalnuInterventnuJedinicu(izmenjenaJedinica, specijalna);
                 }
                 this.DialogResult = DialogResult.OK;
             }
@@ -209,7 +208,7 @@ public class DodajIzmeniJedinicuDialog : Form
             return false;
         }
 
-        if (Jedinica is SpecijalnaInterventnaJedinicaBasic && string.IsNullOrWhiteSpace(txtTipSpecijalne.Text))
+        if (Jedinica is SpecijalnaIntervetnaJedinicaBasicView && string.IsNullOrWhiteSpace(txtTipSpecijalne.Text))
         {
             MessageBox.Show("Molimo unesite tip specijalne jedinice.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;

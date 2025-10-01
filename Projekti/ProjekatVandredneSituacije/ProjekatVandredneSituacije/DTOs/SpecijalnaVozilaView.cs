@@ -1,23 +1,44 @@
-﻿using ProjekatVanredneSituacije.Entiteti;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class SpecijalnaVozilaView:VoziloView
+    public  class SpecijalnaVozilaView:VoziloView
+    {
+        public virtual string Namena { get; set; }
+
+        public SpecijalnaVozilaView() { }
+
+        public SpecijalnaVozilaView(SpecijalnaVozila s): base(s)
+        {
+            Namena = s.Namena.ToString();
+        }
+    }
+
+    public class SpecijalnaVozilaChangeView : VoziloChangeView
     {
         public virtual Namena Namena { get; set; }
 
-        public SpecijalnaVozilaView(string registarska_Oznaka, string proizvodjac)
-        {
-            Registarska_Oznaka = registarska_Oznaka;
-            Proizvodjac = proizvodjac;
-        }
+        public SpecijalnaVozilaChangeView() { }
 
-        public SpecijalnaVozilaView(SpecijalnaVozila s): base(s)
+        public SpecijalnaVozilaChangeView(SpecijalnaVozila s) : base(s)
+        {
+            Namena = s.Namena;
+        }
+    }
+
+    public class SpecijalnaVozilaAddView : VoziloAddView
+    {
+        public virtual Namena Namena { get; set; }
+
+        public SpecijalnaVozilaAddView() { }
+
+        public SpecijalnaVozilaAddView(SpecijalnaVozila s) : base(s)
         {
             Namena = s.Namena;
         }

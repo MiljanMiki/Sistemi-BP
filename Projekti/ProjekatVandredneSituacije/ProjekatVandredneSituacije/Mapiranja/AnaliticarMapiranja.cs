@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
-namespace ProjekatVanredneSituacije.Mapiranja
+using VanrednaSituacijaLibrary.Entiteti;
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
      class AnaliticarMapiranja : SubclassMap<Analiticar>
     {

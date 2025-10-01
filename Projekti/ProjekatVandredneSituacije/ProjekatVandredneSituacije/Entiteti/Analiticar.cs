@@ -1,10 +1,11 @@
-﻿using System;
+﻿using VanrednaSituacijaLibrary.Entiteti;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Entiteti
+namespace VanrednaSituacijaLibrary.Entiteti
 {
     public class Analiticar : Zaposlen
     {

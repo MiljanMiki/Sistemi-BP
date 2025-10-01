@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class MedicinskaOpremaView:OpremaView
+    public  class MedicinskaOpremaView:OpremaView
     {
-        public virtual TipMedicinske Tip { get; set; }
+        public virtual string Tip { get; set; }
 
         public MedicinskaOpremaView()
         {
@@ -17,11 +17,11 @@ namespace ProjekatVanredneSituacije.DTOs
 
         public MedicinskaOpremaView(MedicinskaOprema m):base(m)
         {
-            Tip = m.Tip;
+            Tip = m.Tip.ToString();
         }
     }
 
-    internal class MedicinskaOpremaAddView: OpremaAddView
+    public  class MedicinskaOpremaAddView: OpremaAddView
     {
         public virtual TipMedicinske Tip { get; set; }
         public MedicinskaOpremaAddView() { }
@@ -31,4 +31,28 @@ namespace ProjekatVanredneSituacije.DTOs
             Tip = m.Tip;
         }
     }
+
+
+    public class MedicinskaOpremaChangeView : OpremaChangeView
+    {
+        public virtual TipMedicinske Tip { get; set; }
+        public MedicinskaOpremaChangeView() { }
+
+        public MedicinskaOpremaChangeView(MedicinskaOprema m) : base(m)
+        {
+            Tip = m.Tip;
+        }
+    }
+
+    public class MedicinskaOpremaMiniView : OpremaMiniView
+    {
+        public virtual string Tip { get; set; }
+        public MedicinskaOpremaMiniView() { }
+
+        public MedicinskaOpremaMiniView(MedicinskaOprema m) : base(m)
+        {
+            Tip = m.Tip.ToString();
+        }
+    }
 }
+

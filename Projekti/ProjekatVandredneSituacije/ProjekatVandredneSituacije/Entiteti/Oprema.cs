@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Entiteti
+namespace VanrednaSituacijaLibrary.Entiteti
 {
     public enum TipLicneZastite
     {
@@ -29,29 +29,29 @@ namespace ProjekatVanredneSituacije.Entiteti
     }
     public abstract class Oprema
     {
-        public virtual string Serijski_Broj {  get; set; }    
-        public virtual string Naziv {  get; set; }
+        public virtual  string Serijski_Broj {  get; set; }    
+        public virtual  string Naziv {  get; set; }
 
        
-        public virtual string Status { get; set; }
+        public virtual  string Status { get; set; }
 
-        public virtual DateTime DatumNabavke { get; set; }
+        public virtual  DateTime DatumNabavke { get; set; }
 
-        public virtual InterventnaJedinica Jedinica { get; set; }
+        public virtual  InterventnaJedinica Jedinica { get; set; }
 
 
     }
 
-    internal class MedicinskaOprema : Oprema {
+    public  class MedicinskaOprema : Oprema {
         public virtual TipMedicinske Tip {  get; set; }
     }
-    internal class TehnickaOprema: Oprema {
+    public  class TehnickaOprema: Oprema {
         public virtual TipTehnicke Tip {  get; set; }
     }
-    internal class LicnaZastita : Oprema { 
+    public  class LicnaZastita : Oprema { 
         public virtual TipLicneZastite Tip {  get; set; }
     }
-    internal class Zalihe : Oprema 
+    public  class Zalihe : Oprema 
     {
         public virtual TipZalihe Tip {  get; set; }
         public virtual int Kolicina {  get; set; }

@@ -1,16 +1,20 @@
-﻿using ProjekatVanredneSituacije.Entiteti;
+﻿using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class SpecijalizacijaView
+    public  class SpecijalizacijaView
     {
         public virtual int Id { get; set; }
-        public virtual KordinatorView Kordinator { get; set; }
+        public virtual string JMBG_Kordinatora { get; set; }
+
+        public virtual string ImeKordinatora{get; set;}
+
+        public virtual string PrezimeKordinatora{get; set;}
         public virtual string Tip { get; set; }
 
         public SpecijalizacijaView()
@@ -21,19 +25,21 @@ namespace ProjekatVanredneSituacije.DTOs
         {
             Id = s.Id;
             Tip = s.Tip;
-            Kordinator = new KordinatorView(s.Kordinator);
+            JMBG_Kordinatora = s.Kordinator.JMBG;
+            ImeKordinatora = s.Kordinator.Ime;
+            PrezimeKordinatora = s.Kordinator.Prezime;
+
         }
     }
 
-    internal class SpecijalizacijaAddView
+    public  class SpecijalizacijaAddView
     {
-        public virtual int Id { get; set; }
         public virtual string JMBG_Kordinator { get; set; }
+
         public virtual string Tip { get; set; }
         public SpecijalizacijaAddView() { }
         public SpecijalizacijaAddView(Specijalizacija s)
         {
-            Id = s.Id;
             JMBG_Kordinator = s.Kordinator.JMBG;
             Tip = s.Tip;
         }

@@ -1,18 +1,18 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
-    internal class SaradjujeMapiranja:ClassMap<Saradjuje>
+    public  class SaradjujeMapiranja:ClassMap<Saradjuje>
     {
         public SaradjujeMapiranja()
         {
-            Table("Saradjuje");
+            Table("Saradnja");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
             Map(x => x.Uloga).Column("Uloga");
@@ -23,8 +23,8 @@ namespace ProjekatVanredneSituacije.Mapiranja
                 .Not.Nullable();
 
             
-            References(x => x.VanrednaSituacija)
-                .Column("Id_VandedneSituacije")
+            References(x => x.VandrednaSituacija)
+                .Column("Id_Vanredne_Situacije")
                 .Not.Nullable();
 
         }

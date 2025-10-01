@@ -1,18 +1,19 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NHibernate.Type;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
-    class VanrednaSituacijeMapiranja : ClassMap<VanrednaSituacija>
+    class VandrednaSituacijeMapiranja : ClassMap<VanrednaSituacija>
     {
-        public VanrednaSituacijeMapiranja()
+        public VandrednaSituacijeMapiranja()
         {
-            Table("VanrednaSituacija");
+            Table("Vanredna_Situacija");
 
             Id(x => x.Id).GeneratedBy.TriggerIdentity();
 
@@ -20,24 +21,24 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Map(x => x.Datum_Do).Column("Datum_Do");
             Map(x => x.Tip).Column("Tip");
             Map(x => x.Broj_Ugrozenih_Osoba).Column("Broj_Ugrozenih_Osoba");
-            Map(x => x.Nivo_Opasnosti).Column("Nivo_Opasnosti");
+            Map(x => x.Nivo_Opasnosti).Column("Nivo_Opasnosti").CustomType<EnumStringType<NivoOpasnosti>>();
             Map(x => x.Opstina).Column("Opstina");
             Map(x => x.Lokacija).Column("Lokacija");
             Map(x => x.Opis).Column("Opis");
 
            
-            References(x => x.Prijava_ID).Column("ID");
+            References(x => x.Prijava_ID).Column("Id_Prijave");
             
 
             HasMany(x => x.Ucestvuje)
            .Cascade.All()
            .Inverse()
-           .KeyColumn("IdVanredneSituacije");
+           .KeyColumn("IdVandredneSituacije");
 
             HasMany(x => x.Saradjuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("IdVanredneSituacije");
+                .KeyColumn("IdVandredneSituacije");
 
            
         }

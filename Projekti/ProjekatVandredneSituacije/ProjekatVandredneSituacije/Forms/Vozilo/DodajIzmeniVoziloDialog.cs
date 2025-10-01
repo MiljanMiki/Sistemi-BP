@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
-using ProjekatVanredneSituacije.DTOs;
 using System.Collections.Generic;
 using System.Linq;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
+using VanrednaSituacijaLibrary.Entiteti;
 
 public class DodajIzmeniVoziloDialog : Form
 {
@@ -18,14 +18,14 @@ public class DodajIzmeniVoziloDialog : Form
     private Button btnSacuvaj, btnOdustani;
     private TableLayoutPanel tlpMain;
 
-    public VoziloView? VoziloBasic { get; private set; }
+    public VoziloAddView? VoziloBasic { get; private set; }
     private readonly Type _vehicleType;
 
-    public DodajIzmeniVoziloDialog(VoziloView? vozilo = null)
+    public DodajIzmeniVoziloDialog(VoziloAddView? vozilo = null)
     {
         InitializeComponent();
         this.Text = vozilo != null ? "Izmeni vozilo" : "Dodaj novo vozilo";
-        _vehicleType = vozilo?.GetType() ?? typeof(VoziloBasic);
+        _vehicleType = vozilo?.GetType() ?? typeof(VoziloAddView);
 
         LoadComboBoxes();
 
@@ -35,7 +35,7 @@ public class DodajIzmeniVoziloDialog : Form
             PopulateFields();
         }
          
-        if (_vehicleType == typeof(SpecijalnaVozilaBasic))
+        if (_vehicleType == typeof(SpecijalnaVozilaAddView))
         {
             lblNamena.Visible = true;
             cmbNamena.Visible = true;
@@ -50,12 +50,12 @@ public class DodajIzmeniVoziloDialog : Form
             cmbStatus.Items.AddRange(Enum.GetNames(typeof(StatusVozila)));
             cmbNamena.Items.AddRange(Enum.GetNames(typeof(Namena)));
              
-            var jedinice = await DTOManager.VratiSveJedinice();
+            var jedinice = await DataProvider.VratiSveJedinice();
             cmbJedinica.DataSource = jedinice;
             cmbJedinica.DisplayMember = "Naziv";
             cmbJedinica.ValueMember = "Id";
              
-            var radnici = await DTOManager.VratiOperativneRadnike();
+            var radnici = await DataProvider.VratiOperativneRadnike();
             cmbPojedinac.DataSource = radnici;
             cmbPojedinac.DisplayMember = "ImePrezime"; 
             cmbPojedinac.ValueMember = "JMBG";
@@ -140,7 +140,7 @@ public class DodajIzmeniVoziloDialog : Form
             txtProizvodjac.Text = VoziloBasic.Proizvodjac;
             cmbStatus.SelectedItem = VoziloBasic.Status.ToString();
             txtLokacija.Text = VoziloBasic.Lokacija;
-            if (VoziloBasic is SpecijalnaVozilaView spec)
+            if (VoziloBasic is SpecijalnaVozilaAddView spec)
             {
                 cmbNamena.SelectedItem = spec.Namena.ToString();
             }
@@ -184,21 +184,21 @@ public class DodajIzmeniVoziloDialog : Form
                     return;
                 }
 
-                if (_vehicleType == typeof(SpecijalnaVozilaView))
+                if (_vehicleType == typeof(SpecijalnaVozilaAddView))
                 {
-                    await DTOManager.DodajSpecijalnoVozilo(VoziloBasic as SpecijalnaVozilaView);
+                    await DataProvider.DodajSpecijalnoVozilo(VoziloBasic as SpecijalnaVozilaAddView);
                 }
-                else if (_vehicleType == typeof(SanitetskaBasic))
+                else if (_vehicleType == typeof(SanitetskaAddView))
                 {
-                    await DTOManager.DodajSanitetskaVozilo(VoziloBasic as SanitetskaView);
+                    await DataProvider.DodajSanitetskaVozilo(VoziloBasic as SanitetskaAddView);
                 }
-                else if (_vehicleType == typeof(DzipoviBasic))
+                else if (_vehicleType == typeof(DzipoviAddView))
                 {
-                    await DTOManager.DodajDzip(VoziloBasic as DzipoviView);
+                    await DataProvider.DodajDzip(VoziloBasic as DzipoviAddView);
                 }
-                else if (_vehicleType == typeof(KamioniBasic))
+                else if (_vehicleType == typeof(KamioniAddView))
                 {
-                    await DTOManager.DodajKamion(VoziloBasic as KamioniView);
+                    await DataProvider.DodajKamion(VoziloBasic as KamioniAddView);
                 }
                 else
                 { 
@@ -218,11 +218,11 @@ public class DodajIzmeniVoziloDialog : Form
         }
     }
 
-    private VoziloBasic CreateVoziloBasic()
+    private VoziloAddView CreateVoziloBasic()
     {
-        if (_vehicleType == typeof(SpecijalnaVozilaBasic))
+        if (_vehicleType == typeof(SpecijalnaVozilaAddView))
         {
-            return new SpecijalnaVozilaBasic
+            return new SpecijalnaVozilaAddView
             (
                 txtRegistarskaOznaka.Text,
                 txtProizvodjac.Text,

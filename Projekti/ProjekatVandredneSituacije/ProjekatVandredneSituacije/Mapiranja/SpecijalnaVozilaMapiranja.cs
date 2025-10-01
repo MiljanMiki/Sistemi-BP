@@ -1,14 +1,15 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using NHibernate.Type;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
-    class SpecijalnaVozilaMapiranja : ClassMap<SpecijalnaVozila>
+    class SpecijalnaVozilaMapiranja : SubclassMap<SpecijalnaVozila>
     {
 
 
@@ -16,11 +17,10 @@ namespace ProjekatVanredneSituacije.Mapiranja
         {
             Table("SpecijalnoVozilo");
 
-            
+            KeyColumn("Registarska_Oznaka");
 
-            Map(x => x.Namena).Column("Namena").CustomType<string>();
+            Map(x => x.Namena).Column("Namena").CustomType<EnumStringType<Namena>>();
             
-
 
         }
     }

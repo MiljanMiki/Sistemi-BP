@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using ProjekatVanredneSituacije.Entiteti;
-using ProjekatVanredneSituacije.DTOs;
 using System.Collections.Generic;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class DodajIzmeniPrijavuDialog : Form
 {
@@ -36,7 +35,7 @@ public class DodajIzmeniPrijavuDialog : Form
     {
         try
         {
-            var vanredneSituacije = await DTOManager.VratiVanredneSituacije();
+            var vanredneSituacije = await DataProvider.VratiVanredneSituacije();
             cmbIdVanredne.DataSource = vanredneSituacije;
             cmbIdVanredne.DisplayMember = "NazivIliOpis";
             cmbIdVanredne.ValueMember = "Id";

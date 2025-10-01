@@ -4,8 +4,8 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.Entiteti;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class IntervencijeForm : Form
 {
@@ -67,7 +67,7 @@ public class IntervencijeForm : Form
     {
         try
         {
-            var intervencije = DTOManager.VratiIntervencije();
+            var intervencije = DataProvider.VratiIntervencije();
             dgvIntervencije.DataSource = intervencije;
         }
         catch (Exception ex)
@@ -94,7 +94,7 @@ public class IntervencijeForm : Form
             return;
         }
 
-        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as IntervencijaBasic;
+        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as IntervencijaView;
         if (selectedIntervencija != null)
         {
             var izmenaDialog = new IntervencijaDialog(selectedIntervencija);
@@ -114,7 +114,7 @@ public class IntervencijeForm : Form
             return;
         }
 
-        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as IntervencijaBasic;
+        var selectedIntervencija = dgvIntervencije.SelectedRows[0].DataBoundItem as IntervencijaView;
         if (selectedIntervencija != null)
         {
             var rezultat = MessageBox.Show($"Da li ste sigurni da želite da obrišete intervenciju na lokaciji '{selectedIntervencija.Lokacija}'?",
@@ -123,7 +123,7 @@ public class IntervencijeForm : Form
             {
                 try
                 {
-                    DTOManager.ObrisiIntervenciju(selectedIntervencija.ID);
+                    DataProvider.ObrisiIntervenciju(selectedIntervencija.ID);
                     RefreshDataGrid();
                     MessageBox.Show("Intervencija je uspesno obrisana.");
                 }
@@ -139,7 +139,7 @@ public class IntervencijeForm : Form
     {
         if (e.RowIndex < 0) return;
 
-        var selectedItem = dgvIntervencije.Rows[e.RowIndex].DataBoundItem as IntervencijaBasic;
+        var selectedItem = dgvIntervencije.Rows[e.RowIndex].DataBoundItem as IntervencijaView;
         if (selectedItem != null)
         {
             MessageBox.Show($"Dvoklik na intervenciju sa ID: {selectedItem.ID}. Ovde ce se otvoriti forma sa detaljima intervencije.");

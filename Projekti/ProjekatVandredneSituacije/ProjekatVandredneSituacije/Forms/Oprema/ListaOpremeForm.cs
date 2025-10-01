@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
+using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class ListaOpremeForm : Form
 {
@@ -57,7 +58,7 @@ public class ListaOpremeForm : Form
 	{
 		try
 		{
-			var svaOprema = await DTOManager.VratiSvuOpremu();
+			var svaOprema = await DataProvider.VratiSvuOpremu();
 			dgvOprema.DataSource = svaOprema;
 		}
 		catch (Exception ex)
@@ -73,14 +74,14 @@ public class ListaOpremeForm : Form
 		{
 			try
 			{
-				if (dialog.OpremaBasic is LicnaZastitaBasic liz)
-					await DTOManager.DodajLicnuZastitu(MapFromBasicToView(liz));
-				else if (dialog.OpremaBasic is MedicinskaOpremaBasic med)
-					await DTOManager.DodajMedicinskuOpremu(MapFromBasicToAddView(med));
-				else if (dialog.OpremaBasic is TehnickaOpremaBasic tech)
-					await DTOManager.DodajTehnickuOpremu(MapFromBasicToAddView(tech));
+				if (dialog.OpremaBasic is LicnaZastitaView liz)
+					await DataProvider.DodajLicnuZastitu(MapFromBasicToView(liz));
+				else if (dialog.OpremaBasic is MedicinskaOpremaAddView med)
+					await DataProvider.DodajMedicinskuOpremu(MapFromBasicToAddView(med));
+				else if (dialog.OpremaBasic is TehnickaOpremaAddView tech)
+					await DataProvider.DodajTehnickuOpremu(MapFromBasicToAddView(tech));
 				else if (dialog.OpremaBasic is ZaliheBasic zalihe)
-					await DTOManager.DodajZalihe(MapFromBasicToAddView(zalihe));
+					await DataProvider.DodajZalihe(MapFromBasicToAddView(zalihe));
 
 				MessageBox.Show("Oprema je uspešno dodata.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				await RefreshDataGrid();
@@ -109,19 +110,19 @@ public class ListaOpremeForm : Form
 
 			if (selectedOprema is LicnaZastitaView licna)
 			{
-				opremaBasic = await DTOManager.VratiLicnuZastitu(licna.Serijski_Broj);
+				opremaBasic = await DataProvider.VratiLicnuZastitu(licna.Serijski_Broj);
 			}
 			else if (selectedOprema is MedicinskaOpremaView medicinska)
 			{
-				opremaBasic = await DTOManager.VratiMedicinskuOpremu(medicinska.Serijski_Broj);
+				opremaBasic = await DataProvider.VratiMedicinskuOpremu(medicinska.Serijski_Broj);
 			}
 			else if (selectedOprema is TehnickaOpremaView tehnicka)
 			{
-				opremaBasic = await DTOManager.VratiTehnickuOpremu(tehnicka.Serijski_Broj);
+				opremaBasic = await DataProvider.VratiTehnickuOpremu(tehnicka.Serijski_Broj);
 			}
 			else if (selectedOprema is ZaliheView zalihe)
 			{
-				opremaBasic = await DTOManager.VratiZalihe(zalihe.Serijski_Broj);
+				opremaBasic = await DataProvider.VratiZalihe(zalihe.Serijski_Broj);
 			}
 
 			if (opremaBasic == null)
@@ -134,13 +135,13 @@ public class ListaOpremeForm : Form
 			if (dialog.ShowDialog() == DialogResult.OK && dialog.OpremaBasic != null)
 			{
 				if (dialog.OpremaBasic is LicnaZastitaBasic liz)
-					await DTOManager.IzmeniLicnuZastitu(MapFromBasicToView(liz));
+					await DataProvider.IzmeniLicnuZastitu(MapFromBasicToView(liz));
 				else if (dialog.OpremaBasic is MedicinskaOpremaBasic med)
-					await DTOManager.IzmeniMedicinskuOpremu(med.Serijski_Broj.ToString(), MapFromBasicToAddView(med));
+					await DataProvider.IzmeniMedicinskuOpremu(med.Serijski_Broj.ToString(), MapFromBasicToAddView(med));
 				else if (dialog.OpremaBasic is TehnickaOpremaBasic tech)
-					await DTOManager.IzmeniTehnickuOpremu(MapFromBasicToAddView(tech), tech.Serijski_Broj.ToString());
+					await DataProvider.IzmeniTehnickuOpremu(MapFromBasicToAddView(tech), tech.Serijski_Broj.ToString());
 				else if (dialog.OpremaBasic is ZaliheBasic zalihe)
-					await DTOManager.IzmeniZalihe(MapFromBasicToAddView(zalihe), zalihe.Serijski_Broj.ToString());
+					await DataProvider.IzmeniZalihe(MapFromBasicToAddView(zalihe), zalihe.Serijski_Broj.ToString());
 
 				MessageBox.Show("Oprema je uspešno izmenjena.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				await RefreshDataGrid();
@@ -169,13 +170,13 @@ public class ListaOpremeForm : Form
 			try
 			{
 				if (selectedOprema is LicnaZastitaView)
-					await DTOManager.ObrisiLicnuZastitu(selectedOprema.Serijski_Broj.ToString());
+					await DataProvider.ObrisiLicnuZastitu(selectedOprema.Serijski_Broj.ToString());
 				else if (selectedOprema is MedicinskaOpremaView)
-					await DTOManager.ObrisiMedicinskuOpremu(selectedOprema.Serijski_Broj.ToString());
+					await DataProvider.ObrisiMedicinskuOpremu(selectedOprema.Serijski_Broj.ToString());
 				else if (selectedOprema is TehnickaOpremaView)
-					await DTOManager.ObrisiTehnickuOpremu(selectedOprema.Serijski_Broj.ToString());
+					await DataProvider.ObrisiTehnickuOpremu(selectedOprema.Serijski_Broj.ToString());
 				else if (selectedOprema is ZaliheView)
-					await DTOManager.ObrisiZalihe(selectedOprema.Serijski_Broj.ToString());
+					await DataProvider.ObrisiZalihe(selectedOprema.Serijski_Broj.ToString());
 
 				MessageBox.Show("Oprema je uspešno obrisana.", "Uspeh", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				await RefreshDataGrid();

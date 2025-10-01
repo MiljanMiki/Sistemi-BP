@@ -1,16 +1,20 @@
-﻿using ProjekatVanredneSituacije.Entiteti;
+﻿using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    public class EkspertizaView
+    public  class EkspertizaView
     {
         public virtual int Id { get; set; }
-        public virtual AnaliticarView Analiticar { get; set; }
+        public virtual string ImeAnaliticara { get; set; }
+
+        public virtual string PrezimeAnaliticara { get; set; }
+        public virtual string JMBGAnaliticara { get; set; }
+
         public virtual string Oblast { get; set; }
 
         public EkspertizaView()
@@ -20,13 +24,14 @@ namespace ProjekatVanredneSituacije.DTOs
         {
             Id = e.Id;
             Oblast = e.Oblast;
-            Analiticar = new AnaliticarView(e.Analiticar);
+            ImeAnaliticara = e.Analiticar.Ime;
+            PrezimeAnaliticara = e.Analiticar.Prezime;
+            JMBGAnaliticara = e.Analiticar.JMBG;
 
         }
     }
-    internal class EkspertizaChangeView
+    public  class EkspertizaChangeView
     {
-        public virtual int Id { get; set; }
 
         public virtual string JMBGAnaliticara { get; set; }
 
@@ -38,7 +43,6 @@ namespace ProjekatVanredneSituacije.DTOs
 
         public EkspertizaChangeView(Ekspertiza e)
         {
-            Id = e.Id;
             Oblast = e.Oblast;
             JMBGAnaliticara = e.Analiticar.JMBG;
             

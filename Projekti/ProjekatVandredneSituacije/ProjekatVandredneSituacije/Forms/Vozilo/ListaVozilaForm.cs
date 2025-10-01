@@ -1,12 +1,11 @@
 ﻿using ProjekatVanredneSituacije;
-using ProjekatVanredneSituacije.DTOs;
-using ProjekatVanredneSituacije.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using VanrednaSituacijaLibrary;
+using VanrednaSituacijaLibrary.DTOs;
 
 public class ListaVozilaForm : Form
 {
@@ -74,18 +73,18 @@ public class ListaVozilaForm : Form
         try
         {
             dgvVozila.DataSource = null;
-            var vozilaBasic = await DTOManager.VratiSvaVozila();
-            var vozilaPregled = new List<VoziloPregled>();
+            var vozilaBasic = await DataProvider.VratiSvaVozila();
+            var vozilaPregled = new List<VoziloAddView>();
 
             foreach (var vb in vozilaBasic)
             {
                 if (vb is SpecijalnaVozilaView svb)
                 {
-                    vozilaPregled.Add(new SpecijalnaVozilaPregled(svb.Registarska_Oznaka, svb.Proizvodjac, svb.Status, svb.Lokacija, svb.Namena));
+                    vozilaPregled.Add(new SpecijalizacijaAddView(svb.Registarska_Oznaka, svb.Proizvodjac, svb.Status, svb.Lokacija, svb.Namena));
                 }
                 else
                 {
-                    vozilaPregled.Add(new VoziloPregled(vb.Registarska_Oznaka, vb.Proizvodjac, vb.Status, vb.Lokacija));
+                    vozilaPregled.Add(new VoziloAddView(vb.Registarska_Oznaka, vb.Proizvodjac, vb.Status, vb.Lokacija));
                 }
             }
             dgvVozila.DataSource = vozilaPregled;
@@ -119,15 +118,15 @@ public class ListaVozilaForm : Form
             string selectedTip = cmbTip.SelectedItem.ToString() ?? string.Empty;
 
             if (selectedTip == "Sanitetska")
-                dialog = new DodajIzmeniVoziloDialog(new SanitetskaView());
+                dialog = new DodajIzmeniVoziloDialog(new SanitetskaAddView());
             else if (selectedTip == "Džip")
-                dialog = new DodajIzmeniVoziloDialog(new DzipoviView());
+                dialog = new DodajIzmeniVoziloDialog(new DzipoviAddView());
             else if (selectedTip == "Kamion")
-                dialog = new DodajIzmeniVoziloDialog(new KamioniView());
+                dialog = new DodajIzmeniVoziloDialog(new KamioniAddView());
             else if (selectedTip == "Specijalno Vozilo")
-                dialog = new DodajIzmeniVoziloDialog(new SpecijalnaVozilaView());
+                dialog = new DodajIzmeniVoziloDialog(new SpecijalnaVozilaAddView());
             else
-                dialog = new DodajIzmeniVoziloDialog(new VoziloView());
+                dialog = new DodajIzmeniVoziloDialog(new VoziloAddView());
 
             if (dialog?.ShowDialog() == DialogResult.OK && dialog.VoziloBasic != null)
             {
@@ -148,17 +147,17 @@ public class ListaVozilaForm : Form
     {
         if (dgvVozila.SelectedRows.Count > 0)
         {
-            var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as VoziloPregled;
+            var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as VoziloAddView;
             if (selectedVozilo == null) return;
              
-            VoziloView basicVozilo;
-            if (selectedVozilo is SpecijalnaVozilaPregled spec)
+            VoziloAddView basicVozilo;
+            if (selectedVozilo is SpecijalnaVozilaAddView spec)
             {
-                basicVozilo = new SpecijalnaVozilaView(spec.Registarska_Oznaka, spec.Proizvodjac, spec.Status, spec.Lokacija, spec.Namena);
+                basicVozilo = new SpecijalnaVozilaAddView(spec.Registarska_Oznaka, spec.Proizvodjac, spec.Status, spec.Lokacija, spec.Namena);
             }
             else
             {
-                basicVozilo = new VoziloView(selectedVozilo.Registarska_Oznaka, selectedVozilo.Proizvodjac, selectedVozilo.Status, selectedVozilo.Lokacija);
+                basicVozilo = new VoziloAddView(selectedVozilo.Registarska_Oznaka, selectedVozilo.Proizvodjac, selectedVozilo.Status, selectedVozilo.Lokacija);
             }
 
             var dialog = new DodajIzmeniVoziloDialog(basicVozilo);
@@ -189,7 +188,7 @@ public class ListaVozilaForm : Form
             var result = MessageBox.Show("Da li ste sigurni da želite da obrišete odabrano vozilo?", "Potvrda brisanja", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as VoziloPregled;
+                var selectedVozilo = dgvVozila.SelectedRows[0].DataBoundItem as VoziloAddView;
                 if (selectedVozilo == null) return;
                 try
                 { 

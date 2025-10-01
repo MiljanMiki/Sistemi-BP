@@ -1,14 +1,15 @@
 ﻿using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using NHibernate.Type;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
-    internal class IntervencijaMapiranja:ClassMap<Intervencija>
+    public  class IntervencijaMapiranja:ClassMap<Intervencija>
     {
 
         public IntervencijaMapiranja()
@@ -17,12 +18,13 @@ namespace ProjekatVanredneSituacije.Mapiranja
             Table("Intervencija");
 
             
-            Id(x => x.Id, "Id").GeneratedBy.Identity();
+            Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
 
             
             Map(x => x.Datum_I_Vreme, "Datum_I_Vreme");
             Map(x => x.Lokacija, "Lokacija");
-            Map(x => x.Status, "Status").CustomType<string>();
+            Map(x => x.Status, "Status").CustomType<EnumStringType<Status>>();
+            Map(x => x.Resursi, "Resursi");
             Map(x => x.Broj_Spasenih, "Broj_Spasenih");
             Map(x => x.Broj_Povredjenih, "Broj_Povredjenih");
             Map(x => x.Uspesnost, "Uspesnost");

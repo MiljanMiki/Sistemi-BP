@@ -3,16 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 
-namespace ProjekatVanredneSituacije.DTOs
+namespace VanrednaSituacijaLibrary.DTOs
 {
-    internal class TerenskaView: VoziloView
+    public  class TerenskaView: VoziloView
     {
         public TerenskaView() { }
 
         public TerenskaView(Vozilo v):base(v) { }
     }
 
+    public class TerenskaChangeView : VoziloChangeView
+    {
+        public TerenskaChangeView() { }
+
+        public TerenskaChangeView(Vozilo v) : base(v) { }
+    }
 
 }

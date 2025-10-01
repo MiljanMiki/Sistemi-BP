@@ -1,21 +1,21 @@
 ﻿using FluentNHibernate.Automapping.Steps;
 using FluentNHibernate.Mapping;
-using ProjekatVanredneSituacije.Entiteti;
+using VanrednaSituacijaLibrary.Entiteti;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProjekatVanredneSituacije.Mapiranja
+namespace VanrednaSituacijaLibrary.Mapiranja
 {
     class InterventnaJedinicaMapiranja : ClassMap<InterventnaJedinica>
     {
         public InterventnaJedinicaMapiranja()
         {
-            Table("Intervetna_Jedinica");
+            Table("Interventna_Jedinica");
 
-            Id(x => x.Jedinstveni_Broj, "Jedinstveni_Broj").GeneratedBy.Assigned();
+            Id(x => x.Jedinstveni_Broj, "Jedinstveni_Broj").GeneratedBy.TriggerIdentity();
 
             
             Map(x => x.Naziv, "Naziv");
@@ -23,13 +23,13 @@ namespace ProjekatVanredneSituacije.Mapiranja
           
             Map(x => x.Baza, "Baza");
 
-  
-            References(x => x.Komandir, "JMBG_Komandira");
 
-            HasMany(x => x.Oprema).KeyColumn("Serijski_Broj").Cascade.All();
-            HasMany(x => x.Dodeljuje).KeyColumn("Interventna").Inverse().Cascade.All();
-            HasMany(x => x.Radnici).KeyColumn("JMBG").Inverse().Cascade.All();
-            HasMany(x => x.Ucestvuje).KeyColumn("InterventnaJedinica_Id").Inverse().Cascade.All();
+            References(x => x.Komandir, "JMBG_Komandira").Nullable().Cascade.None().LazyLoad();
+
+            HasMany(x => x.Oprema).KeyColumn("Id_Jedinice").Cascade.All();
+            HasMany(x => x.Dodeljuje).KeyColumn("IdJedinice").Inverse().Cascade.All().LazyLoad();
+            HasMany(x => x.Radnici).KeyColumn("Jedinica_Id").Inverse().Cascade.All().LazyLoad();
+            HasMany(x => x.Ucestvuje).KeyColumn("IdInterventneJed").Inverse().Cascade.All().LazyLoad();
             
         }   
     }
@@ -40,7 +40,7 @@ namespace ProjekatVanredneSituacije.Mapiranja
         {
             Table("OpstaIntervetnaJedinica");
             
-            KeyColumn("JedinstveniBroj");
+            KeyColumn("Jedinstveni_Broj");
         }
     }
 
@@ -51,8 +51,8 @@ namespace ProjekatVanredneSituacije.Mapiranja
 
 
             Table("SpecijalnaIntervetnaJedinica");
-            KeyColumn("JedinstveniBroj");
-            Map(x => x.TipSpecijalneJedinice, "TipSpecijalneJed");
+            KeyColumn("Jedinstveni_Broj");
+            Map(x => x.TipSpecijalneJedinice, "TipSpecijalneJedinice");
         }
     }
 }
