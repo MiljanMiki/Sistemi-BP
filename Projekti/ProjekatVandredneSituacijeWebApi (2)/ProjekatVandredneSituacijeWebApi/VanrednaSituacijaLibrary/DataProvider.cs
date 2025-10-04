@@ -3465,8 +3465,7 @@ namespace VanrednaSituacijaLibrary
                 DodeljujeSe dodeljivanje = new DodeljujeSe();
                 var vozilo = await sess.LoadAsync<Vozilo>(d.RegVozilo);
                 dodeljivanje.Vozilo = vozilo;
-                var Jedinica = await sess.GetAsync<InterventnaJedinica>(d.IdJedinica);
-                var Radnik = await sess.GetAsync<OperativniRadnik>(d.JMBGRadnik);
+                
                 if(vozilo.Status==StatusVozila.U_kvaru)
                 {
                     throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
@@ -3479,12 +3478,28 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new Exception("Nije moguce da radnik i jedinica imaju vrednosti u ovoj tabeli");
                 }
-                dodeljivanje.Radnik = Radnik;
-                dodeljivanje.Jedinica = Jedinica;
+
                 if (d.DatumDo <= d.DatumOd)
                 {
                     throw new Exception("Zao nam je ali ne mozete upisati ovu vrednost");
                 }
+
+                InterventnaJedinica? jedinica;
+                OperativniRadnik? radnik;
+
+                if (d.IdJedinica.HasValue)
+                {
+                    jedinica = await sess.GetAsync<InterventnaJedinica>(d.IdJedinica);
+                    dodeljivanje.Jedinica = jedinica;
+                    dodeljivanje.Radnik = null;
+                }
+                else
+                {
+                    radnik = await sess.GetAsync<OperativniRadnik>(d.JMBGRadnik);
+                    dodeljivanje.Jedinica = null;
+                    dodeljivanje.Radnik = radnik;
+                }
+                
                 dodeljivanje.DatumOd = d.DatumOd;
                 dodeljivanje.DatumDo = d.DatumDo;
 
@@ -3523,6 +3538,7 @@ namespace VanrednaSituacijaLibrary
             
             try
             {
+
                 ISession sess = DataLayer.GetSession();
                 if (sess == null)
                 {
@@ -3531,14 +3547,7 @@ namespace VanrednaSituacijaLibrary
                 DodeljujeSe dodela = await sess.LoadAsync<DodeljujeSe>(Id);
 
                 var vozilo = await sess.LoadAsync<Vozilo>(d.RegVozilo);
-                if (vozilo.Status == StatusVozila.U_kvaru)
-                {
-                    throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
-                }
-                dodela.Vozilo = vozilo;
 
-                var Jedinica = await sess.LoadAsync<InterventnaJedinica>(d.IdJedinica);
-                var Radnik = await sess.LoadAsync<OperativniRadnik>(d.JMBGRadnik);
                 if (vozilo is Dzipovi && d.IdJedinica.HasValue)
                 {
                     throw new Exception("Zao nam je nije moguce dodeliti ovaj tip vozila jedinici");
@@ -3547,10 +3556,32 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new Exception("Nije moguce da radnik i jedinica imaju vrednosti u ovoj tabeli");
                 }
-                dodela.Radnik = Radnik;
-                dodela.Jedinica = Jedinica;
+
+                if (vozilo.Status == StatusVozila.U_kvaru)
+                {
+                    throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
+                }
+
+                
+
+                dodela.Vozilo = vozilo;
+
+                if (d.IdJedinica == null)
+                {
+                    OperativniRadnik radnik = await sess.LoadAsync<OperativniRadnik>(d.JMBGRadnik);
+                    dodela.Radnik = radnik;
+                }
+                else if(d.JMBGRadnik==null)
+                {
+                    InterventnaJedinica jedinica = await sess.LoadAsync<InterventnaJedinica>(d.IdJedinica);
+                    dodela.Jedinica = jedinica;
+                }
+                
                 dodela.DatumOd = d.DatumOd;
                 dodela.DatumDo = d.DatumDo;
+                sess.Update(dodela);
+                sess.Flush();
+
                 sess.Close();
             }
             catch (Exception ec)
@@ -3597,7 +3628,6 @@ namespace VanrednaSituacijaLibrary
                 }
                 DodeljujeSe dodeljivanje= await s.LoadAsync<DodeljujeSe>(Id);
                 d= new DodeljujeSeView(dodeljivanje);
-                s.Close();
                 s.Close();
             }
             catch (Exception ec)

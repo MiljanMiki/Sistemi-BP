@@ -128,31 +128,60 @@ Content-Type : application/json
 
 ### **************************************KRAJ DELA SA ANALITICAREM*****************************************
 
-POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe/DodajDodeljivanje
+Accept: application/json
+Content-Type : application/json
+{
+  "regVozilo": "SH-554-JL",
+  "jmbgRadnik": "2222222222222",
+  "idJedinica": null,
+  "datumOd": "2020-10-04T14:03:22.112Z",
+  "datumDo": "2025-10-04T14:03:22.112Z"
+}
+
+###
+
+//baca intergrity-constraint: parent key not found exception ako se za jmbgRadnika postavi nepostojeci
+//   regVozilo": "SH-554-JL",
+//  "jmbgRadnik": "7950714846652",
+//  "idJedinica": null,
+//  "datumOd": "2000-10-04T14:24:34.983Z",
+//  "datumDo": "2025-10-04T14:24:34.983Z"
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe/IzmeniDodeljivanje/82
+Accept: application/json
+Content-Type : application/json
+{
+  "regVozilo": "SH-554-JL",
+  "jmbgRadnik": "",
+  "idJedinica": 25,
+  "datumOd": "1999-10-04T14:24:34.983Z",
+  "datumDo": "2025-10-04T14:24:34.983Z"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe/ObrisiDodeljivanje/83
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+
+//NHibernate.InstantiationException: Cannot instantiate abstract class 
+//or interface: VanrednaSituacijaLibrary.Entiteti.Vozilo
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe/VratiSvaDodeljivanja
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
-Accept: application/json
-Content-Type : application/json
+//ako pokusam za id/entitet koji je vec bio u bazi (ne koji sam ja ubacio kad sam testirao):
+//NHibernate.InstantiationException: Cannot instantiate abstract class 
+//or interface: VanrednaSituacijaLibrary.Entiteti.Vozilo
 
-###
-
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
-Accept: application/json
-Content-Type : application/json
-
-###
-
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe/VratiDodeljivanje/82
 Accept: application/json
 Content-Type : application/json
 
@@ -251,7 +280,7 @@ Content-Type : application/json
 ###
 
 //ako komandir ne postoji, onda je null
-//ali ako se prosledi tipSpecJedinice, isto je null?
+//ako se prosledi tipSpecJedinice isto je null?
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/DodajSpecijalnuJedinicu
 Accept: application/json
 Content-Type : application/json
@@ -1012,33 +1041,339 @@ Content-Type : application/json
 
 ### ****************************** GOTOV DEO SA TERENSKIM VOZILIMA************************
 
-POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+//Oracle.ManagedDataAccess.Client.OracleException (0x80004005): 
+//ORA-02291: integrity constraint (S19137.SYS_C00406894) violated - parent key not found
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/DodajUcestvovanje
+Accept: application/json
+Content-Type : application/json
+{
+  "voziloReg": "TEST",
+  "intervencijaID": 22,
+  "datum_Od": "2024-10-04T12:21:07.500Z",
+  "datum_Do": "2026-10-04T12:21:07.500Z"
+}
+
+###
+
+//neprovereno
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/IzmeniUcestvovalo/id
+Accept: application/json
+Content-Type : application/json
+{
+  "voziloReg": "string",
+  "intervencijaID": 0,
+  "datum_Od": "2025-10-04T12:21:07.500Z",
+  "datum_Do": "2025-10-04T12:21:07.500Z"
+}
+
+###
+
+//neprovereno
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/ObrisiUcestvovalo/id
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+//InstantiationException: Cannot instantiate abstract class or interface:
+//VanrednaSituacijaLibrary.Entiteti.Vozilo
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/VratiSvaUcestvovanja(Intervencija+Vozila)
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
-Accept: application/json
-Content-Type : application/json
-
-###
-
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
-Accept: application/json
-Content-Type : application/json
-
-###
-
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/VratiUcestvovanje/84
 Accept: application/json
 Content-Type : application/json
 
 ### **********************GOTOV UCESTVOVALO*************************
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/DodajUcestvovanje
+Accept: application/json
+Content-Type : application/json
+{
+  "idInterventneJed": 22,
+  "idVandredneSituacije": 45,
+  "idIntervencije": 21
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/IzmeniUcestvuje/147
+Accept: application/json
+Content-Type : application/json
+{
+  "idInterventneJed": 12,
+  "idVandredneSituacije": 54,
+  "idIntervencije": 32
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/ObrisiUcestvuje/147
+Accept: application/json
+Content-Type : application/json
+
+###
+//ovo se desilo nakon sto sam ubacio Ucestvuje sa idVandredneSituacije = 0 (ne postoji)
+//ne postoji nikakv internal check za to da li postoji,pa je sad vanrednaSituacija NULL
+
+//NHibernate.Exceptions.GenericADOException: 
+//Could not execute query[SQL: SQL not available]\r\n ---> System.NullReferenceException: 
+//Object reference not set to an instance of an object.\r\n   
+//at VanrednaSituacijaLibrary.DTOs.VanrednaSituacijaMiniView..ctor(VanrednaSituacija v)
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/VratiSvaUcestvovanja
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/VratiUcestvovanje/147
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOV UCESTVUJE*************************
+
+//NullReferenceException: Object reference not set to an instance of an object.
+//at VanrednaSituacijaLibrary.DTOs.PrijavaMiniView..ctor(Prijava p)
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/PrikaziVanrednuSituaciju
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/DodajVanrednuSituaciju
+Accept: application/json
+Content-Type : application/json
+{
+  "datum_Od": "2024-10-04T13:14:05.035Z",
+  "datum_Do": "2025-10-04T13:14:05.035Z",
+  "tip": "TEST",
+  "broj_Ugrozenih_Osoba": 999,
+  "nivo_Opasnosti": 2,
+  "opstina": "Test",
+  "lokacija": "Test",
+  "opis": "Test",
+  "idPrijave": 22
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/IzmeniVanrednuSituaciju/81
+Accept: application/json
+Content-Type : application/json
+{
+  "datum_Od": "2020-10-04T13:17:27.655Z",
+  "datum_Do": "2025-10-04T13:17:27.655Z",
+  "tip": "IZMENA",
+  "broj_Ugrozenih_Osoba": 9,
+  "nivo_Opasnosti": 1,
+  "opstina": "izmena",
+  "lokacija": "izmena",
+  "opis": "izmena",
+  "idPrijave": 25
+}
+
+###
+
+//nece da se obrise...
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/ObrisiVanrednuSituaciju/81
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/VratiVanrednuSituaciju/81
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/VratiSveSluzbeUVanrednojSituaciji/41
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/VratiSveUcestvovanjaUVanrednojSituaciji/41
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOVA VANREDNA SITUCIJA*************************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiSvaVozila
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiSvaDodeljivanja/NZ-626-AC
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiUcestvovanje/21
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiSvaUcestvovanjeVozila/NZ-626-AC
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiSveServiseVozila/NZ-626-AC
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//NHibernate.InstantiationException: Cannot instantiate abstract class or interface: 
+//VanrednaSituacijaLibrary.Entiteti.Vozilo   
+//at NHibernate.Tuple.PocoInstantiator.Instantiate()
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiSveServise
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/DodajServis
+Accept: application/json
+Content-Type : application/json
+{
+  "registarskaOznakaVozila": "NZ-626-AC",
+  "tipServisa": "TEST",
+  "datum": "2000-01-01T13:28:15.706Z"
+}
+
+###
+
+//predpostavljam da je servis vezan za vozilo, sto bi mogla da se menja regOznaka?
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/IzmeniServis/41
+Accept: application/json
+Content-Type : application/json
+{
+  "registarskaOznakaVozila": "NZ-626-AC",
+  "tipServisa": "izmena",
+  "datum": "2025-10-04T13:28:15.706Z"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/ObrisiServis/41
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOVO VOZILO*************************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/VratiSveZalihe
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/VratiZalihe/EQ9999999
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//baca unique constraint violated za serijski broj ako pokusam da ubacim EQ9999, mislim 
+//da se to jos nalazi negde u bazi
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/DodajNoveZalihe
+Accept: application/json
+Content-Type : application/json
+{
+  "serijski_Broj": "EQ9999999",
+  "naziv": "TEST",
+  "status": "TEST",
+  "datumNabavke": "2025-10-04T13:32:35.046Z",
+  "jedinicaID": 22,
+  "tip": 1,
+  "kolicina": 9999
+}
+
+### 
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/IzmeniZalihe/EQ9999999
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Izmena",
+  "status": "Izmena",
+  "datumNabavke": "2025-10-04T13:32:35.046Z",
+  "jedinicaID": 22,
+  "tip": 0,
+  "kolicina": 0
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/ObrisiZalihe/EQ9999999
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOVO ZALIHE************************
+
+// NHibernate.WrongClassException: Object with id: 0192258008703 was not of the 
+//specified subclass: VanrednaSituacijaLibrary.Entiteti.Kordinator 
+//(loading object was of wrong class [VanrednaSituacijaLibrary.Entiteti.Analiticar])
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zaposleni/GetSviZaposleni
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//nzm ni kako ovaj ima istoriju, onda sam runovao bez dodajistorijuzaposlenog
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zaposleni/GetIstorijaZaposlenog/2222222222222
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zaposleni/DodajIstorijuZaposlenog
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbgZaposlenog": "2222222222222",
+  "uloga": "TEST",
+  "datum_Od": "2020-10-04T13:56:16.788Z",
+  "datum_Do": "2025-10-04T13:56:16.788Z"
+}
+
+###
+
+//opet, ako je istorija vezana za zaposlenog ne bi trebalo da sme da se menja jmbgZaposlenog
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zaposleni/IzmeniIstoriju/54
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbgZaposlenog": "2222222222222",
+  "uloga": "izmena",
+  "datum_Od": "2000-10-04T13:57:18.039Z",
+  "datum_Do": "2025-10-04T13:57:18.039Z"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zaposleni/ObrisiIstoriju/53
+Accept: application/json
+Content-Type : application/json
+
+###
+
+
+
+
+
 

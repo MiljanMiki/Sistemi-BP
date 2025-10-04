@@ -62,7 +62,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
 
 
         [HttpGet]
-        [Route("VratiSvaUcestvovanjeVozila")]
+        [Route("VratiSvaUcestvovanjeVozila/{regOznaka}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         public async Task<IActionResult> VratiSvaUcestvovanjaVozila(string regOznaka)

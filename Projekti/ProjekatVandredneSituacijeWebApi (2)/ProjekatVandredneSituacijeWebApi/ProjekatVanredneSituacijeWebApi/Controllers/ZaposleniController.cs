@@ -80,7 +80,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
 
 
         [HttpDelete]
-        [Route("ObrisiAnaliticara/{Id}")]
+        [Route("ObrisiIstoriju/{Id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
