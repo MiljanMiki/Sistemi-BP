@@ -20,7 +20,7 @@ namespace VanrednaSituacijaLibrary.Entiteti
 
     public enum TipMedicinske
     {
-        Prenosive_nosiljka, Defibrilator, Komplet_za_reanimaciju
+        Prenosiva_nosiljka, Defibrilator, Komplet_za_reanimaciju
     }
 
     public enum TipZalihe

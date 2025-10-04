@@ -28,10 +28,10 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         }
 
         [HttpPost]
-        [Route("DoajPrijavu")]
+        [Route("DodajPrijavu")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DodajPrijacu([FromBody] PrijavaAddView P)
+        public async Task<IActionResult> DodajPrijavu([FromBody] PrijavaAddView P)
         {
             try
             {

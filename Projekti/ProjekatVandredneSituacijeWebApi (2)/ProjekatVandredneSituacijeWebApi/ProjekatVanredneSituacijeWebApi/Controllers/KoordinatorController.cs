@@ -88,7 +88,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         {
             try
             {
-                await DataProvider.ObrisiAnaliticara(JMBG);
+                await DataProvider.ObrisiKordinatora(JMBG);
                 return Ok();
 
             }

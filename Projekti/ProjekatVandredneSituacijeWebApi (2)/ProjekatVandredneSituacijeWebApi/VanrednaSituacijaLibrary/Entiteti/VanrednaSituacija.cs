@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace VanrednaSituacijaLibrary.Entiteti
 {
     public enum NivoOpasnosti{
-        nizak, srednji, visoki
+        nizak, srednji, visok
     }
     public class VanrednaSituacija
     {

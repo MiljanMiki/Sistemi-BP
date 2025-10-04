@@ -8,7 +8,7 @@ namespace VanrednaSituacijaLibrary.Entiteti
 {
     public enum StatusVozila
     {
-        operativno, u_kvaru
+        Operativno, U_kvaru
     }
     public abstract class Vozilo
     {

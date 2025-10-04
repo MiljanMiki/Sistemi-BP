@@ -375,7 +375,7 @@ namespace VanrednaSituacijaLibrary
 
                 ij.Naziv = i.Naziv;
 
-                ij.Komandir = await s.LoadAsync<OperativniRadnik>(i.JMBGKomandira);
+                ij.Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
                 ij.Baza = i.Baza;
                 ij.TipSpecijalneJedinice = i.TipSpecijalneJedinice;
 
@@ -550,6 +550,8 @@ namespace VanrednaSituacijaLibrary
                 sveIntervencije = await s.Query<Intervencija>()
                                   .Select(i => new IntervencijaView(i))
                                   .ToListAsync();
+
+                s.Close();
             }
             catch (Exception ec)
             {
@@ -1033,7 +1035,7 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 sviOp = await s.Query<OperativniRadnik>()
-                        .Fetch( op => op.InterventnaJedinica)
+                        .Fetch( op => op.InterventnaJedinica)//u sonovi ovo nista ne menja,svakako vraca to
                         .Select(op => new OperativniRadnikView(op))
                         .ToListAsync();
                
@@ -1545,7 +1547,7 @@ namespace VanrednaSituacijaLibrary
 
         public static async Task<SpecijalnaVozilaView> VratiSpecijalnoVozilo(string RegOznaka)
         {
-            SpecijalnaVozilaView v = null ;
+            SpecijalnaVozilaView v = new SpecijalnaVozilaView() ;
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -1887,7 +1889,7 @@ namespace VanrednaSituacijaLibrary
                 }
                 else
                     sertifikat1.DatumIzdavanja = s.DatumIzdavanja;
-                if (s.DatumVazenja <= s.DatumVazenja)
+                if (s.DatumVazenja <= s.DatumIzdavanja)
                 {
                     throw new Exception("Zao nam je ali ne mozete upisati ovu vrednost");
                 }
@@ -1995,8 +1997,7 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 sviSertifikati = s.Query<Sertifikat>()
-                                .Fetch(s => s.Id.OperativniRadnik)
-                                .Where(s => s.Id.OperativniRadnik.JMBG==JMBGZaposlenog)
+                                .Where(s => s.Id.OperativniRadnik.JMBG == JMBGZaposlenog)
                                 .ToList()
                                 .Select(s => new SertifikatView(s))
                                 .ToList();
@@ -2524,7 +2525,7 @@ namespace VanrednaSituacijaLibrary
 
 
                 s.Update(liz);
-                s.FlushAsync();
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
@@ -2625,7 +2626,7 @@ namespace VanrednaSituacijaLibrary
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                liz.Jedinica = await s.GetAsync<InterventnaJedinica>(l.JedinicaID);
                 liz.Tip = l.Tip;
                 await s.SaveAsync(liz);
                 await s.FlushAsync();
@@ -3397,6 +3398,7 @@ namespace VanrednaSituacijaLibrary
             }
             catch (Exception e)
             {
+                throw new Exception("Zao nam je doslo je do greske!", e);
             }
             return Istorija;
         }
@@ -3465,7 +3467,7 @@ namespace VanrednaSituacijaLibrary
                 dodeljivanje.Vozilo = vozilo;
                 var Jedinica = await sess.GetAsync<InterventnaJedinica>(d.IdJedinica);
                 var Radnik = await sess.GetAsync<OperativniRadnik>(d.JMBGRadnik);
-                if(vozilo.Status==StatusVozila.u_kvaru)
+                if(vozilo.Status==StatusVozila.U_kvaru)
                 {
                     throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
                 }
@@ -3529,7 +3531,7 @@ namespace VanrednaSituacijaLibrary
                 DodeljujeSe dodela = await sess.LoadAsync<DodeljujeSe>(Id);
 
                 var vozilo = await sess.LoadAsync<Vozilo>(d.RegVozilo);
-                if (vozilo.Status == StatusVozila.u_kvaru)
+                if (vozilo.Status == StatusVozila.U_kvaru)
                 {
                     throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
                 }
@@ -4502,7 +4504,7 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Softver softver = await sess.LoadAsync<Softver>(s.JMBG_Analiticar);
+                Softver softver = await sess.LoadAsync<Softver>(Id);
                 
                 softver.Analiticar = await sess.LoadAsync<Analiticar>(s.JMBG_Analiticar);
                 

@@ -1,6 +1,1044 @@
 @ProjekatVanredneSituacijeWebApi_HostAddress = http://localhost:5033
 
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/GetSviAnaliticari
 Accept: application/json
 
 ###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/GetAnaliticar/9584757375804
+Accept: application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/DodajAnaliticara
+Content-Type : application/json
+Accept: application/json
+{
+  "jmbg": "1234567891012",
+  "ime": "Test",
+  "prezime": "Test",
+  "datum_Rodjenja": "2000-01-01T11:25:19.965Z",
+  "pol": "M",
+  "kontakt_Telefon": "061234567",
+  "email": "test.test@email.com",
+  "adresaStanovanja": "Test ulica 5",
+  "datum_Zaposlenja": "2025-10-03T11:25:19.965Z"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/IzmeniAnaliticara/1234567891012
+Content-Type: application/json
+Accept: application/json
+{
+  "ime": "NoviTest",
+  "prezime": "NoviTest",
+  "datum_Rodjenja": "2000-01-01T11:25:19",
+  "pol": "M",
+  "kontakt_Telefon": "061234567",
+  "email": "test.test@email.com",
+  "adresaStanovanja": "Test ulica 5",
+  "datum_Zaposlenja": "2025-10-03T11:25:19"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/ObrisiAnaliticara/1234567891012
+Accept: application/json
+
+###
+
+//vraca status OK ako jmbg ne postoji u bazi (i vraca [] body )
+//vraca nista ( [] ) ako analiticar nema ekspertize
+//malo sus da se vraca id iz baze...
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/PrikaziEkspertize/1234567891012
+Accept: application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/DodajEkspertizu
+Accept: application/json
+Content-Type: application/json
+{
+  "jmbgAnaliticara": "1234567891012",
+  "oblast": "Testiranje testova"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/IzmeniEkspertizu/82
+Accept: application/json
+Content-Type: application/json
+{
+  "jmbgAnaliticara": "1234567891012",
+  "oblast": "Nova test ekspertiza"
+}
+
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/ObrisiEkspertizu/82
+Accept: application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/GetSveEkspertize
+Accept: application/json
+
+###
+
+//Isto vraca status OK ako analiticar nema softver
+//ili da JMBG ne postoji
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/PrikaziSoftver/1234567891012
+Accept: application/json
+Content-Type : application/json
+
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/DodajSoftver
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbG_Analiticar": "1234567891012",
+  "naziv": "Softver"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/IzmeniSoftver/61
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbG_Analiticar": "1234567891012",
+  "naziv": "Novi softver"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/ObrisiSoftver/61
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/GetSviSoftveri
+Accept: application/json
+Content-Type : application/json
+
+### **************************************KRAJ DELA SA ANALITICAREM*****************************************
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+Accept: application/json
+Content-Type : application/json
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+Accept: application/json
+Content-Type : application/json
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/DodeljujeSe
+Accept: application/json
+Content-Type : application/json
+
+###******************************** GOTOV DEO SA DODELJUJE SE*******************************
+
+###System.Exception: Zao nam je doslo je do greske!
+###---> NHibernate.HibernateException: Can't Parse Zavrsena as Status
+###---> System.ArgumentException: Requested value 'Zavrsena' was not found.
+### Status je enum : Uspesna, Neuspesna, U_toku.
+### ne postoji "Zavrsena" kao status
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/VratiIntervencije
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/DodajIntervenciju
+Accept: application/json
+Content-Type : application/json
+{
+  "datum_I_Vreme": "2025-10-03T12:23:55.459Z",
+  "lokacija": "Test",
+  "status": 2,
+  "resursi": "Test",
+  "broj_Spasenih": 999,
+  "broj_Povredjenih": 999,
+  "uspesnost": 0
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/IzmeniIntervenciju/41
+Accept: application/json
+Content-Type : application/json
+{
+  "datum_I_Vreme": "2025-10-03T12:23:55",
+  "lokacija": "IzmenjenTest",
+  "status": 0,
+  "resursi": "Test",
+  "broj_Spasenih": 999,
+  "broj_Povredjenih": 999,
+  "uspesnost": 0
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/ObrisiIntervenciju/41
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//bilo potrebno da se promeni u Vozilo.cs StatusVozila iz u_kvaru -> U_kvaru posto je u bazi
+//ubaceno U_kvaru
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/GetVozilaKojaSuUcestvovala/21
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/GetSvaUcestvovanjaUIntervenciji/21
+Accept: application/json
+Content-Type : application/json
+
+### ******************************************GOTOV DEO SA INTERVENCIJOM********************************
+
+//PUCA
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSveJedinice
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSpecijalneJedinice
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiOpsteJedinice
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSpecijalnuJedinicu/61
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiOpstuJedinicu/62
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//ako komandir ne postoji, onda je null
+//ali ako se prosledi tipSpecJedinice, isto je null?
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/DodajSpecijalnuJedinicu
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Test Specijalna",
+  "baza": "Test",
+  "jmbgKomandira": "1234567891012",
+  "tipSpecijalneJedinice": "Zajebani momci"
+}
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/DodajOpstuJedinicu
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Test opsta",
+  "baza": "Test",
+  "jmbgKomandira": "1234567891012"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/IzmeniOpstuJedinicu/62
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Izmenjen Test",
+  "baza": "Izmenjen test",
+  "jmbgKomandira": "1234567891012"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/IzmeniSpecijalnuJedinicu/61
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Izmenjen test",
+  "baza": "Izmenjen test",
+  "jmbgKomandira": "1234567891012",
+  "tipSpecijalneJedinice": "Test"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiOpstuJedinicu/62
+Accept: application/json
+Content-Type : application/json
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiSpecijalnuJedinicu/61
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//vraca status OK ionako id ne postoji
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSvaVozilaJedinice/22 
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//vraca status OK ionako id ne postoji
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiRadnikeJedinice/22
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//PUCA
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiOpremuJedinice/22
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//vraca status OK ionako id ne postoji
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSvaUcestvovanjaJedinice/22
+Accept: application/json
+Content-Type : application/json
+
+### ******************************GOTOV DEO SA INTERVENTNOM JEDINOCOM**********************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/GetSviKoordinatori
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/GetKoordinator/1111111111111
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/DodajKoordinatora
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbg": "1111111111111",
+  "ime": "Test",
+  "prezime": "Testovic",
+  "datum_Rodjenja": "2000-01-01T14:19:44.812Z",
+  "pol": "M",
+  "kontakt_Telefon": "06555333",
+  "email": "test.testovic@example.com",
+  "adresaStanovanja": "Test ADresa",
+  "datum_Zaposlenja": "2025-10-03T14:19:44.812Z",
+  "brojTimova": 99
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/IzmeniKoordinatora/1111111111111
+Accept: application/json
+Content-Type : application/json
+{
+  "ime": "izmenjen Test",
+  "prezime": "izmenjen Testovic",
+  "datum_Rodjenja": "2000-01-01T14:19:44.812Z",
+  "pol": "M",
+  "kontakt_Telefon": "06555333",
+  "email": "test.testovic@example.com",
+  "adresaStanovanja": "izmenjen Test ADresa",
+  "datum_Zaposlenja": "2025-10-03T14:19:44.812Z",
+  "brojTimova": 0
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/ObrisiKoordinatora/1111111111111
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/PrikaziSpecijalizaciju/1111111111111
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/DodajSpecijalizaciju
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbG_Kordinator": "1111111111111",
+  "tip": "Test Specijalizacija"
+}
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/IzmeniSpecijalizaciju/42
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbG_Kordinator": "1111111111111",
+  "tip": "Izmenjena Test Specijalizacija"
+}
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/ObrisiSpecijalizaciju/45
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Koordinator/GetSveSpecijalizacije
+Accept: application/json
+Content-Type : application/json
+
+### ******************************GOTOV DEO SA KOORDINATOROM**********************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/LicnaZastita/VratiSvuLicnuZastitu
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/LicnaZastita/VratiLicnuZastitu/EQ9999
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/LicnaZastita/DodajLicnuZastitu
+Accept: application/json
+Content-Type : application/json
+{
+  "serijski_Broj": "EQ9999",
+  "naziv": "Test",
+  "status": "Ispravno",
+  "datumNabavke": "2025-10-03T17:24:14.892Z",
+  "jedinicaID": 20,
+  "tip": 1
+}
+
+###
+
+//ORA-02291: integrity constraint (S19137.SYS_C00406854) violated - parent key not found
+//nije izbrisano iz baze
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/LicnaZastita/IzmeniLicnuZastitu/EQ9999
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Promenjen test",
+  "status": "Promenjen",
+  "datumNabavke": "2025-10-03T17:24:14.892Z",
+  "jedinicaID": 10,
+  "tip": 0
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/LicnaZastita/ObrisiLicnuZastitu/EQ9999
+Accept: application/json
+Content-Type : application/json
+
+###***************************KRAJ DELA SA LICNOM ZASTITOM******************************
+
+//NHibernate.HibernateException: Can't Parse Prenosiva nosiljka as TipMedicinske
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/VratiSvuMedicinskuOpremu
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/VratiMedicinskuZastitu/EQ99999
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/DodajMedicinskuOpremu
+Accept: application/json
+Content-Type : application/json
+{
+  "serijski_Broj": "EQ99999",
+  "naziv": "Test",
+  "status": "Test",
+  "datumNabavke": "2025-10-03T17:37:19.706Z",
+  "jedinicaID": 20,
+  "tip": 1
+}
+
+###
+
+//ORA-02291: integrity constraint (S19137.SYS_C00406854) violated - parent key not found
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/IzmeniMedicinskuOpremu/EQ99999
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Izmenjeno",
+  "status": "Izmenjeno",
+  "datumNabavke": "2025-10-03T17:38:53.447Z",
+  "jedinicaID": 5,
+  "tip": 0
+}
+
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/ObrisiMedicinskuOpremu/EQ99999
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOV DEO SA MEDICINSKOM OPREMOM**********************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetSviOperativniRadnici
+Accept: application/json
+Content-Type : application/json
+
+### 
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetOperativniRadnik/2222222222222
+Accept: application/json
+Content-Type : application/json
+
+### 
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/DodajOperativnogRadnika
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbg": "2222222222222",
+  "ime": "Test",
+  "prezime": "Testovic",
+  "datum_Rodjenja": "2000-01-01T17:48:53.834Z",
+  "pol": "Z",
+  "kontakt_Telefon": "06555333",
+  "email": "test.testovic@example.com",
+  "adresaStanovanja": "Testova ulica 555",
+  "datum_Zaposlenja": "2025-10-03T17:48:53.834Z",
+  "broj_Sati": 999,
+  "fizicka_Spremnost": "Visoka",
+  "interventnaJedinica": 21
+}
+
+### 
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/IzmeniOperativnogRadnika/2222222222222
+Accept: application/json
+Content-Type : application/json
+{
+  "ime": "izmenjen",
+  "prezime": "izmenjen",
+  "datum_Rodjenja": "2000-10-03T17:51:57.786Z",
+  "pol": "M",
+  "kontakt_Telefon": "06333555",
+  "email": "izmena",
+  "adresaStanovanja": "izmena",
+  "datum_Zaposlenja": "2025-10-03T17:51:57.786Z",
+  "broj_Sati": 111,
+  "fizicka_Spremnost": "Niska",
+  "idJedinice": 11
+}
+
+### 
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/ObrisiOperativnogRadnika/2222222222222
+Accept: application/json
+Content-Type : application/json
+
+### 
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/PrikaziSertifikate/2222222222222
+Accept: application/json
+Content-Type : application/json
+
+### 
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/DodajSertifikat
+Accept: application/json
+Content-Type : application/json
+{
+  "id": {
+    "jmbgRadnika": "2222222222222",
+    "naziv": "Test",
+    "institucija": "Test institucija"
+  },
+  "datumIzdavanja": "2010-01-01T18:44:12.056Z",
+  "datumVazenja": "2010-10-10T18:44:12.056Z"
+}
+
+### 
+
+//mora da se stavi vise atributa, posto je njegov id kompozitni kljuc
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/IzmeniSertifikat/
+Accept: application/json
+Content-Type : application/json
+
+### 
+
+//mora da se stavi vise atributa, posto je njegov id kompozitni kljuc
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/ObrisiSertifikat/id
+Accept: application/json
+Content-Type : application/json
+
+### 
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetSviSertifikati
+Accept: application/json
+Content-Type : application/json
+
+### ***************************KRAJ OPERATIVNOG RADNIKA**********************************
+
+//WrongClassException: Object with id: EQ0001 was not of the specified subclass: 
+//VanrednaSituacijaLibrary.Entiteti.MedicinskaOprema 
+//(loading object was of wrong class [VanrednaSituacijaLibrary.Entiteti.LicnaZastita])
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Oprema/VratiSvuOpremu
+Accept: application/json
+Content-Type : application/json
+
+### ***************************KRAJ OPREME**********************************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/VratiPrijave
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/DodajPrijavu
+Accept: application/json
+Content-Type : application/json
+{
+  "datum_I_Vreme": "2025-10-03T19:18:35.608Z",
+  "tip": "Test",
+  "ime_Prijavioca": "Test",
+  "kontakt": "Test",
+  "lokacija": "Test",
+  "opis": "Test",
+  "jmbG_Dispecer": "3333333333333",
+  "prioritet": 3
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/IzmeniPrijavu/41
+Accept: application/json
+Content-Type : application/json
+{
+  "datum_I_Vreme": "2025-10-03T19:18:35.608Z",
+  "tip": "izmena",
+  "ime_Prijavioca": "izmena",
+  "kontakt": "izmena",
+  "lokacija": "izmena",
+  "opis": "izmena",
+  "jmbG_Dispecer": "3333333333333",
+  "prioritet": 3
+}
+
+###
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/ObrisiPrijavu/41
+Accept: application/json
+Content-Type : application/json
+
+### ********************************GOTOV DEO SA PRIAJVOM*****************************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SanitetskaVozila/VratiSvaSanitetskaVozila
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SanitetskaVozila/VratiSanitetskoVozilo/TEST
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SanitetskaVozila/DodajSanitetskoVozilo
+Accept: application/json
+Content-Type : application/json
+{
+  "registarska_Oznaka": "TEST",
+  "proizvodjac": "Testovic",
+  "status": 0,
+  "lokacija": "Testovska"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SanitetskaVozila/IzmeniSanitetskoVozilo/TEST
+Accept: application/json
+Content-Type : application/json
+{
+  "proizvodjac": "izmena",
+  "status": 1,
+  "lokacija": "izmena"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SanitetskaVozila/ObrisiSanitetskoVozilo/TEST
+Accept: application/json
+Content-Type : application/json
+
+### ********************************GOTOV DEO SA SANITETSKIM VOZILIMA*****************************
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/DodajSaradnju
+Accept: application/json
+Content-Type : application/json
+{
+  "sektorID": 0,
+  "vanrednaSituacijaID": 0,
+  "uloga": "string"
+}
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/IzmeniSaradnju/id
+Accept: application/json
+Content-Type : application/json
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/ObrisiSaradnju/id
+Accept: application/json
+Content-Type : application/json
+
+###
+
+// System.NullReferenceException: Object reference not set to an instance of an object.
+//at VanrednaSituacijaLibrary.DTOs.PrijavaMiniView..ctor(Prijava p) in
+//ProjekatVandredneSituacijeWebApi (2)
+//\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\PrijavaView.cs:line 95
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/VratiSveSaradnje
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/VratiSaradnju/id
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOV DEO SA SARADNJOM **********************
+
+{{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/VratiSluzbe
+Accept: application/json
+Content-Type : application/json
+
+###
+
+{{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/VratiPredstavnikaSluzbe/83
+Accept: application/json
+Content-Type : application/json
+
+###
+
+{{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/VratiSluzbu/83
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/DodajSluzbu
+Accept: application/json
+Content-Type : application/json
+{
+  "tipSektora": "Test2",
+  "jmbG_Predstavnik": "4444444444444"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/IzmeniSluzbu/83
+Accept: application/json
+Content-Type : application/json
+{
+  "tipSektora": "Izmenjeno",
+  "jmbG_Predstavnik": "4250790352086"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/ObrisiSluzbu/83
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/DodajPredstavnika
+Accept: application/json
+Content-Type : application/json
+{
+  "jmbg": "4444444444444",
+  "ime": "Test",
+  "prezime": "Testovic",
+  "pozicija": "Test",
+  "telefon": "06555333",
+  "email": "test.testovic@example.com"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/IzmeniPredstavnika/4444444444444
+Accept: application/json
+Content-Type : application/json
+{
+  "ime": "Izmena",
+  "prezime": "Izmena",
+  "pozicija": "Izmena",
+  "telefon": "06555333",
+  "email": "test.testovic@example.com"
+}
+
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/ObrisiPredstavnika/4444444444444
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Sluzba/VratiPredstavnike
+Accept: application/json
+Content-Type : application/json
+
+###*************************GOTOV DEO SA SLUZBOM********************************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SpecijalnaVozila/VratiSvaSpecijalnaVozila
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SpecijalnaVozila/VratiSpecijalnoVozilo/Test
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SpecijalnaVozila/DodajSpecijalnoVozilo
+Accept: application/json
+Content-Type : application/json
+{
+  "registarska_Oznaka": "Test",
+  "proizvodjac": "Testovski",
+  "status": 0,
+  "lokacija": "Test",
+  "namena": 3
+}
+
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SpecijalnaVozila/IzmeniSpecijalnoVozilo/Test
+Accept: application/json
+Content-Type : application/json
+{
+  "proizvodjac": "Izmena",
+  "status": 1,
+  "lokacija": "Izmena",
+  "namena": 1
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/SpecijalnaVozila/ObrisiSpecijalnoVozilo/Test
+Accept: application/json
+Content-Type : application/json
+
+### *********************GOTOV DEO SA SPECIJALNIM VOZILIMA***************************
+
+//ovde uvek za brojClanova vraca 0, ionako to nije u bazi
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/VratiSvuTehnickuOpremu
+Accept: application/json
+Content-Type : application/json
+
+###
+
+//ako se doda tehnicka oprema jedinici koja ne postoji,ona se postavlja na null i onda ovde kad se vraca
+//puca! Mozda da u DodajTehnickuOpremu baca exception ako jedinica sa zadatim ID-jem ne postoji?
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/VratiTehnickuOpremu/EQ555333
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/DodajTehnickuOpremu
+Accept: application/json
+Content-Type : application/json
+{
+  "serijski_Broj": "EQ555333",
+  "naziv": "TEST",
+  "status": "TEST",
+  "datumNabavke": "2025-10-03T20:18:47.840Z",
+  "jedinicaID": 21,
+  "tip": 2
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/IzmeniTehnickuOpremu/EQ555333
+Accept: application/json
+Content-Type : application/json
+{
+  "naziv": "Izmena",
+  "status": "Izmena",
+  "datumNabavke": "2025-10-03T20:18:47.840Z",
+  "jedinicaID": 21,
+  "tip": 2
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/ObrisiTehnickuOpremu/EQ555333
+Accept: application/json
+Content-Type : application/json
+
+### ************************GOTOV DEO SA TEHNICKOM OPREMOM****************************
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/VratiSveKamione
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/VratiSveDzipove
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/VratiKamion/TEST
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/VratiDzip/test
+Accept: application/json
+Content-Type : application/json
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/DodajKamion
+Accept: application/json
+Content-Type : application/json
+{
+  "registarska_Oznaka": "TEST",
+  "proizvodjac": "test",
+  "status": 1,
+  "lokacija": "testinela"
+}
+
+###
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/DodajDzip
+Accept: application/json
+Content-Type : application/json
+{
+  "registarska_Oznaka": "test",
+  "proizvodjac": "test",
+  "status": 0,
+  "lokacija": "test"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/IzmeniKamion/TEST
+Accept: application/json
+Content-Type : application/json
+{
+  "proizvodjac": "izmena",
+  "status": 1,
+  "lokacija": "izmena"
+}
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/IzmeniDzip/test
+Accept: application/json
+Content-Type : application/json
+{
+  "proizvodjac": "IZMENA",
+  "status": 1,
+  "lokacija": "IZMENA"
+}
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/ObrisiKamion/TEST
+Accept: application/json
+Content-Type : application/json
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/ObrisiDzip/test
+Accept: application/json
+Content-Type : application/json
+
+### ****************************** GOTOV DEO SA TERENSKIM VOZILIMA************************
+
+POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+Accept: application/json
+Content-Type : application/json
+
+###
+
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+Accept: application/json
+Content-Type : application/json
+
+###
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+Accept: application/json
+Content-Type : application/json
+
+###
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/
+Accept: application/json
+Content-Type : application/json
+
+### **********************GOTOV UCESTVOVALO*************************
+
