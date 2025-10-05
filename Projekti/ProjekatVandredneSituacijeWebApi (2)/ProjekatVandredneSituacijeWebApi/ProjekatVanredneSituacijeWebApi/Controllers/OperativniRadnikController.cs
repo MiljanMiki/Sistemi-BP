@@ -152,7 +152,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
 
 
         [HttpDelete]
-        [Route("ObrisiSertifikat/{id}")]
+        [Route("ObrisiSertifikat")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
@@ -168,6 +168,22 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
             {
                 return BadRequest(ex.ToString());
 
+            }
+        }
+
+        [HttpGet]
+        [Route("GetSertifikat/{JMBG}/{Naziv}/{Institucija}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSertifikat(string JMBG,string Naziv,string Institucija)
+        {
+            try
+            {
+                return new JsonResult(await DataProvider.VratiSertifikat(JMBG,Naziv,Institucija));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
             }
         }
 

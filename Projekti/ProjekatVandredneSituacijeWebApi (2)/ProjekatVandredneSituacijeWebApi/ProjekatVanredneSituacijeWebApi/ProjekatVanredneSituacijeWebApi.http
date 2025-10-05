@@ -620,21 +620,43 @@ Content-Type : application/json
 
 ### 
 
-//mora da se stavi vise atributa, posto je njegov id kompozitni kljuc
-PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/IzmeniSertifikat/
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/IzmeniSertifikat
 Accept: application/json
 Content-Type : application/json
+{
+  "id": {
+    "jmbgRadnika": "2222222222222",
+    "naziv": "Test",
+    "institucija": "Test institucija"
+  },
+  "datumIzdavanja": "2023-10-05T12:11:21.346Z",
+  "datumVazenja": "2025-10-05T12:11:21.346Z"
+}
 
 ### 
 
 
-//mora da se stavi vise atributa, posto je njegov id kompozitni kljuc
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/ObrisiSertifikat/id
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/ObrisiSertifikat
+Accept: application/json
+Content-Type : application/json
+{
+  "id": {
+    "jmbgRadnika": "2222222222222",
+    "naziv": "Test",
+    "institucija": "Test institucija"
+  },
+  "datumIzdavanja": "2025-10-05T12:17:37.526Z",
+  "datumVazenja": "2025-10-05T12:17:37.526Z"
+}
+
+### 
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetSertifikat/2222222222222/Test/Test%20institucija
 Accept: application/json
 Content-Type : application/json
 
-### 
+###
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetSviSertifikati
 Accept: application/json
@@ -662,13 +684,13 @@ Accept: application/json
 Content-Type : application/json
 {
   "datum_I_Vreme": "2024-10-03T19:18:35.608Z",
-  "tip": "Poplava",
-  "ime_Prijavioca": "Milorad",
-  "kontakt": "065553332",
-  "lokacija": "Lokacija prijave 21",
-  "opis": "Opis prijave 21",
-  "jmbG_Dispecer": "1693021788321",
-  "prioritet": 5
+  "tip": "TEST",
+  "ime_Prijavioca": "TEST",
+  "kontakt": "06555333",
+  "lokacija": "TEST",
+  "opis": "TEST",
+  "jmbG_Dispecer": "0000000000000",
+  "prioritet": 0
 }
 
 ###
@@ -757,10 +779,7 @@ Content-Type : application/json
 
 ###
 
-// System.NullReferenceException: Object reference not set to an instance of an object.
-//at VanrednaSituacijaLibrary.DTOs.PrijavaMiniView..ctor(Prijava p) in
-//ProjekatVandredneSituacijeWebApi (2)
-//\ProjekatVandredneSituacijeWebApi\\VanrednaSituacijaLibrary\\DTOs\\PrijavaView.cs:line 95
+//sad radi kada ID_PRIJAVE vise nije null kod VANREDNA_SITUACIJA
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/VratiSveSaradnje
 Accept: application/json
 Content-Type : application/json
@@ -1115,15 +1134,13 @@ Content-Type : application/json
 
 ### **********************GOTOV UCESTVUJE*************************
 
-//NullReferenceException: Object reference not set to an instance of an object.
-//at VanrednaSituacijaLibrary.DTOs.PrijavaMiniView..ctor(Prijava p)
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/PrikaziVanrednuSituaciju
+
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/PrikaziVanredneSituacije
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-//sada mi pa vraca timeout, u DataProvider.cs line 93 samo mi se zaglavi na SaveUpdateAsync...
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/DodajVanrednuSituaciju
 Accept: application/json
 Content-Type : application/json
@@ -1136,12 +1153,12 @@ Content-Type : application/json
   "opstina": "Test",
   "lokacija": "Test",
   "opis": "Test",
-  "idPrijave": 22
+  "idPrijave": 44
 }
 
 ###
 
-PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/IzmeniVanrednuSituaciju/81
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/IzmeniVanrednuSituaciju/97
 Accept: application/json
 Content-Type : application/json
 {
@@ -1158,14 +1175,13 @@ Content-Type : application/json
 
 ###
 
-//nece da se obrise...
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/ObrisiVanrednuSituaciju/81
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/ObrisiVanrednuSituaciju/99
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/VratiVanrednuSituaciju/81
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/VratiVanrednuSituaciju/97
 Accept: application/json
 Content-Type : application/json
 

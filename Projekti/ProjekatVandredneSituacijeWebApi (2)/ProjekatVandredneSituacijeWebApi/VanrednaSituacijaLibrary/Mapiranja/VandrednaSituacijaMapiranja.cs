@@ -33,12 +33,12 @@ namespace VanrednaSituacijaLibrary.Mapiranja
             HasMany(x => x.Ucestvuje)
            .Cascade.All()
            .Inverse()
-           .KeyColumn("IdVandredneSituacije");
+           .KeyColumn("IdVanredneSituacije");
 
             HasMany(x => x.Saradjuje)
                 .Cascade.All()
                 .Inverse()
-                .KeyColumn("IdVandredneSituacije");
+                .KeyColumn("Id_Vanredne_Situacije");
 
            
         }

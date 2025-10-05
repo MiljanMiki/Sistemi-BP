@@ -12,7 +12,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
     {
 
         [HttpGet]
-        [Route("PrikaziVanrednuSituaciju")]
+        [Route("PrikaziVanredneSituacije")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
         public async Task<IActionResult> VratiVanredneSituacije()

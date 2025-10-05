@@ -1,0 +1,68 @@
+Analiticar : SVE RADI
+
+Dodeljuje se : /VratiSvaDodeljivanja i /VratiDodeljivanje/id baca ovaj exception :
+NHibernate.InstantiationException: Cannot instantiate abstract class 
+or interface: VanrednaSituacijaLibrary.Entiteti.Vozilo
+
+Intervencija : SVE RADI
+
+Interventna jedinica : /VratiSveJedinice baca:
+NHibernate.WrongClassException: Object with id: 22 was not of the specified subclass: VanrednaSituacijaLibrary.Entiteti.SpecijalnaInterventna (loading object was of wrong class [VanrednaSituacijaLibrary.Entiteti.OpstaIntervetnaJed])
+Verovatno isto greska prilikom punjena baze, postoje jedinice koje su i opste i specijalne istovremeno, kao iza zaposlene
+
+/ObrisiSpecijalnuJedinicu ne zeli da obrise Test record, kaze child record found 
+
+Koordiantor: SVE RADI
+
+LicnaZastita : SVE RADI
+
+MedicinskaOprema : SVE RADI
+
+Operativni radnik: SVE RADI
+
+Oprema: /VratiSvuOpremu ne radi
+//WrongClassException: Object with id: EQ0004 was not of the specified subclass: 
+//VanrednaSituacijaLibrary.Entiteti.MedicinskaOprema 
+//(loading object was of wrong class [VanrednaSituacijaLibrary.Entiteti.LicnaZastita])
+prolazi kroz sve tabele, i onda ubaci neki entitet koji je vec ubacen. To je jer je baza lose napunjena sa podacima
+
+Prijava: SVE RADI
+
+SanitetskaVozila: SVE RADI
+
+Saradjuje:SVE RADI
+
+Sluzba : SVE RADI
+
+SpecijalnaVozila: SVE RADI
+
+TehnickaOprema : SVE RADI
+
+TerenskaVozila : SVE RADI
+
+Ucestvovalo : puca /VratiSvaUcestvovanja
+InstantiationException: Cannot instantiate abstract class or interface:
+//VanrednaSituacijaLibrary.Entiteti.Vozilo
+
+
+Ucestvuje : SVE RADI
+
+VanrednaSituacija : puca /ObrisiVanrednuSituaciju
+NHibernate.Exceptions.GenericADOException: could not initialize a collection: [VanrednaSituacijaLibrary.Entiteti.VanrednaSituacija.Ucestvuje#99][SQL: SELECT ucestvuje0_.IdVandredneSituacije as idvandrednesituacije5_21_1_, ucestvuje0_.Id as id1_21_1_, ucestvuje0_.Id as id1_21_0_, ucestvuje0_.IdInterventneJed as idinterventnejed2_21_0_, ucestvuje0_.IdVanredneSituacije as idvanrednesituacije3_21_0_, ucestvuje0_.IdIntervencije as idintervencije4_21_0_ FROM Ucestvuje ucestvuje0_ WHERE ucestvuje0_.IdVandredneSituacije=?]
+ ---> Oracle.ManagedDataAccess.Client.OracleException (0x80004005): ORA-00904: "UCESTVUJE0_"."IDVANDREDNESITUACIJE": invalid identifier
+***IDALJE JE U BAZI!*** Kreirana je I dodatna test prijava sa ID:44
+
+
+Vozilo : /VratiSveServise puca 
+NHibernate.InstantiationException: Cannot instantiate abstract class or interface: 
+VanrednaSituacijaLibrary.Entiteti.Vozilo   
+at NHibernate.Tuple.PocoInstantiator.Instantiate()
+
+Zalihe : SVE RADI
+
+Zaposleni : puca kod /GetSviZaposleni
+// NHibernate.WrongClassException: Object with id: 0192258008703 was not of the 
+//specified subclass: VanrednaSituacijaLibrary.Entiteti.Kordinator 
+//(loading object was of wrong class [VanrednaSituacijaLibrary.Entiteti.Analiticar])
+opet, ovo je greska jer je baza lose napunjena. svaki zaposlen se istovremeno nalazi u sve tabele...I koordinator i op radnik i analiticar
+
