@@ -164,6 +164,7 @@ namespace VanrednaSituacijaLibrary
                 v.Broj_Ugrozenih_Osoba = vs.Broj_Ugrozenih_Osoba;
                 v.Opstina = vs.Opstina;
                 v.Opis = vs.Opis;
+                v.Lokacija = vs.Lokacija;
 
                 var prijava = await s.GetAsync<Prijava>(vs.IdPrijave);
                 if (prijava == null) throw new Exception("Prijava sa zadatim ID-jem ne postoji!");
@@ -1936,7 +1937,18 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Sertifikat z = await s.LoadAsync<Sertifikat>(se.Id);
+                SertifikatId id = new SertifikatId();
+
+                var opRadnik = await s.GetAsync<OperativniRadnik>(se.Id.JMBGRadnika);
+                if (opRadnik == null) throw new Exception("Operativni radnik sa zadatim JMBG-om ne postoji!");
+
+                id.OperativniRadnik = opRadnik;
+                id.Naziv = se.Id.Naziv;
+                id.Institucija = se.Id.Institucija;
+
+                //posto je se.ID SertifikatIdAddView, to ne moze to da se pretrazi u GetAsync, a nemamo cast iz SertifikatIdAddView u SertifikatId
+                Sertifikat z = await s.GetAsync<Sertifikat>(id);
+                if (z == null) throw new Exception("Sertifikat sa zadatim nazivom/institucijom ne postoji!");
                
                 await s.DeleteAsync(z);
                 await s.FlushAsync();
@@ -1958,12 +1970,17 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 SertifikatId id = new SertifikatId();
-                id.OperativniRadnik = await s.LoadAsync<OperativniRadnik>(sert.Id);
-                
+
+                var opRadnik = await s.GetAsync<OperativniRadnik>(sert.Id.JMBGRadnika);
+                if (opRadnik == null) throw new Exception("Operativni radnik sa zadatim JMBG-om ne postoji!");
+
+                id.OperativniRadnik = opRadnik;
                 id.Naziv = sert.Id.Naziv;
-                id.Institucija = sert.Id.Naziv;
-                Sertifikat sertifikat = await s.LoadAsync<Sertifikat>(id);
-                
+                id.Institucija = sert.Id.Institucija;
+
+                Sertifikat sertifikat = await s.GetAsync<Sertifikat>(id);
+                if(sertifikat == null) throw new Exception("Sertifikat sa zadatim nazivom/institucijom ne postoji!");
+
                 sertifikat.DatumIzdavanja = sert.DatumIzdavanja;
                 sertifikat.DatumVazenja = sert.DatumVazenja;
                 await  s.SaveOrUpdateAsync(sertifikat);
@@ -2029,7 +2046,7 @@ namespace VanrednaSituacijaLibrary
             return sviSertifikati;
         }
 
-        public static async Task<SertifikatView> VratiSertifikat(string JMBG)
+        public static async Task<SertifikatView> VratiSertifikat(string JMBG, string Naziv, string Institucija)
         {
             SertifikatView sertifikat = new SertifikatView();
             try
@@ -2039,8 +2056,21 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Sertifikat s = await sess.LoadAsync<Sertifikat>(JMBG);
-                
+
+                var o = await sess.GetAsync<OperativniRadnik>(JMBG);
+                if (o == null) throw new Exception("Operativni radnik sa zadatim JMBG-om ne postoji!");
+
+                SertifikatId sId = new SertifikatId
+                {
+                    OperativniRadnik = o,
+                    Naziv = Naziv,
+                    Institucija = Institucija
+                };
+                Sertifikat s = await sess.GetAsync<Sertifikat>(sId);
+
+                if (s == null) throw new Exception("Sertifikat sa zadatim nazivom/institucijom ne postoji!");
+
+                sertifikat.Id = new SertifikatIdAddView(sId);
                 sertifikat.DatumIzdavanja = s.DatumIzdavanja;
                 sertifikat.DatumVazenja = s.DatumVazenja;
                 sess.Close();
@@ -2052,7 +2082,7 @@ namespace VanrednaSituacijaLibrary
             return sertifikat;
         }
 
-        
+
         #endregion
 
 
