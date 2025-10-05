@@ -25,7 +25,7 @@ namespace VanrednaSituacijaLibrary.DTOs
         public InterventnaJedinicaView(InterventnaJedinica ij)
         {
             Naziv = ij.Naziv;
-            BrojClanova = 0;// start
+            BrojClanova = ij.BrojClanova;
             Baza = ij.Baza;
             if (ij.Komandir != null)
             {

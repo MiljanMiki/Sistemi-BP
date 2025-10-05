@@ -5,7 +5,7 @@ Accept: application/json
 
 ###
 
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/GetAnaliticar/9584757375804
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/GetAnaliticar/1234567891012
 Accept: application/json
 
 ###
@@ -48,9 +48,7 @@ Accept: application/json
 
 ###
 
-//vraca status OK ako jmbg ne postoji u bazi (i vraca [] body )
-//vraca nista ( [] ) ako analiticar nema ekspertize
-//malo sus da se vraca id iz baze...
+
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/PrikaziEkspertize/1234567891012
 Accept: application/json
 
@@ -87,8 +85,7 @@ Accept: application/json
 
 ###
 
-//Isto vraca status OK ako analiticar nema softver
-//ili da JMBG ne postoji
+
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Analiticar/PrikaziSoftver/1234567891012
 Accept: application/json
 Content-Type : application/json
@@ -141,7 +138,7 @@ Content-Type : application/json
 
 ###
 
-//baca intergrity-constraint: parent key not found exception ako se za jmbgRadnika postavi nepostojeci
+//baca intergrity-constraint: parent key not found exception ako se za jmbgRadnika postavi nepostojeci jmbg
 //   regVozilo": "SH-554-JL",
 //  "jmbgRadnik": "7950714846652",
 //  "idJedinica": null,
@@ -187,11 +184,7 @@ Content-Type : application/json
 
 ###******************************** GOTOV DEO SA DODELJUJE SE*******************************
 
-###System.Exception: Zao nam je doslo je do greske!
-###---> NHibernate.HibernateException: Can't Parse Zavrsena as Status
-###---> System.ArgumentException: Requested value 'Zavrsena' was not found.
-### Status je enum : Uspesna, Neuspesna, U_toku.
-### ne postoji "Zavrsena" kao status
+
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/VratiIntervencije
 Accept: application/json
 Content-Type : application/json
@@ -234,8 +227,7 @@ Content-Type : application/json
 
 ###
 
-//bilo potrebno da se promeni u Vozilo.cs StatusVozila iz u_kvaru -> U_kvaru posto je u bazi
-//ubaceno U_kvaru
+
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Intervencija/GetVozilaKojaSuUcestvovala/21
 Accept: application/json
 Content-Type : application/json
@@ -279,15 +271,15 @@ Content-Type : application/json
 
 ###
 
-//ako komandir ne postoji, onda je null
-//ako se prosledi tipSpecJedinice isto je null?
+//ako se prosledi tipSpecJedinice null je?
+//nece korektno da se setuje
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/DodajSpecijalnuJedinicu
 Accept: application/json
 Content-Type : application/json
 {
   "naziv": "Test Specijalna",
   "baza": "Test",
-  "jmbgKomandira": "1234567891012",
+  "jmbgKomandira": "9584757375804",
   "tipSpecijalneJedinice": "Zajebani momci"
 }
 
@@ -333,20 +325,20 @@ Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiSpecijalnuJedinicu/61
+//i sad nece da se obrise...kaze child record found 
+
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiSpecijalnuJedinicu/64
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-//vraca status OK ionako id ne postoji
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSvaVozilaJedinice/22 
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSvaVozilaJedinice/22
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-//vraca status OK ionako id ne postoji
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiRadnikeJedinice/22
 Accept: application/json
@@ -354,14 +346,13 @@ Content-Type : application/json
 
 ###
 
-//PUCA
+
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiOpremuJedinice/22
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-//vraca status OK ionako id ne postoji
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/VratiSvaUcestvovanjaJedinice/22
 Accept: application/json
@@ -484,8 +475,6 @@ Content-Type : application/json
 
 ###
 
-//ORA-02291: integrity constraint (S19137.SYS_C00406854) violated - parent key not found
-//nije izbrisano iz baze
 PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/LicnaZastita/IzmeniLicnuZastitu/EQ9999
 Accept: application/json
 Content-Type : application/json
@@ -493,7 +482,7 @@ Content-Type : application/json
   "naziv": "Promenjen test",
   "status": "Promenjen",
   "datumNabavke": "2025-10-03T17:24:14.892Z",
-  "jedinicaID": 10,
+  "jedinicaID": 26,
   "tip": 0
 }
 
@@ -505,7 +494,6 @@ Content-Type : application/json
 
 ###***************************KRAJ DELA SA LICNOM ZASTITOM******************************
 
-//NHibernate.HibernateException: Can't Parse Prenosiva nosiljka as TipMedicinske
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/VratiSvuMedicinskuOpremu
 Accept: application/json
 Content-Type : application/json
@@ -540,8 +528,8 @@ Content-Type : application/json
   "naziv": "Izmenjeno",
   "status": "Izmenjeno",
   "datumNabavke": "2025-10-03T17:38:53.447Z",
-  "jedinicaID": 5,
-  "tip": 0
+  "jedinicaID": 25,
+  "tip": 1
 }
 
 
@@ -552,6 +540,7 @@ Accept: application/json
 Content-Type : application/json
 
 ### **********************GOTOV DEO SA MEDICINSKOM OPREMOM**********************
+
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetSviOperativniRadnici
 Accept: application/json
@@ -638,6 +627,7 @@ Content-Type : application/json
 
 ### 
 
+
 //mora da se stavi vise atributa, posto je njegov id kompozitni kljuc
 
 DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/ObrisiSertifikat/id
@@ -671,14 +661,14 @@ POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/DodajPrijavu
 Accept: application/json
 Content-Type : application/json
 {
-  "datum_I_Vreme": "2025-10-03T19:18:35.608Z",
-  "tip": "Test",
-  "ime_Prijavioca": "Test",
-  "kontakt": "Test",
-  "lokacija": "Test",
-  "opis": "Test",
-  "jmbG_Dispecer": "3333333333333",
-  "prioritet": 3
+  "datum_I_Vreme": "2024-10-03T19:18:35.608Z",
+  "tip": "Poplava",
+  "ime_Prijavioca": "Milorad",
+  "kontakt": "065553332",
+  "lokacija": "Lokacija prijave 21",
+  "opis": "Opis prijave 21",
+  "jmbG_Dispecer": "1693021788321",
+  "prioritet": 5
 }
 
 ###
@@ -698,7 +688,7 @@ Content-Type : application/json
 }
 
 ###
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/ObrisiPrijavu/41
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Prijava/ObrisiPrijavu/42
 Accept: application/json
 Content-Type : application/json
 
@@ -777,6 +767,7 @@ Content-Type : application/json
 
 ###
 
+//isto za bilo koju saradnju koja je vec ubacena u bazu (ne test vrednosti)
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Saradjuje/VratiSaradnju/id
 Accept: application/json
 Content-Type : application/json
@@ -911,15 +902,12 @@ Content-Type : application/json
 
 ### *********************GOTOV DEO SA SPECIJALNIM VOZILIMA***************************
 
-//ovde uvek za brojClanova vraca 0, ionako to nije u bazi
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/VratiSvuTehnickuOpremu
 Accept: application/json
 Content-Type : application/json
 
 ###
 
-//ako se doda tehnicka oprema jedinici koja ne postoji,ona se postavlja na null i onda ovde kad se vraca
-//puca! Mozda da u DodajTehnickuOpremu baca exception ako jedinica sa zadatim ID-jem ne postoji?
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TehnickaOprema/VratiTehnickuOpremu/EQ555333
 Accept: application/json
 Content-Type : application/json
@@ -977,7 +965,7 @@ Content-Type : application/json
 
 ###
 
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/VratiDzip/test
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/VratiDzip/TEST
 Accept: application/json
 Content-Type : application/json
 
@@ -999,7 +987,7 @@ POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/DodajDzi
 Accept: application/json
 Content-Type : application/json
 {
-  "registarska_Oznaka": "test",
+  "registarska_Oznaka": "TEST",
   "proizvodjac": "test",
   "status": 0,
   "lokacija": "test"
@@ -1035,14 +1023,13 @@ Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/ObrisiDzip/test
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/TerenskaVozila/ObrisiDzip/TEST
 Accept: application/json
 Content-Type : application/json
 
 ### ****************************** GOTOV DEO SA TERENSKIM VOZILIMA************************
 
-//Oracle.ManagedDataAccess.Client.OracleException (0x80004005): 
-//ORA-02291: integrity constraint (S19137.SYS_C00406894) violated - parent key not found
+//napravio sam novi dzip TEST
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/DodajUcestvovanje
 Accept: application/json
 Content-Type : application/json
@@ -1055,21 +1042,19 @@ Content-Type : application/json
 
 ###
 
-//neprovereno
-PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/IzmeniUcestvovalo/id
+PUT {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/IzmeniUcestvovalo/124
 Accept: application/json
 Content-Type : application/json
 {
-  "voziloReg": "string",
-  "intervencijaID": 0,
-  "datum_Od": "2025-10-04T12:21:07.500Z",
+  "voziloReg": "KH-008-VT",
+  "intervencijaID": 30,
+  "datum_Od": "2020-10-04T12:21:07.500Z",
   "datum_Do": "2025-10-04T12:21:07.500Z"
 }
 
 ###
 
-//neprovereno
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/ObrisiUcestvovalo/id
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/ObrisiUcestvovalo/124
 Accept: application/json
 Content-Type : application/json
 
@@ -1083,12 +1068,13 @@ Content-Type : application/json
 
 ###
 
-GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/VratiUcestvovanje/84
+GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvovalo/VratiUcestvovanje/124
 Accept: application/json
 Content-Type : application/json
 
 ### **********************GOTOV UCESTVOVALO*************************
 
+//22,45,21
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/DodajUcestvovanje
 Accept: application/json
 Content-Type : application/json
@@ -1111,18 +1097,11 @@ Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/ObrisiUcestvuje/147
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/ObrisiUcestvuje/148
 Accept: application/json
 Content-Type : application/json
 
 ###
-//ovo se desilo nakon sto sam ubacio Ucestvuje sa idVandredneSituacije = 0 (ne postoji)
-//ne postoji nikakv internal check za to da li postoji,pa je sad vanrednaSituacija NULL
-
-//NHibernate.Exceptions.GenericADOException: 
-//Could not execute query[SQL: SQL not available]\r\n ---> System.NullReferenceException: 
-//Object reference not set to an instance of an object.\r\n   
-//at VanrednaSituacijaLibrary.DTOs.VanrednaSituacijaMiniView..ctor(VanrednaSituacija v)
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Ucestvuje/VratiSvaUcestvovanja
 Accept: application/json
@@ -1144,6 +1123,7 @@ Content-Type : application/json
 
 ###
 
+//sada mi pa vraca timeout, u DataProvider.cs line 93 samo mi se zaglavi na SaveUpdateAsync...
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/DodajVanrednuSituaciju
 Accept: application/json
 Content-Type : application/json
@@ -1285,14 +1265,12 @@ Content-Type : application/json
 
 ###
 
-//baca unique constraint violated za serijski broj ako pokusam da ubacim EQ9999, mislim 
-//da se to jos nalazi negde u bazi
 
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/DodajNoveZalihe
 Accept: application/json
 Content-Type : application/json
 {
-  "serijski_Broj": "EQ9999999",
+  "serijski_Broj": "EQ9999",
   "naziv": "TEST",
   "status": "TEST",
   "datumNabavke": "2025-10-04T13:32:35.046Z",
@@ -1317,7 +1295,7 @@ Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/ObrisiZalihe/EQ9999999
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/ObrisiZalihe/EQ9999
 Accept: application/json
 Content-Type : application/json
 
