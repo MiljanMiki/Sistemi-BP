@@ -651,7 +651,7 @@ Content-Type : application/json
   "datumVazenja": "2025-10-05T12:17:37.526Z"
 }
 
-### 
+###
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/OperativniRadnik/GetSertifikat/2222222222222/Test/Test%20institucija
 Accept: application/json
