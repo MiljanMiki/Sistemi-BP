@@ -20,7 +20,14 @@ namespace VanrednaSituacijaLibrary.Entiteti
 
     public enum TipMedicinske
     {
-        Prenosive_nosiljka, Defibrilator, Komplet_za_reanimaciju
+        Prenosiva_nosiljka, Defibrilator, Komplet_za_reanimaciju
+    }
+
+    public enum StatusOpreme
+    {
+        Ispravno,
+        Neispravno,
+        Servis
     }
 
     public enum TipZalihe
@@ -33,7 +40,7 @@ namespace VanrednaSituacijaLibrary.Entiteti
         public virtual  string Naziv {  get; set; }
 
        
-        public virtual  string Status { get; set; }
+        public virtual  StatusOpreme Status { get; set; }
 
         public virtual  DateTime DatumNabavke { get; set; }
 

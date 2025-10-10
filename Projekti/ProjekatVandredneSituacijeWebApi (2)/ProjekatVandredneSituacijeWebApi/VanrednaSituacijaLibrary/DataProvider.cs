@@ -64,7 +64,7 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                VanrednaSituacijaLibrary.Entiteti.VanrednaSituacija v = new VanrednaSituacijaLibrary.Entiteti.VanrednaSituacija();
+                VanrednaSituacija v = new VanrednaSituacija();
                 if (vs.Datum_Od >= DateTime.Now)
                 {
                     
@@ -85,11 +85,15 @@ namespace VanrednaSituacijaLibrary
                 v.Opstina = vs.Opstina;
                 v.Lokacija = vs.Lokacija;
                 v.Opis = vs.Opis;
-                v.Prijava_ID = await s.GetAsync<Prijava>(vs.IdPrijave);
+
+                var prijava = await s.GetAsync<Prijava>(vs.IdPrijave);
+                if (prijava == null) throw new Exception("Prijava sa zadatim ID-jem ne postoji!");
+                v.Prijava_ID = prijava;
 
                 await s.SaveOrUpdateAsync(v);
                 await s.FlushAsync();
 
+                s.Close();
             }
             catch (Exception ec)
             {
@@ -160,7 +164,12 @@ namespace VanrednaSituacijaLibrary
                 v.Broj_Ugrozenih_Osoba = vs.Broj_Ugrozenih_Osoba;
                 v.Opstina = vs.Opstina;
                 v.Opis = vs.Opis;
-                v.Prijava_ID = await s.GetAsync<Prijava>(vs.IdPrijave);
+                v.Lokacija = vs.Lokacija;
+
+                var prijava = await s.GetAsync<Prijava>(vs.IdPrijave);
+                if (prijava == null) throw new Exception("Prijava sa zadatim ID-jem ne postoji!");
+                v.Prijava_ID = prijava;
+                
 
                 await s.UpdateAsync(v);
                 await s.FlushAsync();
@@ -190,7 +199,10 @@ namespace VanrednaSituacijaLibrary
 
                 OpstaIntervetnaJed ij = new OpstaIntervetnaJed();
                 ij.Naziv = i.Naziv;
-                ij.Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
+                var komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
+                if (komandir == null)
+                    throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
+                ij.Komandir = komandir;
                 ij.Baza = i.Baza;
                 OperativniRadnik Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
                 await s.SaveOrUpdateAsync(ij);
@@ -243,6 +255,8 @@ namespace VanrednaSituacijaLibrary
 
                 ij.Naziv = i.Naziv;
                 OperativniRadnik Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
+                if (Komandir == null)
+                    throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
 
                 ij.Baza = i.Baza;
 
@@ -321,17 +335,24 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+
                 ij.Naziv = i.Naziv;
-                ij.Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
+
                 OperativniRadnik Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
-                ij.Baza = i.Baza;
-                await s.SaveOrUpdateAsync(ij);
                 if (Komandir != null)
                 {
                     Komandir.InterventnaJedinica = ij;
                     await s.SaveOrUpdateAsync(Komandir);
                     ij.BrojClanova++;
                 }
+                else
+                    throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
+
+                ij.Komandir = Komandir;
+                ij.Baza = i.Baza;
+                ij.TipSpecijalneJedinice = i.TipSpecijalneJedinice;
+
+                await s.SaveOrUpdateAsync(ij);
                 await s.FlushAsync();
                 s.Close();
 
@@ -375,7 +396,10 @@ namespace VanrednaSituacijaLibrary
 
                 ij.Naziv = i.Naziv;
 
-                ij.Komandir = await s.LoadAsync<OperativniRadnik>(i.JMBGKomandira);
+                var komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
+                if (komandir == null)
+                    throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
+                ij.Komandir = komandir;
                 ij.Baza = i.Baza;
                 ij.TipSpecijalneJedinice = i.TipSpecijalneJedinice;
 
@@ -550,6 +574,8 @@ namespace VanrednaSituacijaLibrary
                 sveIntervencije = await s.Query<Intervencija>()
                                   .Select(i => new IntervencijaView(i))
                                   .ToListAsync();
+
+                s.Close();
             }
             catch (Exception ec)
             {
@@ -760,9 +786,9 @@ namespace VanrednaSituacijaLibrary
                     Datum_Do = null
                 };
 
-                await s.SaveAsync(i);
-
                 await s.SaveAsync(analiticar);
+
+                await s.SaveAsync(i);
                 await s.FlushAsync();
                 s.Close();
             }
@@ -910,13 +936,21 @@ namespace VanrednaSituacijaLibrary
                 op.Datum_Zaposlenja = o.Datum_Zaposlenja;
                 op.Broj_Sati = o.Broj_Sati;
                 op.Fizicka_Spremnost = o.Fizicka_Spremnost;
-                op.InterventnaJedinica = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
-                InterventnaJedinica ij = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
-                if (ij != null)
+
+                if (o.InterventnaJedinica != null || o.InterventnaJedinica > 0)
                 {
-                    ij.BrojClanova++;
-                    await s.UpdateAsync(ij);
+                    InterventnaJedinica ij = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
+                    op.InterventnaJedinica = ij;
+                    if (ij != null)
+                    {
+                        ij.BrojClanova++;
+
+                        await s.UpdateAsync(ij);
+                    }
                 }
+                else
+                    op.InterventnaJedinica = null;
+
 
                 Istorija_Uloga_Zaposlenih i = new Istorija_Uloga_Zaposlenih
                 {
@@ -926,9 +960,9 @@ namespace VanrednaSituacijaLibrary
                     Datum_Do = null
                 };
 
-                await s.SaveAsync(i);
-
                 await s.SaveAsync(op);
+                await s.SaveAsync(i);
+                
                 await s.FlushAsync();
                 s.Close();
             }
@@ -987,7 +1021,10 @@ namespace VanrednaSituacijaLibrary
                 op.Broj_Sati = o.Broj_Sati;
                 op.Fizicka_Spremnost = o.Fizicka_Spremnost;
                 InterventnaJedinica oldij = op.InterventnaJedinica;
+
                 InterventnaJedinica newij = await s.GetAsync<InterventnaJedinica>(o.IdJedinice);
+                if (newij == null)
+                    throw new Exception("Interventna jedinica sa zadatim ID-jem ne postoji!");
                 if (oldij != null && newij != null && op.InterventnaJedinica.Jedinstveni_Broj != o.IdJedinice)
                 {
                     newij.BrojClanova++;
@@ -1033,7 +1070,7 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 sviOp = await s.Query<OperativniRadnik>()
-                        .Fetch( op => op.InterventnaJedinica)
+                        .Fetch( op => op.InterventnaJedinica)//u sonovi ovo nista ne menja,svakako vraca to
                         .Select(op => new OperativniRadnikView(op))
                         .ToListAsync();
                
@@ -1056,6 +1093,8 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                if (s.Get<InterventnaJedinica>(IdJedinice) == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji u bazi!");
+
                 sviOp = s.Query<OperativniRadnik>()
                       .Fetch(op => op.InterventnaJedinica)
                       .Where(v => v.InterventnaJedinica.Jedinstveni_Broj == IdJedinice)
@@ -1140,8 +1179,9 @@ namespace VanrednaSituacijaLibrary
                 i.Datum_Od = DateTime.Now;
                 i.Datum_Do = null;
 
-                await s.SaveAsync(i);
                 await s.SaveAsync(kordinator);
+                await s.SaveAsync(i);
+                
                 await s.FlushAsync();
                 s.Close();
             }
@@ -1545,7 +1585,7 @@ namespace VanrednaSituacijaLibrary
 
         public static async Task<SpecijalnaVozilaView> VratiSpecijalnoVozilo(string RegOznaka)
         {
-            SpecijalnaVozilaView v = null ;
+            SpecijalnaVozilaView v = new SpecijalnaVozilaView() ;
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -1887,7 +1927,7 @@ namespace VanrednaSituacijaLibrary
                 }
                 else
                     sertifikat1.DatumIzdavanja = s.DatumIzdavanja;
-                if (s.DatumVazenja <= s.DatumVazenja)
+                if (s.DatumVazenja <= s.DatumIzdavanja)
                 {
                     throw new Exception("Zao nam je ali ne mozete upisati ovu vrednost");
                 }
@@ -1917,7 +1957,18 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Sertifikat z = await s.LoadAsync<Sertifikat>(se.Id);
+                SertifikatId id = new SertifikatId();
+
+                var opRadnik = await s.GetAsync<OperativniRadnik>(se.Id.JMBGRadnika);
+                if (opRadnik == null) throw new Exception("Operativni radnik sa zadatim JMBG-om ne postoji!");
+
+                id.OperativniRadnik = opRadnik;
+                id.Naziv = se.Id.Naziv;
+                id.Institucija = se.Id.Institucija;
+
+                //posto je se.ID SertifikatIdAddView, to ne moze to da se pretrazi u GetAsync, a nemamo cast iz SertifikatIdAddView u SertifikatId
+                Sertifikat z = await s.GetAsync<Sertifikat>(id);
+                if (z == null) throw new Exception("Sertifikat sa zadatim nazivom/institucijom ne postoji!");
                
                 await s.DeleteAsync(z);
                 await s.FlushAsync();
@@ -1939,12 +1990,17 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 SertifikatId id = new SertifikatId();
-                id.OperativniRadnik = await s.LoadAsync<OperativniRadnik>(sert.Id);
-                
+
+                var opRadnik = await s.GetAsync<OperativniRadnik>(sert.Id.JMBGRadnika);
+                if (opRadnik == null) throw new Exception("Operativni radnik sa zadatim JMBG-om ne postoji!");
+
+                id.OperativniRadnik = opRadnik;
                 id.Naziv = sert.Id.Naziv;
-                id.Institucija = sert.Id.Naziv;
-                Sertifikat sertifikat = await s.LoadAsync<Sertifikat>(id);
-                
+                id.Institucija = sert.Id.Institucija;
+
+                Sertifikat sertifikat = await s.GetAsync<Sertifikat>(id);
+                if(sertifikat == null) throw new Exception("Sertifikat sa zadatim nazivom/institucijom ne postoji!");
+
                 sertifikat.DatumIzdavanja = sert.DatumIzdavanja;
                 sertifikat.DatumVazenja = sert.DatumVazenja;
                 await  s.SaveOrUpdateAsync(sertifikat);
@@ -1995,8 +2051,7 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 sviSertifikati = s.Query<Sertifikat>()
-                                .Fetch(s => s.Id.OperativniRadnik)
-                                .Where(s => s.Id.OperativniRadnik.JMBG==JMBGZaposlenog)
+                                .Where(s => s.Id.OperativniRadnik.JMBG == JMBGZaposlenog)
                                 .ToList()
                                 .Select(s => new SertifikatView(s))
                                 .ToList();
@@ -2011,7 +2066,7 @@ namespace VanrednaSituacijaLibrary
             return sviSertifikati;
         }
 
-        public static async Task<SertifikatView> VratiSertifikat(string JMBG)
+        public static async Task<SertifikatView> VratiSertifikat(string JMBG, string Naziv, string Institucija)
         {
             SertifikatView sertifikat = new SertifikatView();
             try
@@ -2021,8 +2076,21 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Sertifikat s = await sess.LoadAsync<Sertifikat>(JMBG);
-                
+
+                var o = await sess.GetAsync<OperativniRadnik>(JMBG);
+                if (o == null) throw new Exception("Operativni radnik sa zadatim JMBG-om ne postoji!");
+
+                SertifikatId sId = new SertifikatId
+                {
+                    OperativniRadnik = o,
+                    Naziv = Naziv,
+                    Institucija = Institucija
+                };
+                Sertifikat s = await sess.GetAsync<Sertifikat>(sId);
+
+                if (s == null) throw new Exception("Sertifikat sa zadatim nazivom/institucijom ne postoji!");
+
+                sertifikat.Id = new SertifikatIdAddView(sId);
                 sertifikat.DatumIzdavanja = s.DatumIzdavanja;
                 sertifikat.DatumVazenja = s.DatumVazenja;
                 sess.Close();
@@ -2034,7 +2102,7 @@ namespace VanrednaSituacijaLibrary
             return sertifikat;
         }
 
-        
+
         #endregion
 
 
@@ -2142,6 +2210,13 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+
+                Analiticar a = await s.GetAsync <Analiticar>(JMBG);
+                if(a == null)
+                {
+                    throw new Exception("Ne postoji analiticar sa zadatim JMBG-om!");
+                }
+
                 sveEkspertize =await s.Query<Ekspertiza>()
                                .Fetch(e => e.Analiticar)
                                .Where(e=> e.Analiticar.JMBG==JMBG)
@@ -2379,7 +2454,9 @@ namespace VanrednaSituacijaLibrary
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                var jedinica = await s.GetAsync<InterventnaJedinica>(l.JedinicaID);
+                if (jedinica == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji!");
+                liz.Jedinica = jedinica;
                 liz.Tip = l.Tip;
 
 
@@ -2519,12 +2596,14 @@ namespace VanrednaSituacijaLibrary
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+                var jedinica = await s.GetAsync<InterventnaJedinica>(l.JedinicaID);
+                if (jedinica == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji!");
+                liz.Jedinica = jedinica;
                 liz.Tip = l.Tip;
 
 
                 s.Update(liz);
-                s.FlushAsync();
+                await s.FlushAsync();
                 s.Close();
             }
             catch (Exception ec)
@@ -2625,7 +2704,11 @@ namespace VanrednaSituacijaLibrary
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+
+                var jedinica = await s.GetAsync<InterventnaJedinica>(l.JedinicaID);
+                if (jedinica == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji!");
+                liz.Jedinica = jedinica;
+
                 liz.Tip = l.Tip;
                 await s.SaveAsync(liz);
                 await s.FlushAsync();
@@ -2671,7 +2754,11 @@ namespace VanrednaSituacijaLibrary
                 liz.Naziv = l.Naziv;
                 liz.Status = l.Status;
                 liz.DatumNabavke = l.DatumNabavke;
-                liz.Jedinica = await s.LoadAsync<InterventnaJedinica>(l.JedinicaID);
+
+                var jedinica = await s.GetAsync<InterventnaJedinica>(l.JedinicaID);
+                if (jedinica == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji!");
+                liz.Jedinica = jedinica;
+
                 liz.Tip = l.Tip;
                 await s.UpdateAsync(liz);
                 await s.FlushAsync();
@@ -2764,7 +2851,9 @@ namespace VanrednaSituacijaLibrary
                 zalihe.Naziv = z.Naziv;
                 zalihe.Status = z.Status;
                 zalihe.DatumNabavke = z.DatumNabavke;
-                zalihe.Jedinica = await s.LoadAsync<InterventnaJedinica>(z.JedinicaID);
+                var jedinica = await s.GetAsync<InterventnaJedinica>(z.JedinicaID);
+                if (jedinica == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji  u bazi!");
+                zalihe.Jedinica = jedinica;
                 if(zalihe.Jedinica==null)
                 {
                     throw new KeyNotFoundException("Zao nam je ne postoji jedinica sa ovim Id-em");
@@ -2822,7 +2911,11 @@ namespace VanrednaSituacijaLibrary
                 zalihe.Naziv = z.Naziv;
                 zalihe.Status = z.Status;
                 zalihe.DatumNabavke = z.DatumNabavke;
-                zalihe.Jedinica = await s.GetAsync<InterventnaJedinica>(z.JedinicaID);
+
+                var jedinica = await s.GetAsync<InterventnaJedinica>(z.JedinicaID);
+                if (jedinica == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji  u bazi!");
+                zalihe.Jedinica = jedinica;
+
                 zalihe.Kolicina = z.Kolicina;
                 zalihe.Tip = z.Tip;
                 await s.UpdateAsync(zalihe);
@@ -3288,7 +3381,11 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 Istorija_Uloga_Zaposlenih istorija = new Istorija_Uloga_Zaposlenih();
-                istorija.Zaposleni = await sess.LoadAsync<Zaposlen>(i.JMBGZaposlenog);
+                var zaposleni = await sess.GetAsync<Zaposlen>(i.JMBGZaposlenog);
+                if (zaposleni == null)
+                    throw new Exception("Zaposleni sa zadatim JMBG-om ne postoji!");
+                istorija.Zaposleni = zaposleni;
+
                 istorija.Uloga = i.Uloga;
                 if (i.Datum_Do <= i.Datum_Od)
                 {
@@ -3397,6 +3494,7 @@ namespace VanrednaSituacijaLibrary
             }
             catch (Exception e)
             {
+                throw new Exception("Zao nam je doslo je do greske!", e);
             }
             return Istorija;
         }
@@ -3438,7 +3536,10 @@ namespace VanrednaSituacijaLibrary
                                  .Where(s=> s.Zaposleni.JMBG== JMBGZaposleni)
                                 .Select(s => new Istorija_Uloga_ZaposlenihView(s))
                                 .ToListAsync();
-                
+
+                if (Istorija == null || Istorija.IsEmpty()) 
+                    throw new Exception($"Radnik sa JMBG-om {JMBGZaposleni} nema istoriju ili radnik ne postoji!");
+
                 s.Close();
             }
             
@@ -3461,11 +3562,12 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 DodeljujeSe dodeljivanje = new DodeljujeSe();
-                var vozilo = await sess.LoadAsync<Vozilo>(d.RegVozilo);
+                var vozilo = await sess.GetAsync<Vozilo>(d.RegVozilo);
+                if (vozilo == null)
+                    throw new Exception("Vozilo sa zadatom registracijom ne postoji!");
                 dodeljivanje.Vozilo = vozilo;
-                var Jedinica = await sess.GetAsync<InterventnaJedinica>(d.IdJedinica);
-                var Radnik = await sess.GetAsync<OperativniRadnik>(d.JMBGRadnik);
-                if(vozilo.Status==StatusVozila.u_kvaru)
+                
+                if(vozilo.Status==StatusVozila.U_kvaru)
                 {
                     throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
                 }
@@ -3477,12 +3579,32 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new Exception("Nije moguce da radnik i jedinica imaju vrednosti u ovoj tabeli");
                 }
-                dodeljivanje.Radnik = Radnik;
-                dodeljivanje.Jedinica = Jedinica;
+
                 if (d.DatumDo <= d.DatumOd)
                 {
                     throw new Exception("Zao nam je ali ne mozete upisati ovu vrednost");
                 }
+
+                InterventnaJedinica? jedinica;
+                OperativniRadnik? radnik;
+
+                if (d.IdJedinica.HasValue)
+                {
+                    jedinica = await sess.GetAsync<InterventnaJedinica>(d.IdJedinica);
+                    if (jedinica == null)
+                        throw new Exception("Jedinica sa zadatim id-jem ne postoji!");
+                    dodeljivanje.Jedinica = jedinica;
+                    dodeljivanje.Radnik = null;
+                }
+                else
+                {
+                    radnik = await sess.GetAsync<OperativniRadnik>(d.JMBGRadnik);
+                    if (radnik == null)
+                        throw new Exception("Ne postoji radnik sa zadatim JMBG-om!");
+                    dodeljivanje.Jedinica = null;
+                    dodeljivanje.Radnik = radnik;
+                }
+                
                 dodeljivanje.DatumOd = d.DatumOd;
                 dodeljivanje.DatumDo = d.DatumDo;
 
@@ -3521,6 +3643,7 @@ namespace VanrednaSituacijaLibrary
             
             try
             {
+
                 ISession sess = DataLayer.GetSession();
                 if (sess == null)
                 {
@@ -3529,14 +3652,7 @@ namespace VanrednaSituacijaLibrary
                 DodeljujeSe dodela = await sess.LoadAsync<DodeljujeSe>(Id);
 
                 var vozilo = await sess.LoadAsync<Vozilo>(d.RegVozilo);
-                if (vozilo.Status == StatusVozila.u_kvaru)
-                {
-                    throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
-                }
-                dodela.Vozilo = vozilo;
 
-                var Jedinica = await sess.LoadAsync<InterventnaJedinica>(d.IdJedinica);
-                var Radnik = await sess.LoadAsync<OperativniRadnik>(d.JMBGRadnik);
                 if (vozilo is Dzipovi && d.IdJedinica.HasValue)
                 {
                     throw new Exception("Zao nam je nije moguce dodeliti ovaj tip vozila jedinici");
@@ -3545,10 +3661,36 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new Exception("Nije moguce da radnik i jedinica imaju vrednosti u ovoj tabeli");
                 }
-                dodela.Radnik = Radnik;
-                dodela.Jedinica = Jedinica;
+
+                if (vozilo.Status == StatusVozila.U_kvaru)
+                {
+                    throw new Exception("Zao nam je ali vozilo se ne moze dodeliti jer je u kvaru");
+                }
+
+                
+
+                dodela.Vozilo = vozilo;
+
+                if (d.IdJedinica == null)
+                {
+                    OperativniRadnik radnik = await sess.GetAsync<OperativniRadnik>(d.JMBGRadnik);
+                    if (radnik == null)
+                        throw new Exception("Radnik sa zadatim JMBG-om ne postoji!");
+                    dodela.Radnik = radnik;
+                }
+                else if(d.JMBGRadnik==null)
+                {
+                    InterventnaJedinica jedinica = await sess.GetAsync<InterventnaJedinica>(d.IdJedinica);
+                    if (jedinica == null)
+                        throw new Exception("Jedinica sa zadatim ID-jem ne postoji!");
+                    dodela.Jedinica = jedinica;
+                }
+                
                 dodela.DatumOd = d.DatumOd;
                 dodela.DatumDo = d.DatumDo;
+                sess.Update(dodela);
+                sess.Flush();
+
                 sess.Close();
             }
             catch (Exception ec)
@@ -3561,7 +3703,7 @@ namespace VanrednaSituacijaLibrary
 
         public static async Task<IList<DodeljujeSeView>> VratiSvaDodeljivanja()
         {
-            List<DodeljujeSeView> Dodeljivanja = new List<DodeljujeSeView>();
+            var Dodeljivanja = new List<DodeljujeSeView>();
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -3595,7 +3737,6 @@ namespace VanrednaSituacijaLibrary
                 }
                 DodeljujeSe dodeljivanje= await s.LoadAsync<DodeljujeSe>(Id);
                 d= new DodeljujeSeView(dodeljivanje);
-                s.Close();
                 s.Close();
             }
             catch (Exception ec)
@@ -3658,7 +3799,7 @@ namespace VanrednaSituacijaLibrary
 
         public static async Task<IList<VoziloView>> VratiDodeljivanjaJedinic(int IdJedinica)
         {
-            List<VoziloView> Vozila = new List<VoziloView>();
+            var Vozila = new List<VoziloView>();
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -3666,6 +3807,9 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+
+                if (s.Get<InterventnaJedinica>(IdJedinica) == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji u bazi!");
+
                 var DodeljujeSe =await s.Query<DodeljujeSe>()
                                 .Where(s => s.Jedinica.Jedinstveni_Broj == IdJedinica)
                                 .Fetch(s => s.Vozilo)
@@ -3696,9 +3840,16 @@ namespace VanrednaSituacijaLibrary
                 }
                 Saradjuje saradnja = new Saradjuje();
                 saradnja.Uloga= s.Uloga;
-                saradnja.Sektor = await sess.LoadAsync<Sluzba>(s.SektorID);
-                saradnja.VandrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
-                
+                var sektor = await sess.GetAsync<Sluzba>(s.SektorID);
+                if (sektor == null)
+                    throw new Exception("Sektor sa zadatim ID-jem ne postoji!");
+                saradnja.Sektor = sektor;
+
+                var vanSit = await sess.GetAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
+                if (vanSit== null)
+                    throw new Exception("");
+                saradnja.VandrednaSituacija = vanSit; 
+
                 await sess.SaveAsync(saradnja);
                 await sess.FlushAsync();
                 sess.Close();
@@ -3742,9 +3893,18 @@ namespace VanrednaSituacijaLibrary
                 Saradjuje saradnja = await sess.LoadAsync<Saradjuje>(Id);
                
                 saradnja.Uloga = s.Uloga;
-                saradnja.Sektor = await sess.LoadAsync<Sluzba>(s.SektorID);
-                saradnja.VandrednaSituacija = await sess.LoadAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
-               
+
+                var sektor = await sess.GetAsync<Sluzba>(s.SektorID);
+                if (sektor == null)
+                    throw new Exception("Sektor sa zadatim ID-jem ne postoji!");
+                saradnja.Sektor = sektor;
+
+                var vanSit = await sess.GetAsync<VanrednaSituacija>(s.VanrednaSituacijaID);
+                if (vanSit == null)
+                    throw new Exception("");
+                saradnja.VandrednaSituacija = vanSit;
+                
+
                 await sess.UpdateAsync(saradnja);
                 await sess.FlushAsync();
                 sess.Close();
@@ -3866,8 +4026,14 @@ namespace VanrednaSituacijaLibrary
             {
                 ISession sess = DataLayer.GetSession();
                 Ucestvovalo ucestvovanje = new Ucestvovalo();
-                ucestvovanje.Vozilo = await sess.LoadAsync<Vozilo>(u.VoziloReg);
-                ucestvovanje.Intervencija = await sess.LoadAsync<Intervencija>(u.IntervencijaID);
+
+                var vozilo = await sess.GetAsync<Vozilo>(u.VoziloReg);
+                if (vozilo == null) throw new Exception("Vozilo sa zadatom registracijom ne postoji u bazi!");
+                ucestvovanje.Vozilo = vozilo;
+
+                var intervencija = await sess.GetAsync<Intervencija>(u.IntervencijaID);
+                if (intervencija == null) throw new Exception("Intervencija sa zadatim ID-jem ne postoji u bazi!");
+                ucestvovanje.Intervencija = intervencija;
 
                 if (u.Datum_Od >= DateTime.Now)
                 {
@@ -3879,7 +4045,7 @@ namespace VanrednaSituacijaLibrary
                     ucestvovanje.Datum_Od = u.Datum_Od;
                 if (u.Datum_Do <= u.Datum_Od)
                 {
-                    throw new Exception("Zao nam je ali ne mozete upisati ovu vrednost");
+                    throw new Exception("Datum do ne moze biti pre datum od...");
                 }
                 else
                     ucestvovanje.Datum_Do = ucestvovanje.Datum_Do;
@@ -3927,11 +4093,17 @@ namespace VanrednaSituacijaLibrary
                
                 Ucestvovalo ucestvovanje = await sess.LoadAsync<Ucestvovalo>(Id);
                
-                ucestvovanje.Vozilo = await sess.LoadAsync<Vozilo>(u.VoziloReg);
-                ucestvovanje.Intervencija = await sess.LoadAsync<Intervencija>(u.IntervencijaID);
-                
+                var vozilo = await sess.GetAsync<Vozilo>(u.VoziloReg);
+                if (vozilo == null) throw new Exception("Vozilo sa zadatom registracijom ne postoji!");
+                ucestvovanje.Vozilo = vozilo;
+
+                var intervencija= await sess.GetAsync<Intervencija>(u.IntervencijaID);
+                if(intervencija==null) throw new Exception("Intervencija sa zadatim ID-jem ne postoji!");
+                ucestvovanje.Intervencija = intervencija;
+
                 ucestvovanje.Datum_Od = u.Datum_Od;
                 ucestvovanje.Datum_Do = u.Datum_Do;
+
                 await sess.UpdateAsync(ucestvovanje);
                 await sess.FlushAsync();
                 sess.Close();
@@ -3944,7 +4116,7 @@ namespace VanrednaSituacijaLibrary
 
         public static async Task<IList<UcestvovaloView>> VratiUcestvovanja()
         {
-            List<UcestvovaloView> ucestvovalo = new List<UcestvovaloView>();
+            var ucestvovalo = new List<UcestvovaloView>();
             try
             {
                 ISession s = DataLayer.GetSession();
@@ -4094,10 +4266,19 @@ namespace VanrednaSituacijaLibrary
             {
                 ISession sess = DataLayer.GetSession();
                 Ucestvuje ucestvovanje = new Ucestvuje();
-                ucestvovanje.IdInterventneJed = await sess.LoadAsync<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVandredneSituacije);
-                ucestvovanje.IdIntervencije = await sess.LoadAsync<Intervencija>(u.IdIntervencije);
-                
+
+                var interventnaJed = await sess.GetAsync<InterventnaJedinica>(u.IdInterventneJed);
+                if (interventnaJed == null) throw new Exception("Interventna jedinica sa zadatim ID-jem ne postoji!");
+                ucestvovanje.IdInterventneJed = interventnaJed;
+
+                var vanSit = await sess.GetAsync<VanrednaSituacija>(u.IdVandredneSituacije);
+                if(vanSit==null) throw new Exception("Vanredna situacija sa zadatim ID-jem ne postoji!");
+                ucestvovanje.IdVandredneSituacije = vanSit;
+
+                var intervencija = await sess.GetAsync<Intervencija>(u.IdIntervencije);
+                if(intervencija==null) throw new Exception("Intervencija sa zadatim ID-jem ne postoji!");
+                ucestvovanje.IdIntervencije = intervencija;
+
                 await sess.SaveAsync(ucestvovanje);
                 await sess.FlushAsync();
                 sess.Close();
@@ -4136,11 +4317,19 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 Ucestvuje ucestvovanje = await sess.LoadAsync<Ucestvuje>(Id);
-               
-                ucestvovanje.IdInterventneJed = await sess.LoadAsync<InterventnaJedinica>(u.IdInterventneJed);
-                ucestvovanje.IdVandredneSituacije = await sess.LoadAsync<VanrednaSituacija>(u.IdVandredneSituacije);
-                ucestvovanje.IdIntervencije = await sess.LoadAsync<Intervencija>(u.IdIntervencije);
-               
+
+                var interventnaJed = await sess.GetAsync<InterventnaJedinica>(u.IdInterventneJed);
+                if (interventnaJed == null) throw new Exception("Interventna jedinica sa zadatim ID-jem ne postoji!");
+                ucestvovanje.IdInterventneJed = interventnaJed;
+
+                var vanSit = await sess.GetAsync<VanrednaSituacija>(u.IdVandredneSituacije);
+                if (vanSit == null) throw new Exception("Vanredna situacija sa zadatim ID-jem ne postoji!");
+                ucestvovanje.IdVandredneSituacije = vanSit;
+
+                var intervencija = await sess.GetAsync<Intervencija>(u.IdIntervencije);
+                if (intervencija == null) throw new Exception("Intervencija sa zadatim ID-jem ne postoji!");
+                ucestvovanje.IdIntervencije = intervencija;
+
                 await sess.UpdateAsync(ucestvovanje);
                 await sess.FlushAsync();
                 sess.Close();
@@ -4262,6 +4451,8 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+                if (s.Get<InterventnaJedinica>(IdJed) == null) throw new Exception("Jedinica sa zadatim ID-jem ne postoji u bazi!");
+
                 var Ucestvovalo = await s.Query<Ucestvuje>()
                                  .Fetch(s => s.IdInterventneJed)
                                  .Where(s => s.IdInterventneJed.Jedinstveni_Broj == IdJed)
@@ -4333,10 +4524,18 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Sluzba sluzba = await sess.LoadAsync<Sluzba>(Id);
-                
+                Sluzba sluzba = await sess.GetAsync<Sluzba>(Id);
+
+                if(sluzba == null)
+                    throw new Exception("Sluzba sa zadatim ID-jem ne postoji!");
+
+
                 sluzba.TipSektora = s.TipSektora;
-                sluzba.Predstavnik = await sess.LoadAsync<Predstavnik>(s.JMBG_Predstavnik);
+                var predstavnik = await sess.GetAsync<Predstavnik>(s.JMBG_Predstavnik);
+                if (predstavnik== null)
+                    throw new Exception("Predstavnik sa zadatim ID-jem ne postoji!");
+                sluzba.Predstavnik = predstavnik;
+
                 await sess.UpdateAsync(sluzba);
                 await sess.FlushAsync();
                 sess.Close();
@@ -4502,7 +4701,7 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
-                Softver softver = await sess.LoadAsync<Softver>(s.JMBG_Analiticar);
+                Softver softver = await sess.LoadAsync<Softver>(Id);
                 
                 softver.Analiticar = await sess.LoadAsync<Analiticar>(s.JMBG_Analiticar);
                 
@@ -4549,6 +4748,13 @@ namespace VanrednaSituacijaLibrary
                 {
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
+
+                var analiticar = await s.GetAsync<Analiticar>(JMBGAnaliticara);
+                if(analiticar==null)
+                {
+                    throw new Exception("Ne postoji analiticar sa zadatim JMBG-om!");
+                }
+
                 Softveri =await  s.Query<Softver>()
                             .Fetch(s => s.Analiticar)
                             .Where(s => s.Analiticar.JMBG == JMBGAnaliticara)

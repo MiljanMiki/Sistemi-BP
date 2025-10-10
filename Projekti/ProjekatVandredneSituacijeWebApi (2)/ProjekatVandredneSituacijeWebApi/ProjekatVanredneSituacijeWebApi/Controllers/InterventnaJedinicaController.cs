@@ -86,7 +86,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         {
             try
             {
-                return new JsonResult(await DataProvider.VratiSpecijalnuJedinicu(Id));
+                return new JsonResult(await DataProvider.VratiOpstuJedinicu(Id));
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         }
 
         [HttpPost]
-        [Route("DodajOparuJedinicu")]
+        [Route("DodajOpstuJedinicu")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
@@ -151,7 +151,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         }
 
         [HttpPut]
-        [Route("IzmeniSpecijalnuJedinicu")]
+        [Route("IzmeniSpecijalnuJedinicu/{Id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 

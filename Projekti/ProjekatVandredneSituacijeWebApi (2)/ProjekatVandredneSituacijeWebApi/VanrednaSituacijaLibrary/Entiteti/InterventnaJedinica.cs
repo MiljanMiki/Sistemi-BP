@@ -8,7 +8,7 @@ using VanrednaSituacijaLibrary.Entiteti;
 
 namespace VanrednaSituacijaLibrary.Entiteti
 {
-    public abstract class InterventnaJedinica
+    public  class InterventnaJedinica
     {
         public virtual  int Jedinstveni_Broj { get; set; }
         public virtual  string Naziv { get; set; }

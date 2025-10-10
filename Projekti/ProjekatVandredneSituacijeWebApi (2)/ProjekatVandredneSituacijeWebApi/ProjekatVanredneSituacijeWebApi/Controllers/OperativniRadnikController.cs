@@ -47,7 +47,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<IActionResult> DodajKoordinatora([FromBody] OperativniRadnikAddView a)
+        public async Task<IActionResult> DodajOperativnogRadnika([FromBody] OperativniRadnikAddView a)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<IActionResult> IzmeniKoordinatora([FromBody] OperativniRadnikChangeView k, string JMBG)
+        public async Task<IActionResult> IzmeniOperativnogRadnika([FromBody] OperativniRadnikChangeView k, string JMBG)
         {
             try
             {
@@ -119,7 +119,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
-        public async Task<IActionResult> DodajSpecijalizacijuKoordinatoru([FromBody] SertifikatView e)
+        public async Task<IActionResult> DodajSertifikat([FromBody] SertifikatView e)
         {
             try
             {
@@ -152,7 +152,7 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
 
 
         [HttpDelete]
-        [Route("ObrisiSertifikat/{id}")]
+        [Route("ObrisiSertifikat")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
 
@@ -168,6 +168,22 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
             {
                 return BadRequest(ex.ToString());
 
+            }
+        }
+
+        [HttpGet]
+        [Route("GetSertifikat/{JMBG}/{Naziv}/{Institucija}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetSertifikat(string JMBG,string Naziv,string Institucija)
+        {
+            try
+            {
+                return new JsonResult(await DataProvider.VratiSertifikat(JMBG,Naziv,Institucija));
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
             }
         }
 
@@ -188,22 +204,6 @@ namespace ProjekatVanredneSituacijeWebApi.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("VratiDodeljenaVozila/{JMBG}")]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-
-        public async Task<IActionResult> VratiVozilaPojedinca(string JMBG)
-        {
-            try
-            {
-                return new JsonResult(await DataProvider.VratiDodeljenaVozilaRadniku(JMBG));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.ToString());
-            }
-        }
 
 
     }

@@ -1,0 +1,53 @@
+Analiticar : SVE RADI
+
+Dodeljuje se : /VratiSvaDodeljivanja i /VratiDodeljivanje/id baca ovaj exception :
+NHibernate.InstantiationException: Cannot instantiate abstract class 
+or interface: VanrednaSituacijaLibrary.Entiteti.Vozilo
+
+Intervencija : SVE RADI
+
+Interventna jedinica : SVE RADI???
+
+Koordiantor: SVE RADI
+
+LicnaZastita : SVE RADI
+
+MedicinskaOprema : SVE RADI
+
+Operativni radnik: SVE RADI
+
+Oprema: /VratiSvuOpremu ne radi
+NHibernate.InstantiationException: Cannot instantiate abstract class or interface: VanrednaSituacijaLibrary.Entiteti.InterventnaJedinica\r\n   at NHibernate.Tuple.PocoInstantiator.Instantiate()
+
+Prijava: SVE RADI
+
+SanitetskaVozila: SVE RADI
+
+Saradjuje:SVE RADI
+
+Sluzba : SVE RADI
+
+SpecijalnaVozila: SVE RADI
+
+TehnickaOprema : SVE RADI
+
+TerenskaVozila : SVE RADI
+
+Ucestvovalo : puca /VratiSvaUcestvovanja
+InstantiationException: Cannot instantiate abstract class or interface:
+//VanrednaSituacijaLibrary.Entiteti.Vozilo
+
+
+Ucestvuje : SVE RADI
+
+VanrednaSituacija : SVE RADI??? VALJDA...
+
+
+Vozilo : SVE RADI? valjda…
+
+Zalihe : SVE RADI
+
+Zaposleni : puca kod /GetSviZaposleni
+NHibernate.InstantiationException: Cannot instantiate abstract class or interface: VanrednaSituacijaLibrary.Entiteti.InterventnaJedinica
+
+

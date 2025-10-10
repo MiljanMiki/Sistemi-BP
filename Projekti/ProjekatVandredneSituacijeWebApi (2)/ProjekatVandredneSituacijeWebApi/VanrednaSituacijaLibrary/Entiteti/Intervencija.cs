@@ -10,7 +10,7 @@ namespace VanrednaSituacijaLibrary.Entiteti
 {
     public enum Status
     {
-        Uspesna, Neuspesna, U_toku
+        Zavrsena, U_toku
     }
     public class Intervencija
     {

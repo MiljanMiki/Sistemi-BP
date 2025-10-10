@@ -1,10 +1,11 @@
 ﻿using FluentNHibernate.Mapping;
-using VanrednaSituacijaLibrary.Entiteti;
+using NHibernate.Type;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VanrednaSituacijaLibrary.Entiteti;
 
 namespace VanrednaSituacijaLibrary.Mapiranja
 {
@@ -17,7 +18,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
             KeyColumn("JMBG");
 
             Map(x => x.Broj_Sati).Column("Broj_Sati");
-            Map(x => x.Fizicka_Spremnost).Column("Fizicka_Spremnost");
+            Map(x => x.Fizicka_Spremnost).Column("Fizicka_Spremnost").CustomType<EnumStringType<Spremnost>>();
             References(x => x.InterventnaJedinica).Column("Jedinica_Id").Nullable().LazyLoad();
 
 

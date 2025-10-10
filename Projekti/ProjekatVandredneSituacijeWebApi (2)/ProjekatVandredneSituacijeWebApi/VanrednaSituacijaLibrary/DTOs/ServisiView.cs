@@ -47,6 +47,8 @@ namespace VanrednaSituacijaLibrary.DTOs
                 RegistarskaOznakaVozila = s.Vozilo.Registarska_Oznaka;
                 Status = s.Vozilo.Status.ToString();
             }
+            else
+                throw new Exception("Vozilo je null!");
         }
     }
 }

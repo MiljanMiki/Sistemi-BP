@@ -15,7 +15,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
         public VoziloMapiranja()
         {
             Table("Vozilo");
-
+            
             Id(x => x.Registarska_Oznaka, "Registarska_Oznaka").GeneratedBy.Assigned();
 
             Map(x => x.Proizvodjac).Column("Proizvodjac");

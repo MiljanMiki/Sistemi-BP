@@ -11,7 +11,7 @@ namespace VanrednaSituacijaLibrary.DTOs
     {
         public virtual int Id { get; set; }
         public virtual  VoziloView Vozilo { get; set; }
-        public virtual OperativniRadnikView? Radnik { get; set; }
+        public virtual OperativniRadnikChangeView? Radnik { get; set; }
         public virtual InterventnaJedinicaView? Jedinica { get; set; }
 
         public virtual  DateTime DatumOd { get; set; }
@@ -28,7 +28,7 @@ namespace VanrednaSituacijaLibrary.DTOs
             if (d.Vozilo != null)
                 Vozilo = new VoziloView(d.Vozilo);
             if (d.Radnik != null)
-                Radnik = new OperativniRadnikView(d.Radnik);
+                Radnik = new OperativniRadnikChangeView(d.Radnik);
             if (d.Jedinica != null)
                 Jedinica = new InterventnaJedinicaView(d.Jedinica);
             DatumOd = d.DatumOd;

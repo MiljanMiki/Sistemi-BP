@@ -10,7 +10,7 @@ namespace VanrednaSituacijaLibrary.DTOs
     public  class OperativniRadnikView:ZaposleniView
     {
         public virtual int Broj_Sati { get; set; }
-        public virtual string Fizicka_Spremnost { get; set; }
+        public virtual Spremnost Fizicka_Spremnost { get; set; }
 
         public virtual InterventnaJedinicaGetView? InterventnaJedinica { get; set; }
 
@@ -35,7 +35,7 @@ namespace VanrednaSituacijaLibrary.DTOs
 
         public virtual int Broj_Sati { get; set; }
 
-        public virtual string Fizicka_Spremnost { get; set; }
+        public virtual Spremnost Fizicka_Spremnost { get; set; }
 
 
         public virtual int? IdJedinice { get; set; }
@@ -58,7 +58,7 @@ namespace VanrednaSituacijaLibrary.DTOs
     public class OperativniRadnikAddView : ZaposleniView
     {
         public virtual int Broj_Sati { get; set; }
-        public virtual string Fizicka_Spremnost { get; set; }
+        public virtual Spremnost Fizicka_Spremnost { get; set; }
 
         public virtual int? InterventnaJedinica { get; set; }
 
