@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace VanrednaSituacijaLibrary.Entiteti
+{
+    public enum TipLicneZastite
+    {
+        Odelo, 
+        Maska,
+        Kaciga
+    }
+
+    public enum TipTehnicke
+    {
+        Pumpa, Detektor, Radio_stanica
+    }
+
+    public enum TipMedicinske
+    {
+        Prenosiva_nosiljka, Defibrilator, Komplet_za_reanimaciju
+    }
+
+    public enum StatusOpreme
+    {
+        Ispravno,
+        Neispravno,
+        Servis
+    }
+
+    public enum TipZalihe
+    {
+        Sator, Hrana, Voda, Lek
+    }
+    public abstract class Oprema
+    {
+        public virtual  string Serijski_Broj {  get; set; }    
+        public virtual  string Naziv {  get; set; }
+
+       
+        public virtual  StatusOpreme Status { get; set; }
+
+        public virtual  DateTime DatumNabavke { get; set; }
+
+        public virtual  InterventnaJedinica Jedinica { get; set; }
+
+
+    }
+
+    public  class MedicinskaOprema : Oprema {
+        public virtual TipMedicinske Tip {  get; set; }
+    }
+    public  class TehnickaOprema: Oprema {
+        public virtual TipTehnicke Tip {  get; set; }
+    }
+    public  class LicnaZastita : Oprema { 
+        public virtual TipLicneZastite Tip {  get; set; }
+    }
+    public  class Zalihe : Oprema 
+    {
+        public virtual TipZalihe Tip {  get; set; }
+        public virtual int Kolicina {  get; set; }
+
+    }
+}
