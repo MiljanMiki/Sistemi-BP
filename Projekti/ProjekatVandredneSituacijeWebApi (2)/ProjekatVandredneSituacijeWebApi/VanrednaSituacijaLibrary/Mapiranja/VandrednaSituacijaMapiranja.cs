@@ -26,9 +26,9 @@ namespace VanrednaSituacijaLibrary.Mapiranja
             Map(x => x.Lokacija).Column("Lokacija");
             Map(x => x.Opis).Column("Opis");
 
-           
+
             References(x => x.Prijava_ID).Column("Id_Prijave");
-            
+
 
             HasMany(x => x.Ucestvuje)
            .Cascade.All()
@@ -40,7 +40,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
                 .Inverse()
                 .KeyColumn("Id_Vanredne_Situacije");
 
-           
+
         }
     }
 }

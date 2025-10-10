@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 
 namespace VanrednaSituacijaLibrary.Entiteti
 {
+    public enum Spremnost { Niska, Srednja, Visoka}
     public class OperativniRadnik : Zaposlen
     {
         public virtual  int Broj_Sati { get; set; }
-        public virtual  string Fizicka_Spremnost { get; set; }
+        public virtual  Spremnost Fizicka_Spremnost { get; set; }
 
         public virtual IList<DodeljujeSe> Dodeljuje { get; set; }
 

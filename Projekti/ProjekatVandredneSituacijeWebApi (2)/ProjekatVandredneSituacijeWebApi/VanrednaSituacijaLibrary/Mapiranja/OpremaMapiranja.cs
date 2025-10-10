@@ -23,7 +23,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
           
             Map(x => x.Naziv).Column("Naziv");
            
-            Map(x => x.Status).Column("Status");
+            Map(x => x.Status).Column("Status").CustomType<EnumStringType<StatusOpreme>>();
             Map(x => x.DatumNabavke).Column("DatumNabavke");
            
             References(x => x.Jedinica, "Id_Jedinice");

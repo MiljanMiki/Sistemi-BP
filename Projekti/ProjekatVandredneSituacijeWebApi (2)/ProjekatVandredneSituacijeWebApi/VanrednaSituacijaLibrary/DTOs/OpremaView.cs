@@ -13,7 +13,7 @@ namespace VanrednaSituacijaLibrary.DTOs
         public virtual string Serijski_Broj { get; set; }
         public virtual string Naziv { get; set; }
 
-        public virtual string Status { get; set; }
+        public virtual StatusOpreme Status { get; set; }
 
         public virtual DateTime DatumNabavke { get; set; }
 
@@ -40,7 +40,7 @@ namespace VanrednaSituacijaLibrary.DTOs
     {
         public virtual string Serijski_Broj { get; set; }
         public virtual string Naziv { get; set; }
-        public virtual string Status { get; set; }
+        public virtual StatusOpreme Status { get; set; }
         public virtual DateTime DatumNabavke { get; set; }
         public virtual int JedinicaID { get; set; }
         
@@ -59,7 +59,7 @@ namespace VanrednaSituacijaLibrary.DTOs
     {
 
         public virtual string Naziv { get; set; }
-        public virtual string Status { get; set; }
+        public virtual StatusOpreme Status { get; set; }
         public virtual DateTime DatumNabavke { get; set; }
         public virtual int JedinicaID { get; set; }
 
@@ -77,7 +77,7 @@ namespace VanrednaSituacijaLibrary.DTOs
     {
         public virtual string Serijski_Broj { get; set; }
         public virtual string Naziv { get; set; }
-        public virtual string Status { get; set; }
+        public virtual StatusOpreme Status { get; set; }
         public virtual DateTime DatumNabavke { get; set; }
 
 

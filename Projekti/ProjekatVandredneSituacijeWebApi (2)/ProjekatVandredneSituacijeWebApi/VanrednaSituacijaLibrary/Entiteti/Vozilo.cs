@@ -10,7 +10,7 @@ namespace VanrednaSituacijaLibrary.Entiteti
     {
         Operativno, U_kvaru
     }
-    public abstract class Vozilo
+    public  class Vozilo
     {
         public virtual  string Registarska_Oznaka { get; set; }
         public virtual  string Proizvodjac {  get; set; }
