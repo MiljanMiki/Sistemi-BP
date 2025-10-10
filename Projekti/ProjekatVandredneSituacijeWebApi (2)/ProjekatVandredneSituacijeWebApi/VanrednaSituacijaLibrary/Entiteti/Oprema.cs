@@ -25,7 +25,7 @@ namespace VanrednaSituacijaLibrary.Entiteti
 
     public enum TipZalihe
     {
-        Sator, Hrana, Voda, Lek
+        Sator, Hrana, Voda, Lekovi
     }
     public abstract class Oprema
     {

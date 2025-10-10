@@ -279,7 +279,7 @@ Content-Type : application/json
 {
   "naziv": "Test Specijalna",
   "baza": "Test",
-  "jmbgKomandira": "9584757375804",
+  "jmbgKomandira": "2222222222222",
   "tipSpecijalneJedinice": "Zajebani momci"
 }
 
@@ -319,7 +319,7 @@ Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiOpstuJedinicu/62
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiOpstuJedinicu/12
 Accept: application/json
 Content-Type : application/json
 
@@ -327,7 +327,7 @@ Content-Type : application/json
 
 //i sad nece da se obrise...kaze child record found 
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiSpecijalnuJedinicu/64
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/InterventnaJedinica/ObrisiSpecijalnuJedinicu/81
 Accept: application/json
 Content-Type : application/json
 
@@ -506,6 +506,7 @@ Content-Type : application/json
 
 ###
 
+//i ovo puca za tip=0... Prenosiva_nosiljka != Prenosiva nosiljka
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/MedicinskaOprema/DodajMedicinskuOpremu
 Accept: application/json
 Content-Type : application/json
@@ -515,7 +516,7 @@ Content-Type : application/json
   "status": "Test",
   "datumNabavke": "2025-10-03T17:37:19.706Z",
   "jedinicaID": 20,
-  "tip": 1
+  "tip": 0
 }
 
 ###
@@ -569,7 +570,7 @@ Content-Type : application/json
   "datum_Zaposlenja": "2025-10-03T17:48:53.834Z",
   "broj_Sati": 999,
   "fizicka_Spremnost": "Visoka",
-  "interventnaJedinica": 21
+  "interventnaJedinica": null
 }
 
 ### 
@@ -1175,7 +1176,7 @@ Content-Type : application/json
 
 ###
 
-DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/ObrisiVanrednuSituaciju/99
+DELETE {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/VanrednaSituacija/ObrisiVanrednuSituaciju/60
 Accept: application/json
 Content-Type : application/json
 
@@ -1229,9 +1230,6 @@ Content-Type : application/json
 
 ###
 
-//NHibernate.InstantiationException: Cannot instantiate abstract class or interface: 
-//VanrednaSituacijaLibrary.Entiteti.Vozilo   
-//at NHibernate.Tuple.PocoInstantiator.Instantiate()
 
 GET {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Vozilo/VratiSveServise
 Accept: application/json
@@ -1281,17 +1279,21 @@ Content-Type : application/json
 
 ###
 
-
+//U BAZI POSTOJE 2 CHECK CONSTRAINTS
+//1 za SATOR,HRANA,VODA,LEKOVI
+//2 ZA HRANA,VODA,SATOR,LEK
+//I OBRNI OKRENI JEDAN CHECK CE DA PADNE ZA TIP=3...
+//btw idalje puca za EQ9999 kao da je jos u bazi...
 POST {{ProjekatVanredneSituacijeWebApi_HostAddress}}/api/Zalihe/DodajNoveZalihe
 Accept: application/json
 Content-Type : application/json
 {
-  "serijski_Broj": "EQ9999",
+  "serijski_Broj": "EQ0",
   "naziv": "TEST",
   "status": "TEST",
   "datumNabavke": "2025-10-04T13:32:35.046Z",
   "jedinicaID": 22,
-  "tip": 1,
+  "tip": 3,
   "kolicina": 9999
 }
 

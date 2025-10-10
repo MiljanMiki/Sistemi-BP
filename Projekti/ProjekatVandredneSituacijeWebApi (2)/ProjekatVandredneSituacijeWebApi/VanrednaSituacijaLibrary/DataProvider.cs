@@ -917,6 +917,7 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 OperativniRadnik op = new OperativniRadnik();
+
                 op.JMBG = o.JMBG;
                 op.Ime = o.Ime;
                 op.Prezime = o.Prezime;
@@ -928,13 +929,27 @@ namespace VanrednaSituacijaLibrary
                 op.Datum_Zaposlenja = o.Datum_Zaposlenja;
                 op.Broj_Sati = o.Broj_Sati;
                 op.Fizicka_Spremnost = o.Fizicka_Spremnost;
-                op.InterventnaJedinica = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
-                InterventnaJedinica ij = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
-                if (ij != null)
+
+                if (o.InterventnaJedinica != null || o.InterventnaJedinica > 0)
                 {
-                    ij.BrojClanova++;
-                    await s.UpdateAsync(ij);
+                    InterventnaJedinica ij = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
+                    op.InterventnaJedinica = ij;
+                    if (ij != null)
+                    {
+                        ij.BrojClanova++;
+                        await s.UpdateAsync(ij);
+                    }
                 }
+                else
+                   op.InterventnaJedinica = null;
+
+                //    InterventnaJedinica ij = await s.GetAsync<InterventnaJedinica>(o.InterventnaJedinica);
+                //op.InterventnaJedinica = ij;
+                //if (ij != null)
+                //{
+                //    ij.BrojClanova++;
+                //    await s.UpdateAsync(ij);
+                //}
 
                 Istorija_Uloga_Zaposlenih i = new Istorija_Uloga_Zaposlenih
                 {
@@ -944,9 +959,9 @@ namespace VanrednaSituacijaLibrary
                     Datum_Do = null
                 };
 
+                await s.SaveAsync(op);
                 await s.SaveAsync(i);
 
-                await s.SaveAsync(op);
                 await s.FlushAsync();
                 s.Close();
             }
@@ -3506,6 +3521,8 @@ namespace VanrednaSituacijaLibrary
                                  .Where(s=> s.Zaposleni.JMBG== JMBGZaposleni)
                                 .Select(s => new Istorija_Uloga_ZaposlenihView(s))
                                 .ToListAsync();
+
+                if (Istorija == null || Istorija.IsEmpty()) throw new Exception($"Radnik sa JMBG-om {JMBGZaposleni} nema istoriju ili radnik ne postoji!");
                 
                 s.Close();
             }
