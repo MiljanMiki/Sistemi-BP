@@ -1,0 +1,46 @@
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ProjekatVandredneSituacije.Entiteti;
+
+namespace ProjekatVandredneSituacije.DTOs
+{
+    public  class SpecijalnaVozilaView:VoziloView
+    {
+        public virtual Namena Namena { get; set; }
+
+        public SpecijalnaVozilaView() { }
+
+        public SpecijalnaVozilaView(SpecijalnaVozila s): base(s)
+        {
+            Namena = s.Namena;
+        }
+    }
+
+    public class SpecijalnaVozilaChangeView : VoziloChangeView
+    {
+        public virtual Namena Namena { get; set; }
+
+        public SpecijalnaVozilaChangeView() { }
+
+        public SpecijalnaVozilaChangeView(SpecijalnaVozila s) : base(s)
+        {
+            Namena = s.Namena;
+        }
+    }
+
+    public class SpecijalnaVozilaAddView : VoziloAddView
+    {
+        public virtual Namena Namena { get; set; }
+
+        public SpecijalnaVozilaAddView() { }
+
+        public SpecijalnaVozilaAddView(SpecijalnaVozila s) : base(s)
+        {
+            Namena = s.Namena;
+        }
+    }
+}
