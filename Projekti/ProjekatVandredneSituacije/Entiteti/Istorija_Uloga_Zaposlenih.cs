@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using ProjekatVandredneSituacije.Entiteti;
+
+namespace ProjekatVandredneSituacije.Entiteti
+{
+    public class Istorija_Uloga_Zaposlenih
+    {
+        public virtual  int Id { get; set; }
+        public virtual  Zaposlen Zaposleni {  get; set; }
+        public virtual   string Uloga {  get; set; }
+        public virtual  DateTime Datum_Od { get; set; }
+        public virtual DateTime? Datum_Do { get; set; }
+
+
+    }
+}
