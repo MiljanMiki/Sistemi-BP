@@ -22,9 +22,10 @@ namespace ProjekatVandredneSituacije.Forme2._0.ZaposleniForma
         {
             InitializeComponent();
             PopuniCombo();
+            comboJedinica.SelectedIndex = -1;
         }
 
-       
+
         public AddCHangeOperativniForma(OperativniRadnikView radnik)
         {
             this.OperativniRadnik = radnik;
@@ -34,7 +35,7 @@ namespace ProjekatVandredneSituacije.Forme2._0.ZaposleniForma
             textJmbg.BackColor = Color.LightGray;
         }
 
-        public async void  PopuniCombo()
+        public async void PopuniCombo()
         {
             comboSpremnost.DataSource = Enum.GetValues(typeof(Spremnost));
             comboSpremnost.SelectedIndex = -1;
@@ -117,52 +118,71 @@ namespace ProjekatVandredneSituacije.Forme2._0.ZaposleniForma
 
         private async void buttonCancel_Click(object sender, EventArgs e)
         {
-            OperativniRadnikAddView operativni = new OperativniRadnikAddView();
-            operativni.JMBG = textJmbg.Text;
-            operativni.Ime = texIme.Text;
-            operativni.Prezime = textPrezime.Text;
-            operativni.Datum_Rodjenja = dateRodjenje.Value;
-            operativni.Kontakt_Telefon = textKontakt.Text;
-            operativni.Email = textEmail.Text;
-            operativni.AdresaStanovanja = textAdresa.Text;
-            operativni.Datum_Zaposlenja=dateZaposlenje.Value;
-            operativni.Broj_Sati = (int)numericBrojSati.Value;
-            operativni.Fizicka_Spremnost = (Spremnost)comboSpremnost.SelectedValue;
-            if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
+            try
             {
-                MessageBox.Show("Neispravan JMBG!");
-            }
-            if (checkMusko.Checked == true)
-            {
-                operativni.Pol = "M";
-            }
-            else if (checkZensko.Checked == true)
-            {
-                operativni.Pol = "Z";
-            }
-            if (comboJedinica.SelectedValue != null)
-            {
-                operativni.InterventnaJedinica = (int)comboJedinica.SelectedValue;
-            }
-            else operativni.InterventnaJedinica = null;
-            if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(texIme.Text) || string.IsNullOrEmpty(textPrezime.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text)||
-                string.IsNullOrEmpty(textAdresa.Text)|| decimal.IsNegative(numericBrojSati.Value))
-            {
-                MessageBox.Show("Sva polja moraju biti popunjena.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                OperativniRadnikAddView operativni = new OperativniRadnikAddView();
+                operativni.JMBG = textJmbg.Text;
+                operativni.Ime = texIme.Text;
+                operativni.Prezime = textPrezime.Text;
+                operativni.Datum_Rodjenja = dateRodjenje.Value;
+                operativni.Kontakt_Telefon = textKontakt.Text;
+                operativni.Email = textEmail.Text;
+                operativni.AdresaStanovanja = textAdresa.Text;
+                operativni.Datum_Zaposlenja = dateZaposlenje.Value;
+                operativni.Broj_Sati = (int)numericBrojSati.Value;
+                operativni.Fizicka_Spremnost = (Spremnost)comboSpremnost.SelectedValue;
+                if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
+                {
+                    MessageBox.Show("Neispravan JMBG!");
+                    return;
+                }
+                if (!int.TryParse(textKontakt.Text, out _))
+                {
+                    MessageBox.Show("Neispravan telefon! Koristite samo brojeve!");
+                    return;
+                }
+                if (checkMusko.Checked == true)
+                {
+                    operativni.Pol = "M";
+                }
+                else if (checkZensko.Checked == true)
+                {
+                    operativni.Pol = "Z";
+                }
+                else
+                {
+                    MessageBox.Show("Morate izabrati pol!");
+                    return;
+                }
+                if (comboJedinica.SelectedValue != null)
+                {
+                    operativni.InterventnaJedinica = (int)comboJedinica.SelectedValue;
+                }
+                else operativni.InterventnaJedinica = null;
 
-            if (OperativniRadnik == null)
-            {
-                await DataProvider.DodajOperativnogRadnik(operativni);
-            }
-            else
-            {
-                await DataProvider.IzmeniOperativnog(operativni, OperativniRadnik.JMBG);
-            }
+                if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(texIme.Text) || string.IsNullOrEmpty(textPrezime.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text) ||
+                    string.IsNullOrEmpty(textAdresa.Text) || decimal.IsNegative(numericBrojSati.Value))
+                {
+                    MessageBox.Show("Sva polja moraju biti popunjena.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+                if (OperativniRadnik == null)
+                {
+                    await DataProvider.DodajOperativnogRadnik(operativni);
+                }
+                else
+                {
+                    await DataProvider.IzmeniOperativnog(operativni, OperativniRadnik.JMBG);
+                }
+
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+            }
         }
     }
 }

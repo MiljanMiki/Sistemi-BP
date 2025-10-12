@@ -19,7 +19,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
 
             Map(x => x.Broj_Sati).Column("Broj_Sati");
             Map(x => x.Fizicka_Spremnost).Column("Fizicka_Spremnost").CustomType<EnumStringType<Spremnost>>();
-            References(x => x.InterventnaJedinica).Column("Jedinica_Id").Nullable().LazyLoad();
+            References(x => x.InterventnaJedinica).Column("Jedinica_Id").Nullable().Cascade.None().LazyLoad();
 
 
             HasMany(x => x.Sertifikats)

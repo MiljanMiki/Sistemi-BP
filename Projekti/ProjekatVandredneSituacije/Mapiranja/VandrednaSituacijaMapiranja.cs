@@ -27,7 +27,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Opis).Column("Opis");
 
            
-            References(x => x.Prijava_ID).Column("Id_Prijave");
+            References(x => x.Prijava_ID).Column("Id_Prijave").Cascade.None();
             
 
             HasMany(x => x.Ucestvuje)

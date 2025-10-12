@@ -40,34 +40,48 @@ namespace ProjekatVandredneSituacije.Forme2._0.Sluzba
         }
         private async void buttonCancel_Click(object sender, EventArgs e)
         {
-            PredstavnikView pred = new PredstavnikView();
-            pred.JMBG = textJmbg.Text;
-            pred.Ime = textIme.Text;
-            pred.Prezime = textPrezime.Text;
-            pred.Pozicija = textPozicija.Text;
-            pred.Telefon = textKontakt.Text;
-            pred.Email = textEmail.Text;
-            if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
+            try
             {
-                MessageBox.Show("Neispravan JMBG!");
+                PredstavnikView pred = new PredstavnikView();
+                pred.JMBG = textJmbg.Text;
+                pred.Ime = textIme.Text;
+                pred.Prezime = textPrezime.Text;
+                pred.Pozicija = textPozicija.Text;
+                pred.Telefon = textKontakt.Text;
+                pred.Email = textEmail.Text;
+                if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
+                {
+                    MessageBox.Show("Neispravan JMBG!");
+                    return;
+                }
+                if (!int.TryParse(textKontakt.Text, out _))
+                {
+                    MessageBox.Show("Neispravan telefon! Koristite samo brojeve!");
+                    return;
+                }
+                if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(textIme.Text) || string.IsNullOrEmpty(textPrezime.Text) ||
+                    string.IsNullOrEmpty(textPozicija.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text))
+                {
+                    MessageBox.Show("Popunite sva polja.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (predstavnik == null)
+                {
+                    await DataProvider.DodajPredstavnika(pred);
+                }
+                else
+                {
+                    await DataProvider.IzmeniPredstavnika(pred, predstavnik.JMBG);
+                }
+
+                DialogResult = DialogResult.OK;
+                this.Close();
             }
-            if (string.IsNullOrEmpty(textJmbg.Text)|| string.IsNullOrEmpty(textIme.Text) || string.IsNullOrEmpty(textPrezime.Text) ||
-                string.IsNullOrEmpty(textPozicija.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text))
+            catch (Exception ex)
             {
-                MessageBox.Show("Popunite sva polja.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            if (predstavnik == null)
-            {
-                await DataProvider.DodajPredstavnika(pred);
-            }
-            else
-            {
-                await DataProvider.IzmeniPredstavnika(pred, predstavnik.JMBG);
-            }
-
-            DialogResult=DialogResult.OK;
-            this.Close();
         }
 
         private void buttonReset_Click(object sender, EventArgs e)

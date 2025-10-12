@@ -384,5 +384,20 @@ namespace ProjekatVandredneSituacije.Forme2._0.Vozila
         {
 
         }
+
+        private void buttonServisi_Click(object sender, EventArgs e)
+        {
+            if (dataGridView1.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Izaberite vozilo ciju istoriju intervencija zelite da prikazete!");
+                return;
+            }
+
+            var vozilo = dataGridView1.CurrentRow.DataBoundItem as VoziloView;
+
+            var forma = new ServisOverlay(vozilo);
+            forma.ShowDialog();
+            popuniPodacima();
+        }
     }
 }

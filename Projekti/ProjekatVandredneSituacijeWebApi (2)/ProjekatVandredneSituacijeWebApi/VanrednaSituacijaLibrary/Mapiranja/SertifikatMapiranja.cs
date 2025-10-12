@@ -18,7 +18,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
            CompositeId(x=> x.Id)
             .KeyReference(x => x.OperativniRadnik, "JMBG")
             .KeyProperty(x => x.Naziv, "Naziv")
-            .KeyProperty(x => x.Institucija, "Institucija"); ;
+            .KeyProperty(x => x.Institucija, "Institucija"); 
 
             Map(x => x.DatumIzdavanja).Column("Datum_Izdavanja");
             Map(x => x.DatumVazenja).Column("Datum_Vazenja");

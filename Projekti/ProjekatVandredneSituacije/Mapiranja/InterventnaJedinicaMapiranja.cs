@@ -24,7 +24,11 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Map(x => x.Baza, "Baza");
 
 
-            References(x => x.Komandir, "JMBG_Komandira").Nullable().Cascade.None().LazyLoad();
+            References(x => x.Komandir)
+             .Column("JMBG_KOMANDIRA")
+             .Unique()        
+             .Cascade.None()
+             .LazyLoad();
 
             HasMany(x => x.Oprema).KeyColumn("Id_Jedinice").Cascade.All();
             HasMany(x => x.Dodeljuje).KeyColumn("IdJedinice").Inverse().Cascade.All().LazyLoad();

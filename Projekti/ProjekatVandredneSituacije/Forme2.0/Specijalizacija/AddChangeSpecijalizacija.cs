@@ -52,6 +52,7 @@ namespace ProjekatVandredneSituacije.Forme2._0.Specijalizacija
             if (string.IsNullOrEmpty(specijalizacija.Tip))
             {
                 MessageBox.Show("Niste uneli validnu vrednost za Oblast");
+                return;
             }
             if (specijalizacijaa == null)
             {

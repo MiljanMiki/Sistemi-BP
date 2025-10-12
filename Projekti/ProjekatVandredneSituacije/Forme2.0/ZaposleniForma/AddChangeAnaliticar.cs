@@ -85,47 +85,64 @@ namespace ProjekatVandredneSituacije.Forme2._0.ZaposleniForma
 
         private async void buttonSave_Click(object sender, EventArgs e)
         {
-            AnaliticarView analiticar = new AnaliticarView();
-            analiticar.JMBG = textJmbg.Text;
-            analiticar.Ime = textIme.Text;
-            analiticar.Prezime = textPrezime.Text;
-            analiticar.Datum_Rodjenja = dateRodjenja.Value;
-            analiticar.Kontakt_Telefon = textKontakt.Text;
-            analiticar.Email = textEmail.Text;
-            analiticar.AdresaStanovanja = textAdresa.Text;
-            analiticar.Datum_Zaposlenja = dateZaposlenje.Value;
+            try
+            {
+                AnaliticarView analiticar = new AnaliticarView();
+                analiticar.JMBG = textJmbg.Text;
+                analiticar.Ime = textIme.Text;
+                analiticar.Prezime = textPrezime.Text;
+                analiticar.Datum_Rodjenja = dateRodjenja.Value;
+                analiticar.Kontakt_Telefon = textKontakt.Text;
+                analiticar.Email = textEmail.Text;
+                analiticar.AdresaStanovanja = textAdresa.Text;
+                analiticar.Datum_Zaposlenja = dateZaposlenje.Value;
 
-            if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
-            {
-                MessageBox.Show("Neispravan JMBG!");
-            }
+                if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
+                {
+                    MessageBox.Show("Neispravan JMBG!");
+                }
 
-            if (checkMusko.Checked == true)
-            {
-                analiticar.Pol = "M";
-            }
-            else if (checkZensko.Checked == true)
-            {
-                analiticar.Pol = "Z";
-            }
-            if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(textIme.Text) || string.IsNullOrEmpty(textPrezime.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text) ||
-                string.IsNullOrEmpty(textAdresa.Text))
-            {
-                MessageBox.Show("Popunite sva polja.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                if (!int.TryParse(textKontakt.Text, out _))
+                {
+                    MessageBox.Show("Neispravan telefon! Koristite samo brojeve!");
+                    return;
+                }
+                if (checkMusko.Checked == true)
+                {
+                    analiticar.Pol = "M";
+                }
+                else if (checkZensko.Checked == true)
+                {
+                    analiticar.Pol = "Z";
+                }
+                else
+                {
+                    MessageBox.Show("Morate izabrati pol!");
+                    return;
+                }
+                if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(textIme.Text) || string.IsNullOrEmpty(textPrezime.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text) ||
+                    string.IsNullOrEmpty(textAdresa.Text))
+                {
+                    MessageBox.Show("Popunite sva polja.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            if (analiticar == null)
-            {
-                await DataProvider.DodajAnalitcar(analiticar);
-            }
-            else
-            {
-                await DataProvider.IzmeniAnaliticar(analiticar, analiticar.JMBG);
-            }
+                if (analiticar == null)
+                {
+                    await DataProvider.DodajAnalitcar(analiticar);
+                }
+                else
+                {
+                    await DataProvider.IzmeniAnaliticar(analiticar, analiticar.JMBG);
+                }
 
-            this.DialogResult = DialogResult.OK;
-            this.Close();
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
+            }
         }
     }
 }

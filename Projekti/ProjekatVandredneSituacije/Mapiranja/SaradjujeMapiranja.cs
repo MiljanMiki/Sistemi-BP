@@ -20,12 +20,12 @@ namespace ProjekatVandredneSituacije.Mapiranja
 
             References(x => x.Sektor)
                 .Column("Id_Sluzbe") 
-                .Not.Nullable();
+                .Not.Nullable().Cascade.None();
 
             
             References(x => x.VandrednaSituacija)
                 .Column("Id_Vanredne_Situacije")
-                .Not.Nullable();
+                .Not.Nullable().Cascade.None();  
 
         }
     }

@@ -26,7 +26,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
             Map(x => x.Status).Column("Status").CustomType<EnumStringType<StatusOpreme>>();
             Map(x => x.DatumNabavke).Column("DatumNabavke");
            
-            References(x => x.Jedinica, "Id_Jedinice");
+            References(x => x.Jedinica, "Id_Jedinice").Cascade.None();
 
         }
     }

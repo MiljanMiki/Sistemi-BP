@@ -26,7 +26,7 @@ namespace ProjekatVandredneSituacije.Forme2._0.InterventnaJedinica
             InitializeComponent();
             specijalna = sp;
             PopuniPodacima();
-            comboKomandir.Enabled=false;
+            
         }
 
         public async void PopuniPodacima()
@@ -43,9 +43,16 @@ namespace ProjekatVandredneSituacije.Forme2._0.InterventnaJedinica
                 textBaza.Text = specijalna.Baza;
                 textTip.Text = specijalna.TipSpecijalneJedinice;
 
-
-                comboKomandir.SelectedValue = specijalna.JMBGKomandira;
-
+                if (specijalna.JMBGKomandira != null)
+                {
+                    comboKomandir.SelectedValue = specijalna.JMBGKomandira;
+                    comboKomandir.Enabled = false;
+                }
+                else
+                {
+                    comboKomandir.SelectedIndex = -1;
+                    comboKomandir.Enabled = true;
+                }
             }
         }
 
@@ -55,6 +62,7 @@ namespace ProjekatVandredneSituacije.Forme2._0.InterventnaJedinica
             spec.Naziv = textNaziv.Text;
             spec.Baza = textBaza.Text;
             spec.JMBGKomandira = comboKomandir.SelectedValue.ToString();
+            
             spec.TipSpecijalneJedinice = textTip.Text;
             if (string.IsNullOrEmpty(textNaziv.Text) || string.IsNullOrEmpty(textBaza.Text) ||
                 string.IsNullOrEmpty(textTip.Text) || comboKomandir.SelectedIndex == -1)

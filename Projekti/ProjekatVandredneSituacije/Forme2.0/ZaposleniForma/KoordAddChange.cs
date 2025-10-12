@@ -94,46 +94,62 @@ namespace ProjekatVandredneSituacije.Forme2._0.ZaposleniForma
 
         private async void buttonSacuvaj_Click(object sender, EventArgs e)
         {
-            KordinatorView kordinator = new KordinatorView();
-            kordinator.JMBG = textJmbg.Text;
-            kordinator.Ime = textIme.Text;
-            kordinator.Prezime = textPrezime.Text;
-            kordinator.Datum_Rodjenja = dateRodjenje.Value;
-            kordinator.Kontakt_Telefon = textKontakt.Text;
-            kordinator.Email = textEmail.Text;
-            kordinator.AdresaStanovanja = textAdresa.Text;
+            try
+            {
+                KordinatorView kordinator = new KordinatorView();
+                kordinator.JMBG = textJmbg.Text;
+                kordinator.Ime = textIme.Text;
+                kordinator.Prezime = textPrezime.Text;
+                kordinator.Datum_Rodjenja = dateRodjenje.Value;
+                kordinator.Kontakt_Telefon = textKontakt.Text;
+                kordinator.Email = textEmail.Text;
+                kordinator.AdresaStanovanja = textAdresa.Text;
 
-            if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
-            {
-                MessageBox.Show("Neispravan JMBG!");
-            }
-            if (checkMusko.Checked == true)
-            {
-                kordinator.Pol = "M";
-            }
-            else if (checkZensko.Checked == true)
-            {
-                kordinator.Pol = "Z";
-            }
+                if (textJmbg.Text.Length != 13 || int.TryParse(textJmbg.Text, out _))
+                {
+                    MessageBox.Show("Neispravan JMBG!");
+                }
+                if (!int.TryParse(textKontakt.Text, out _))
+                {
+                    MessageBox.Show("Neispravan telefon! Koristite samo brojeve!");
+                    return;
+                }
+                if (checkMusko.Checked == true)
+                {
+                    kordinator.Pol = "M";
+                }
+                else if (checkZensko.Checked == true)
+                {
+                    kordinator.Pol = "Z";
+                }
+                else
+                {
+                    MessageBox.Show("Morate izabrati pol!");
+                    return;
+                }
+                if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(textIme.Text) || string.IsNullOrEmpty(textPrezime.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text) ||
+                    string.IsNullOrEmpty(textAdresa.Text))
+                {
+                    MessageBox.Show("Sva polja moraju biti popunjena.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-            if (string.IsNullOrEmpty(textJmbg.Text) || string.IsNullOrEmpty(textIme.Text) || string.IsNullOrEmpty(textPrezime.Text) || string.IsNullOrEmpty(textKontakt.Text) || string.IsNullOrEmpty(textEmail.Text) ||
-                string.IsNullOrEmpty(textAdresa.Text))
-            {
-                MessageBox.Show("Sva polja moraju biti popunjena.", "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+                if (kord == null)
+                {
+                    await DataProvider.DodajKordinatora(kordinator);
+                }
+                else
+                {
+                    await DataProvider.IzmeniKordinatora(kordinator, kord.JMBG);
+                }
 
-            if (kord == null)
-            {
-                await DataProvider.DodajKordinatora(kordinator);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            else
+            catch (Exception ex)
             {
-                await DataProvider.IzmeniKordinatora(kordinator, kord.JMBG);
+                MessageBox.Show(ex.Message, "Greška", MessageBoxButtons.OK, MessageBoxIcon.Error); return;
             }
-
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
     }
 }

@@ -15,10 +15,10 @@ namespace VanrednaSituacijaLibrary.Mapiranja
             Table("Ucestvovalo");
             Id(x => x.ID, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.Vozilo)
-                .Column("Registarska_Oznaka_Vozila")
+                .Column("Registarska_Oznaka_Vozila").Cascade.None()
                 .Not.Nullable();
             References(x => x.Intervencija)
-                .Column("IdIntervencije")
+                .Column("IdIntervencije").Cascade.None()
                 .Not.Nullable();
 
             Map(x => x.Datum_Od, "Datum_Od");

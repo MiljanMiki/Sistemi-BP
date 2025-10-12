@@ -14,7 +14,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
         {
             Table("Servisi");
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Vozilo, "Registarska_Oznaka_Vozila");
+            References(x => x.Vozilo, "Registarska_Oznaka_Vozila").Cascade.None();
 
 
             Map(x => x.TipServisa).Column("Tip");

@@ -15,13 +15,13 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Table("Istorija_Uloga_Zaposlenih");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Zaposleni, "JMBG");
+            References(x => x.Zaposleni, "JMBG").Not.Nullable().Cascade.None();
             Map(x => x.Uloga, "Uloga");
 
 
             Map(x => x.Datum_Od)
                 .Column("Datum_Od")
-                .Nullable();
+                .Not.Nullable();
             Map(x => x.Datum_Do)
                 .Column("Datum_Do")
                 .Nullable();

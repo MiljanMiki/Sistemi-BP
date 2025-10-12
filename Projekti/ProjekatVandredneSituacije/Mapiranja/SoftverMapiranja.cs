@@ -13,7 +13,7 @@ namespace ProjekatVandredneSituacije.Mapiranja
         {
             Table("SoftverAnaliticara");
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Analiticar, "JMBG_Analiticara");
+            References(x => x.Analiticar, "JMBG_Analiticara").Cascade.None();
             Map(x => x.Naziv, "Naziv");
         }
     }
