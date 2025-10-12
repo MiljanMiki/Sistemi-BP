@@ -16,7 +16,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
             Table("Ekspertiza");
 
             Id(x => x.Id, "Id").GeneratedBy.TriggerIdentity();
-            References(x => x.Analiticar, "JMBG");
+            References(x => x.Analiticar, "JMBG").Cascade.None();
             Map(x => x.Oblast, "Oblast");
         }
     }

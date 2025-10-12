@@ -18,7 +18,7 @@ namespace VanrednaSituacijaLibrary.Mapiranja
 
             Map(x => x.TipSektora).Column("Tip");
 
-            References(x => x.Predstavnik).Column("JMBGPredstavnika");
+            References(x => x.Predstavnik).Column("JMBGPredstavnika").Cascade.All();
 
 
             HasMany(x => x.VandredneSituacije)

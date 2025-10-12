@@ -252,20 +252,47 @@ namespace VanrednaSituacijaLibrary
                 }
 
                 OpstaIntervetnaJed ij = await s.LoadAsync<OpstaIntervetnaJed>(Id);
+                if (ij == null)
+                    throw new Exception("Tražena jedinica ne postoji!");
 
                 ij.Naziv = i.Naziv;
-                OperativniRadnik Komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
-                if (Komandir == null)
-                    throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
-
                 ij.Baza = i.Baza;
 
-                if (Komandir != null)
+
+                var komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
+                if (komandir == null)
+                    throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
+
+
+                if (komandir.InterventnaJedinica != null &&
+                    komandir.InterventnaJedinica.Jedinstveni_Broj != ij.Jedinstveni_Broj)
                 {
-                    Komandir.InterventnaJedinica = ij;
-                    await s.SaveOrUpdateAsync(Komandir);
-                    ij.BrojClanova++;
+
+
+                    var staraJedinica = komandir.InterventnaJedinica;
+
+
+                    staraJedinica.Komandir = null;
+                    await s.UpdateAsync(staraJedinica);
+
+                    komandir.InterventnaJedinica = null;
+                    await s.UpdateAsync(komandir);
+
+                    await s.FlushAsync();
                 }
+
+
+                if (ij.Komandir != null && ij.Komandir.JMBG != komandir.JMBG)
+                {
+                    var stariKomandir = ij.Komandir;
+                    stariKomandir.InterventnaJedinica = null;
+                    await s.UpdateAsync(stariKomandir);
+                }
+
+                ij.Komandir = komandir;
+                komandir.InterventnaJedinica = ij;
+
+                await s.SaveOrUpdateAsync(komandir);
                 await s.UpdateAsync(ij);
                 await s.FlushAsync();
                 s.Close();
@@ -393,16 +420,41 @@ namespace VanrednaSituacijaLibrary
                     throw new SessionException("Doslo je do greske pri pravljenju sesije");
                 }
                 SpecijalnaInterventna ij = await s.LoadAsync<SpecijalnaInterventna>(Id);
+                if (ij == null)
+                    throw new Exception("Specijalna interventna jedinica ne postoji!");
 
                 ij.Naziv = i.Naziv;
+                ij.Baza = i.Baza;
+                ij.TipSpecijalneJedinice = i.TipSpecijalneJedinice;
 
                 var komandir = await s.GetAsync<OperativniRadnik>(i.JMBGKomandira);
                 if (komandir == null)
                     throw new Exception("Komandir sa zadatim JMBG-om ne postoji!");
-                ij.Komandir = komandir;
-                ij.Baza = i.Baza;
-                ij.TipSpecijalneJedinice = i.TipSpecijalneJedinice;
 
+                if (komandir.InterventnaJedinica != null &&
+                    komandir.InterventnaJedinica.Jedinstveni_Broj != ij.Jedinstveni_Broj)
+                {
+                    var staraJedinica = komandir.InterventnaJedinica;
+                    staraJedinica.Komandir = null;
+                    await s.UpdateAsync(staraJedinica);
+
+                    komandir.InterventnaJedinica = null;
+                    await s.UpdateAsync(komandir);
+
+                    await s.FlushAsync();
+                }
+
+                if (ij.Komandir != null && ij.Komandir.JMBG != komandir.JMBG)
+                {
+                    var stariKomandir = ij.Komandir;
+                    stariKomandir.InterventnaJedinica = null;
+                    await s.UpdateAsync(stariKomandir);
+                }
+
+                ij.Komandir = komandir;
+                komandir.InterventnaJedinica = ij;
+
+                await s.SaveOrUpdateAsync(komandir);
                 await s.UpdateAsync(ij);
                 await s.FlushAsync();
                 s.Close();

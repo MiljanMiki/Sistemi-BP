@@ -25,7 +25,7 @@ namespace ProjekatVandredneSituacije.Forme2._0.InterventnaJedinica
             InitializeComponent();
             this.opsta = opsta;
             PopuniPodacima();
-            comboBox1.Enabled= false;
+            
         }
         public async void PopuniPodacima()
         {
@@ -39,8 +39,17 @@ namespace ProjekatVandredneSituacije.Forme2._0.InterventnaJedinica
 
                 textBox3.Text = opsta.Naziv;
                 textBox1.Text = opsta.Baza;
-                
-                comboBox1.SelectedValue = opsta.JMBGKomandira;
+
+                if (opsta.JMBGKomandira != null)
+                {
+                    comboBox1.SelectedValue = opsta.JMBGKomandira;
+                    comboBox1.Enabled = false;
+                }
+                else
+                {
+                    comboBox1.SelectedIndex = -1;
+                    comboBox1.Enabled = true;
+                }
 
             }
         }
@@ -77,25 +86,32 @@ namespace ProjekatVandredneSituacije.Forme2._0.InterventnaJedinica
 
         private async void button1_Click(object sender, EventArgs e)
         {
-            OpstaInterventnaBasicView ops = new OpstaInterventnaBasicView();
-            ops.Naziv = textBox3.Text;
-            ops.Baza = textBox1.Text;
-            ops.JMBGKomandira = comboBox1.SelectedValue.ToString();
-            if (string.IsNullOrEmpty(textBox1.Text)|| string.IsNullOrEmpty(textBox3.Text) || comboBox1.SelectedIndex == -1)
+            try
             {
-                MessageBox.Show("Popunite sva polja.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                OpstaInterventnaBasicView ops = new OpstaInterventnaBasicView();
+                ops.Naziv = textBox3.Text;
+                ops.Baza = textBox1.Text;
+                ops.JMBGKomandira = comboBox1.SelectedValue.ToString();
+                if (string.IsNullOrEmpty(textBox1.Text) || string.IsNullOrEmpty(textBox3.Text) || comboBox1.SelectedIndex == -1)
+                {
+                    MessageBox.Show("Popunite sva polja.", "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                if (opsta == null)
+                {
+                    await DataProvider.DodajOpstuIntervetnuJedinicu(ops);
+                }
+                else
+                {
+                    await DataProvider.IzmeniOpstuInterventnuJedinicu(ops, opsta.Jedinstveni_Broj);
+                }
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
-            if (opsta == null)
+            catch (Exception ex)
             {
-                await DataProvider.DodajOpstuIntervetnuJedinicu(ops);
+                MessageBox.Show(ex.Message, "Greska", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
-            {
-                await DataProvider.IzmeniOpstuInterventnuJedinicu(ops, opsta.Jedinstveni_Broj);
-            }
-            this.DialogResult = DialogResult.OK;
-            this.Close();
         }
     }
 

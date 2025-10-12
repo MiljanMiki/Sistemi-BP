@@ -16,10 +16,10 @@ namespace ProjekatVandredneSituacije.Mapiranja
             Id(x => x.ID, "Id").GeneratedBy.TriggerIdentity();
             References(x => x.Vozilo)
                 .Column("Registarska_Oznaka_Vozila")
-                .Not.Nullable();
+                .Not.Nullable().Cascade.None();
             References(x => x.Intervencija)
                 .Column("IdIntervencije")
-                .Not.Nullable();
+                .Not.Nullable().Cascade.None();
 
             Map(x => x.Datum_Od, "Datum_Od");
             Map(x => x.Datum_Do, "Datum_Do");
